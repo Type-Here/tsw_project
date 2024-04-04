@@ -1,0 +1,511 @@
+/**
+ * Main Style CSS by Man
+ * Rules: 
+ * - Underscore('_') in external container or general components names only
+ * - In other classes/id: use '-'instead
+ */
+
+ /* ===================== @ rules and queries ===================== */
+
+@font-face {
+    font-family: "CodecPro";
+    src: url(/fonts/CodecPro-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url(/fonts/Inter-VariableFont_slnt\,wght.ttf);
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ===================== GENERAL ELEMENTS ========================= */
+
+body.main{
+    background-color: #121212;
+    color: #f5f5f5;
+    margin: 0;
+    font-family: 'OpenSans', sans-serif;
+    font-size: 0.8em;
+}
+
+img {
+    max-width: 100%;
+}
+
+h3{
+    margin: 0;
+    font-family: Inter, sans-serif;
+    font-weight: normal;
+}
+
+a{
+    text-decoration: none;
+    color: #f5f5f5;
+}
+
+.general_icon{
+    filter: invert(1);
+    border-radius: 50%;
+    outline: 3px solid #59595940;
+    background-color: #59595940;
+    margin: auto 5px;   
+}
+
+.general_icon:hover{
+    /*outline: 5px solid #f5f5f5;*/
+    background-color: #59595980;
+    transform: scale(1.1);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+/*.menu_icon {
+    display: none ;
+}*/ /*WideScreen Rule*/
+
+span.discount{
+    border-radius: 2px;
+    font-weight: bold;
+    color: #f5f5f5;
+    background-color: #0a78f5;
+    margin: auto;
+    padding: 1px 2px;
+    box-shadow: 0px 0px 2px 1px rgba(55, 55, 55, 0.2);
+}
+
+span.original-rem-price{
+    margin: 0 5%;
+    color: #ad212e;
+    text-decoration: line-through;
+}
+
+li.this-page{
+    a{color:#C0C0C0;}
+    
+}
+
+/* ===================  MAIN UPPER BAR  =================== */
+
+div.upper_bar{
+    display: flex; 
+    height:fit-content;
+    background-color: #202020;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 2; 
+
+    & .upper-logo-name{
+        display: flex;
+        align-content: center;
+        justify-content:flex-start;
+    }
+}
+
+/* LOGO AND NAME */
+
+.logo{
+    width: 100px;
+    object-fit: fill;
+    margin-top: -10px;
+}
+
+div.upper_bar a.upper-name{
+    margin: auto -20px;
+    /*font-size: 25px;*/ /*WideScreen Rule*/
+    font-family: "CodecPro", 'Calibri', sans-serif;
+    color: #f5f5f5;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* MAIN MENU */
+
+div.upper_bar li {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 1vw 1vw;
+    text-decoration: none;
+    /*border: #CCCCCC solid 0.1px;*/
+    border-radius: 10px;
+
+    &:hover{
+        /*background-color: #0a78f5;*/
+        background-color: #5a5a5a;
+        transition: 0.5s;
+    }
+    
+    &:not(:hover){
+        transition: all 0.2s;
+    }
+}
+
+.upper_bar ul{
+    margin: auto;
+}
+
+/*
+.upper_bar ul > li:first-child{
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+
+.upper_bar ul > li:last-child{
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}*/
+
+
+
+
+/* RIGHT SIDE OF MAIN BAR */
+
+.upper-bar-right{
+    display: flex;
+    flex-wrap: nowrap;
+    margin: auto 2% auto auto;
+    padding-right: 1%;
+}
+
+
+/* ==================== MAIN PAGE CAROUSEL ================== */
+
+/* CAROUSEL CONTAINER */
+
+.carousel{
+    width: 80%;
+    height: auto;
+    margin: 0 auto 30px auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: stretch;
+
+    .carousel-radio{
+        display: none;
+    }
+
+    ul{
+        height: auto;
+    }
+}
+
+/* SLIDE */
+
+li.carousel-slide{
+    display: none;
+    box-sizing: border-box;
+    margin: auto;
+
+    &.active-slide{
+        display: flex;
+        animation: fadeIn 2s;
+    }
+
+
+    img{
+        border-radius: 5%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        max-height: 400px !important;
+        margin:auto;
+        /*max-width: 640px !important;*/
+    }
+
+    img:hover, img:focus{
+        opacity: 0.8;
+        color: #f5f5f5;
+        text-decoration: none;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    /*&:first-child{
+        display: flex;
+    }*/
+}
+
+/* THUMBNAILS */
+
+ul.carousel-thumbnails{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: flex-start;
+    list-style-type: none;
+    justify-content: center;
+    max-height: 400px !important;
+
+    & li{ 
+        min-height: 0;
+        min-width: 0;
+        height: calc(100% / 5);
+        width: 100%; 
+        flex-grow: 1;
+    }
+
+    & li:hover, li:focus{
+        opacity: .9;
+        text-decoration: none;
+        cursor: pointer;
+        transform: scale(1.1);
+        transition: all 0.5s;
+    }
+
+    & li:not(:hover){
+        transform: scale(1);
+        transition: transform 0.5s;
+    }
+
+    & li img.active-thumbnail{
+        /*border: #CCCCCC;
+        border-style: solid;*/
+        outline: 2px solid #0a78f5;
+    }
+
+    & li label{
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+    }
+
+    & li img{
+        box-sizing: border-box;
+        border-radius: 10px;
+        min-width: 0;
+        max-width: 180px;
+        max-height: calc(100% - 5px);
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        margin: auto;
+    }
+}
+
+
+/* =================== SEARCH BAR =================== */
+
+.search_container{
+    width: 80%;
+    margin: auto;
+}
+
+.search-bar{
+    margin: auto;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    background-color: #202020;
+    border-radius: 8px;
+
+    span{
+        margin-left: 1%;
+        height: 100%;
+    }
+
+    span img{
+        filter: invert(1);
+        display: block;
+        max-height: 100%;
+        width: auto;
+    }
+    
+    input[type=text] {
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0 auto;
+        background-color: inherit;
+        border: 0px;
+        height: 30px;
+        color: #f5f5f5 !important;
+        padding: 0px 10px !important;   
+        border-radius: inherit;
+    }
+
+    input::placeholder{
+        color: #C0C0C0;
+    }
+
+    input[type=text]:focus, input[type=text]:focus-visible {
+        /*outline: solid 2px #0a78f5 !important;*/
+        outline: solid 1px #5a5a5a !important;
+    }
+}
+
+.search-bar:focus, .search-bar:focus-visible {
+    /*outline: solid 2px #0a78f5 !important;*/
+    outline: solid 1px #5a5a5a !important;
+}
+
+
+
+
+/* =========================== FOOTER ============================= */
+
+.footer{
+    font-size: x-small;
+    display: flex; 
+    flex: 1;
+    flex-flow: column wrap;
+    height:fit-content;
+    align-items: stretch;
+    background-color: #202020;
+    padding-bottom: 10px;
+    margin-top: 100px;
+
+    p{
+        margin: 0%;
+    }
+    
+    img{
+        object-fit: contain;
+    }
+
+    & > *:first-child{
+        padding-top: 2px;
+    }
+
+    & > div{
+    margin: 10px auto 0 auto;
+    }
+
+    a{
+        color: #f5f5f5;
+        text-decoration: none;
+
+        &:hover{
+            color: #C0C0C0;
+            transition: all ease-in 0.2s;
+        }
+
+        &:not(:hover){
+            transition: all ease-in 0.2s;
+        }
+    }
+
+    & .ft-terms{
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+        & > *{
+            margin: 0 auto;
+        }
+    }
+}
+
+
+/* ===================== MAIN HOME CONTENT ===================== */
+
+/* CONTAINER */
+.main_home{
+    margin: 5% auto 0 auto;
+    width: 80%;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+
+/* -----------  TILE ----------- */
+.tile{
+    flex: 0 1 28%; /* Properties for tile div not internal components */
+    width: calc(80% / 3);
+    background: #202020;
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+    font-size: small;
+    margin: 2% auto 0 auto;
+    height: auto;
+    max-height: 250px;
+    /*This set display:flex for children elements*/
+    display: flex; 
+    flex-flow: column nowrap;
+
+    &:hover{
+        box-shadow: 0px 0px 5px 1px rgba(80, 80, 80, 0.2) inset;
+        transform: scale(1.01);
+        transition: scale 0.2s;
+    }
+
+    &:not(:hover){
+        transition: scale 0.2s;
+    }
+
+    .tile-text{
+        height: auto;
+        min-height: 20px;
+        padding: 5px 10px 0 10px;
+        display: flex;
+        flex-flow: column nowrap;
+        flex-grow: 1;
+    }
+
+    .tile-title{
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /*all 3 above needed for ellipsis to work*/
+        min-height: 1.2em; /*min-height needed for overflox problem width description div*/
+        margin-bottom: 1%;
+    }
+
+    .tile-desc{
+        flex-grow: 1; /*Only this div will flex-grow if required*/
+        font-size: smaller;
+        min-height: 20px;
+        max-height: 3.4em;
+        
+        /* Manage overflow and add ellipsis after 3 lines */
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .tile-text-bottom{
+        box-sizing: border-box;
+        margin: 2% auto 3% auto;
+        border-radius: 5px;
+        display: flex;
+        flex-flow: row nowrap;
+        border: solid 1px #5a5a5a;
+        width: 60%;
+        min-width: 150px;
+        padding: 5px 10px;
+
+        .tile-text-bottom-price{
+            margin: auto;
+        }
+    }
+
+    .tile-img{
+        height: calc(9/16 * 100%);
+    }
+
+    img{
+        border-top-left-radius: 2%;
+        border-top-right-radius: 2%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    img:hover{
+        opacity: .9;
+    }
+}
+
+/* Span.Discount see General Section */

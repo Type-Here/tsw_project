@@ -1,0 +1,75 @@
+/**
+ * Medium Sized Screens - 450 - 700px
+ */
+@media only screen and (max-width: 700px) { 
+
+    /* ======================= GENERAL ========================= */
+
+
+
+    /* ================= UPPER MENU BAR ======================== */
+    .menu_icon{
+        display: block;
+        align-self: center;
+        margin-left: 1%;
+    }
+
+    div.upper_bar {
+        & ul{
+            display: none;
+            transition: display 0.2s;
+        }
+
+        & a.upper-name{
+           font-size: 1rem; 
+        }
+
+        & .upper-logo-name{
+            flex-grow: 2;
+            justify-content:center;
+            margin: auto;
+        }
+    }
+
+    /* ====================== CAROUSEL ================== */
+    
+    .carousel {   
+        flex-direction: column;
+        align-items: center;
+
+        ul:has(.carousel-slide){
+            padding: 0;
+        }
+
+        ul.carousel-thumbnails {
+            display: none;
+        }
+
+        .carousel-radio{
+            display: block;
+            align-self: center;
+        }
+    }
+
+    /* ====================== SEARCH BAR ========================= */
+    .search-bar{
+        width: 90%;
+        transition: width 0.5s;
+    }
+
+    /* ====================== MAIN CONTENT ====================== */
+    
+    /* TILES */
+    .tile{
+        flex-basis: 45%;
+
+        & .tile-text{
+            font-size: 0.9em;
+
+            .tile-desc{
+                overflow: hidden;
+            }
+        }
+    }
+
+  }

@@ -1,0 +1,52 @@
+/**
+ * These are Rules for >= 700px width only;
+ */
+@media only screen and (min-width: 700px) { 
+
+/* ==================== UPPER MENU BAR ======================== */
+
+    div.upper_bar {
+
+        & a.upper-name{
+           font-size: 25px; 
+        }
+
+        & .upper-logo-name{
+            flex-grow: 0;
+            justify-content:flex-start;
+            margin: 0 2%;
+        }
+    }
+
+    .menu_icon{
+        display: none;
+    }
+
+/* ====================== SEARCH BAR ========================= */
+    .search-bar{
+        width: 75%;
+    }
+
+
+/* =================== CAROUSEL ===================== */
+
+    .carousel{
+        & .carousel-slide{
+            min-height: 300px;
+            align-self: center;
+        }
+    }
+
+}
+
+
+
+
+
+/* ============================================= RULES BETWEEN 700px AND 1000px SCREEN WIDTH ======================================== */
+
+@media only screen and (max-width: 1000px) {
+    .tile{
+        flex-basis: 45%;
+    }
+}
