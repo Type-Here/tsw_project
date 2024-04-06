@@ -52,6 +52,17 @@ a{
     color: #f5f5f5;
 }
 
+.overlay{
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(0, 0, 0);
+    opacity: .8;
+    position: fixed;
+    z-index: 3; 
+    display: none;  
+}
+
 .general_icon{
     filter: invert(1);
     border-radius: 50%;
@@ -68,9 +79,16 @@ a{
     cursor: pointer;
 }
 
-/*.menu_icon {
-    display: none ;
-}*/ /*WideScreen Rule*/
+.menu_icon {
+    /*display: none; */ /*WideScreen Rule*/
+    position: relative;
+    z-index: 5;
+    transition: transform 0.4s;
+} 
+
+.close_icon{
+    transition: transform 0.5s;
+}
 
 span.discount{
     border-radius: 2px;
@@ -89,10 +107,8 @@ span.original-rem-price{
 }
 
 li.this-page{
-    a{color:#C0C0C0;}
-    
+    a{color:#C0C0C0;}   
 }
-
 /* ===================  MAIN UPPER BAR  =================== */
 
 div.upper_bar{
@@ -110,6 +126,13 @@ div.upper_bar{
         align-content: center;
         justify-content:flex-start;
     }
+
+    & input[type=checkbox]{
+        /* FOR TEST ONLY */ /*TODO*/
+        /*z-index: 5;
+        position: absolute;*/
+        display: none;
+    } 
 }
 
 /* LOGO AND NAME */
@@ -138,7 +161,7 @@ div.upper_bar li {
     padding: 1vw 1vw;
     text-decoration: none;
     /*border: #CCCCCC solid 0.1px;*/
-    border-radius: 10px;
+    border-radius: 5px;
 
     &:hover{
         /*background-color: #0a78f5;*/
@@ -166,8 +189,6 @@ div.upper_bar li {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }*/
-
-
 
 
 /* RIGHT SIDE OF MAIN BAR */
@@ -460,6 +481,8 @@ ul.carousel-thumbnails{
         text-overflow: ellipsis; /*all 3 above needed for ellipsis to work*/
         min-height: 1.2em; /*min-height needed for overflox problem width description div*/
         margin-bottom: 1%;
+        line-height: normal; /*A little of adapation for older versions not supporting nowrap*/
+        max-height: 1.4em;
     }
 
     .tile-desc{
@@ -473,6 +496,7 @@ ul.carousel-thumbnails{
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        line-clamp: 3; /* Should replace all 3 lines in future */
     }
 
     .tile-text-bottom{

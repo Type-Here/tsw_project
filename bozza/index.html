@@ -12,16 +12,19 @@
         <script src="js/carousel.js"></script>
     </head>
     <body class="main">
-
+        
         <div class="upper_bar">
-            <span class="menu_icon"><img src="img/icons/menu.svg" alt="Menu Button" class="general_icon" /></span>
+            <input type="checkbox" id="nav" name="nav" />
+            <span class="menu_icon"><label for="nav"><img src="img/icons/menu.svg" alt="Menu Button" class="general_icon" /><img src="img/icons/close.svg" alt="Menu Close" class="general_icon close_icon" /></label></span>
             
             <div class="upper-logo-name">
                 <a href="#"><img class="logo" src="img/logo.png" alt="logo"/></a>
                 <a class="upper-name" href="#">RETROGAMER</a>
             </div>
             
-            <ul>
+            <div class="overlay"></div>
+
+            <ul class="nav">
                 <li class="this-page"><a href="#">Home</a></li>
                 <li><a href="#">Catalogo</a></li>
                 <li><a href="#">Chi Siamo</a></li>

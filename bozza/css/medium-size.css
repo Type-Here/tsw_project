@@ -15,10 +15,10 @@
     }
 
     div.upper_bar {
-        & ul{
+        /*& ul{
             display: none;
             transition: display 0.2s;
-        }
+        }*/
 
         & a.upper-name{
            font-size: 1rem; 
@@ -70,6 +70,52 @@
                 overflow: hidden;
             }
         }
+    }
+
+
+    /* ======================== MOBILE MENU ========================= */
+
+    .nav{
+        padding-top: 100px;
+        padding-right: 10%;
+        background: #1a1a1af7;
+        height: 100vh;
+        max-width: 90vw;
+        transform: translate(-150%);
+        display: flex;
+        flex-direction: column;
+        padding-left: 50px;
+        transition: transform 0.5s ease-in-out;
+        box-shadow: 3px 0px 5px 0px #121212;
+        position: absolute;
+        box-sizing: border-box;
+        z-index: 4;
+
+        & li{
+            margin: 10px;
+        }
+    }
+
+    div.upper_bar input[type="checkbox"]:checked ~ .nav { /* .nav preceded by a cheked checkbox */
+        transform: translateX(0);
+    }
+
+    div.upper_bar input[type="checkbox"]:checked ~ .menu_icon img:first-child{
+        transform: rotate(90deg);
+        animation: fadeOut 0.5s;
+        display: none;
+    }
+    
+    div.upper_bar input[type="checkbox"]:checked ~ .menu_icon .close_icon{
+        display: block;
+    }
+
+    div.upper_bar input[type="checkbox"]:not(:checked) ~ .menu_icon .close_icon{
+        display: none;
+    }
+    
+    div.upper_bar input[type="checkbox"]:checked ~ .overlay{
+        display: block;
     }
 
   }
