@@ -48,6 +48,11 @@
     .tile-desc{
         display: none !important;
     }
+
+    /* FOOTER*/
+    .ft-terms{
+        flex-flow: column wrap;
+    }
 }
 
 /* ============= ONLY LESS THAN 150px ============ */
