@@ -35,6 +35,10 @@
             min-height: 300px;
             align-self: center;
         }
+
+        ul{
+            min-height: 300px;
+        }
     }
 
 }
