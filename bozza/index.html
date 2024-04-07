@@ -11,7 +11,7 @@
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
         <script src="js/carousel.js"></script>
     </head>
-    <body class="main">
+    <body class="main" onload="prepare_function()">
         
         <div class="upper_bar">
             <input type="checkbox" id="nav" name="nav" />
@@ -59,28 +59,28 @@
                 </ul>
 
                 <div class="carousel-radio">
-                    <input type="radio" name="slides" id="carousel-slide-1" checked />
-                    <input type="radio" name="slides" id="carousel-slide-2" />
-                    <input type="radio" name="slides" id="carousel-slide-3" />
-                    <input type="radio" name="slides" id="carousel-slide-4" />
-                    <input type="radio" name="slides" id="carousel-slide-5" />
+                    <input type="radio" name="slides" id="carousel-slide-1" checked onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-2" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-3" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-4" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-5" onclick="carousel_changeimg(this)" />
                 </div>
 
                 <ul class="carousel-thumbnails">
                     <li>
-                        <label for="carousel-slide-1" onclick="carousel_changeimg(this)"><img src="img/placeholder.svg" alt="" class="active-thumbnail"></label>
+                        <label for="carousel-slide-1"><img src="img/placeholder.svg" alt="" class="active-thumbnail"></label>
                     </li>
                     <li>
-                        <label for="carousel-slide-2" onclick="carousel_changeimg(this)"><img src="img/placeholder2.svg" alt=""></label>
+                        <label for="carousel-slide-2"><img src="img/placeholder2.svg" alt=""></label>
                     </li>
                     <li>
-                        <label for="carousel-slide-3" onclick="carousel_changeimg(this)"><img src="img/placeholder.svg" alt=""></label>
+                        <label for="carousel-slide-3"><img src="img/placeholder.svg" alt=""></label>
                     </li>
                     <li>
-                        <label for="carousel-slide-4" onclick="carousel_changeimg(this)"><img src="img/placeholder2.svg" alt=""></label>
+                        <label for="carousel-slide-4"><img src="img/placeholder2.svg" alt=""></label>
                     </li>
                     <li>
-                        <label for="carousel-slide-5" onclick="carousel_changeimg(this)"><img src="img/placeholder.svg" alt=""></label>
+                        <label for="carousel-slide-5"><img src="img/placeholder.svg" alt=""></label>
                     </li>
                 </ul>
             </div>
