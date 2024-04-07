@@ -121,6 +121,8 @@
         }
     }
 
+    /* Manage menu button click with input checkbox trick in css */
+
     div.upper_bar input[type="checkbox"]:checked ~ .nav { /* .nav preceded by a cheked checkbox */
         transform: translateX(0);
     }
