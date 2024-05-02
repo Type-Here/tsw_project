@@ -656,8 +656,11 @@ ul.carousel-thumbnails{
 
     & fieldset{
         border: none;
-        width: 100%;
         flex-flow: row wrap;
+    }
+
+    & fieldset:not(.form-row){
+        width: 100%;
     }
 
     & label span {min-width: 70px;}
