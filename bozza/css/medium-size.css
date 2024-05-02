@@ -4,16 +4,26 @@
 @media only screen and (max-width: 700px) { 
 
     /* ======================= GENERAL ========================= */
-
+    
+    /* Input in Login Form */
+    .log_form fieldset:has(input:not([type="submit"])){
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
 
 
     /* ================= UPPER MENU BAR ======================== */
+
+    /* Icon for mobile menu  */
     .menu_icon{
         display: block;
         align-self: center;
         margin-left: 1%;
     }
 
+    /* Mobile adapt of Upper Bar */
     div.upper_bar {
         /*& ul{
             display: none;

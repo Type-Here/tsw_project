@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Retrogamer: Login</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="css/medium-size.css" />
+        <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
+        <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="css/small.css" />
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+        <script src="js/carousel.js"></script>
+        <script src="js/overlay.js"></script>
+
+        <style>
+
+            .centerized-flex-container{
+                justify-content: center;
+                display: flex;
+                flex-flow: row wrap;
+            }
+
+            .log_form{
+                /*background-color: #C0C0C0;*/
+                align-self: center;
+                border: 1px solid black;
+                border-radius: 5px;
+                width: 90%;
+                max-width: 500px; 
+                font-size: 0.9rem;
+
+                & fieldset{
+                    border: none;
+                    flex-flow: row wrap;
+                }
+                & fieldset:has(input:not([type="submit"])){
+                    justify-content: space-between;
+                    align-items: center;
+                    display: flex;
+                    width: 90%;
+                }
+            }
+
+            .log_form form{
+                margin: 20px;
+                display: flex;
+                flex-flow: column wrap;
+                align-items: center;
+            }
+
+            .log_form input{
+                background: none;
+                margin: 10px 20px;
+                line-height: 1.3rem;
+                color: #c0c0c0;
+            }
+
+            .log_form input::placeholder{
+                color: #c0c0c0;
+            }
+
+            input#user{
+                background-image: url(img/icons/user_white.svg);
+                background-size: 17px;
+                background-position: 5px center;
+                background-repeat: no-repeat;
+                text-indent: 20px;
+            }
+
+            input:not([type="submit"]){
+                border: 2px solid #5a5a5a;
+                border-radius: 20px;
+                padding: 10px 15px;
+                min-width: 100px;
+                width: 50%;
+            }
+
+            input#pass{
+                background-image: url(img/icons/fingerprint_white.svg);
+                background-position: 5px center;
+                background-repeat: no-repeat;
+                text-indent: 20px;
+            }
+
+            input[type="submit"].default, button.default{
+                background-color:#0a78f5;
+                line-height: normal;
+                color: #f5f5f5;
+                font-weight: bold;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                box-shadow: 0 0 2px 2px rgba(0,0,0,0.5);
+                &:hover{
+                    background-color: #1d80f1;
+                    transform: scale(1.05);
+                }
+            }
+
+            button.alternative{
+                border: 2px solid #0a78f5;
+                background-color: #f5f5f5;
+                color: #5a5a5a;
+
+                &:hover{
+                    background-color: #1d80f1;
+                    transform: scale(1.05);
+                    color: #f5f5f5;
+                }
+            }
+            
+            input:focus, input:focus-visible {
+                outline: solid 1px #5a5a5a !important;
+            }
+        </style>
+    </head>
+
+    <body class="body_def">            
+            <div class="central-logo-name">
+                <a href="#"><img class="logo-big" src="img/logo.png" alt="logo"/></a>
+                <a class="upper-name" href="#">RETROGAMER</a>
+                <h5>EVERYTHING BACK TO LIFE</h5>
+            </div>
+            <div class="main centerized-flex-container">
+                <div class="log_form">
+                    <!--TODO-->
+                    <form action="log_servlet">
+                        <fieldset>
+                            <label for="user">Username</label>
+                            <input id="user" type="email" placeholder="Username" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" /> <!-- Email -->
+                            <!-- General username pattern="^(?=.*[a-z])(?=.*[A-Z])(?!.*[\s]).{3,}$" -->
+                        </fieldset>
+                        <fieldset>
+                            <label for="pass">Password</label>
+                            <input id="pass" type="password" placeholder="Password" required pattern="^.{8,}$" maxlength="30"/>
+                        </fieldset>                
+                        <fieldset><a href="#">Password Dimenticata?</a></fieldset>
+                        <fieldset>
+                            <input class="default" type="submit" value="Login">
+                            <button class="default alternative" value="register" name="method">Registrati</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="ft-social">
+                    <img src="img/icons/facebook.svg" alt="Facebook Share" class="general_icon" />
+                    <img src="img/icons/share.svg" alt="Share Button" class="general_icon" />
+                </div>
+                <div class="ft-links">
+                    <a href="#">Chi Siamo</a>
+                    <a href="#">Contatti</a>
+                </div>
+                <div class="ft-copy">
+                    <p>&#169; 2024, RetroGamer. Tutti i diritti riservati.</p>
+                </div>
+                <div class="ft-terms">
+                    <a href="#">Termini di Servizio</a>
+                    <a href="#">Gestione Cookies</a>
+                    <a href="#">Termini di Privacy</a>
+                </div>
+            </div>
+
+    </body>
+</html>
