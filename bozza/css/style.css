@@ -656,9 +656,17 @@ ul.carousel-thumbnails{
 
     & fieldset{
         border: none;
+        width: 100%;
         flex-flow: row wrap;
     }
-    & fieldset:has(input:not([type="submit"])){
+
+    & label span {min-width: 70px;}
+
+    & .form-row{
+        flex-flow: row wrap;
+    }
+    /* Every FieldSet that doesn't have a submit type input */
+    & .form-row:has(input:not([type="submit"])){
         justify-content: space-between;
         align-items: center;
         display: flex;
@@ -682,7 +690,7 @@ ul.carousel-thumbnails{
 
 /* Add Image Background for Input Username */
 input#user{
-    background-image: url(img/icons/user_white.svg);
+    background-image: url(../img/icons/user_white.svg);
     background-size: 17px;
     background-position: 5px center;
     background-repeat: no-repeat;
@@ -691,7 +699,7 @@ input#user{
 
 /* Add Image Background for Input Password */
 input#pass{
-    background-image: url(img/icons/fingerprint_white.svg);
+    background-image: url(../img/icons/fingerprint_white.svg);
     background-position: 5px center;
     background-repeat: no-repeat;
     text-indent: 20px;

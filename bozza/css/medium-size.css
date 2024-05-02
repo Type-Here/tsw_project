@@ -5,11 +5,18 @@
 
     /* ======================= GENERAL ========================= */
     
-    /* Input in Login Form */
-    .log_form fieldset:has(input:not([type="submit"])){
+    /* Input not submit in Login Form */
+    .log_form .form-row:has(input:not([type="submit"])){
         align-items: center;
         justify-content: center;
         width: 100%;
+        flex-basis: 60%;
+    }
+    /*All other row in form (submit input also) */
+    .log_form .form-row{
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
 
