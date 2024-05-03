@@ -172,6 +172,19 @@ input:not([type="submit"]){
     width: 50%;
 }
 
+/* Override size imposition of previous css style. Now html style tag is used */
+input.free-size{
+    min-width: 10px;
+    width: fit-content;
+}
+
+input[type="number"].hide-arrows{
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
 input::placeholder{
     color: #c0c0c0;
 }
@@ -668,6 +681,7 @@ ul.carousel-thumbnails{
     & .form-row{
         flex-flow: row wrap;
     }
+    
     /* Every FieldSet that doesn't have a submit type input */
     & .form-row:has(input:not([type="submit"])){
         justify-content: space-between;
@@ -675,6 +689,17 @@ ul.carousel-thumbnails{
         display: flex;
         width: 90%;
     }
+
+    /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
+    & .form-row:has(input:not([type="submit"])).centerized-row{
+        justify-content: center;
+    }
+
+}
+
+/* --- Register Form Overrides ---- */
+.reg_form{
+    max-width: 800px;
 }
 
 .log_form form{
