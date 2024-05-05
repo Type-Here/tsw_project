@@ -36,10 +36,17 @@ build/
 
 ### Mac OS ###
 .DS_Store
-.idea/
-.mvn/
+.idea/*
+.mvn/*
 
 
 ### Manual ###
 /internal_docs/
 /internal_doc/
+.idea/encodings.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
+mvnw
+mvnw.cmd
