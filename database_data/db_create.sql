@@ -45,7 +45,6 @@ create table users (
     telephone varchar(31) not null,
     email varchar(255) not null unique, -- Email unica per utente
     birth date not null,
-    road varchar(255) not null,
     address varchar(255) not null,
     city varchar(255) not null,
     prov varchar(2) not null,
@@ -62,7 +61,6 @@ create table shipping_addresses(
     id_add int not null,
     firstname varchar(255) not null,
     lastname varchar(255) not null,
-    road varchar(255) not null,
     address varchar(255) not null,
     city varchar(255) not null,
     prov varchar(2) not null,
