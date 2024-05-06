@@ -1,4 +1,4 @@
-package com.unisa.store.tsw_project.model;
+package com.unisa.store.tsw_project.model.beans;
 
 import com.unisa.store.tsw_project.other.Data;
 
