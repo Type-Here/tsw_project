@@ -1,0 +1,70 @@
+/**
+ * Small Sized Screens - Less than 450px
+ */
+@media only screen and (max-width: 450px) { 
+    .tile{
+        flex-basis: 80%;
+    }
+
+}
+
+
+
+/* ============== RULES LESS THAN 350px SCREEN WIDTH =============== */
+@media only screen and (max-width: 350px) {
+    /* UPPER BAR */
+    .upper-logo-name{
+        object-fit: cover;
+        padding-left:36px;
+    }
+
+    .upper-name{
+        display: none;
+    }
+
+    /* TILE */
+    .tile{
+        .original-rem-price{
+           font-size: 0.7em;
+           display: block;
+        }
+        .tile-text-bottom{
+            min-width: 30px;
+            flex-grow: 1;
+            flex-flow: row wrap;
+        }
+    }
+}
+
+/* ============= ONLY LESS THAN 250px ============ */
+@media only screen and (max-width: 250px) {
+    /* UPPER BAR */
+    .upper-logo-name{
+        padding-left: 0;
+        object-fit: fill;
+        width: 60px;
+    }
+
+    /* TILE */
+    .tile-desc{
+        display: none !important;
+    }
+
+    /* FOOTER*/
+    .ft-terms{
+        flex-flow: column wrap;
+    }
+}
+
+/* ============= ONLY LESS THAN 150px ============ */
+@media only screen and (max-width: 155px) {
+    /* UPPER BAR */
+    .upper-logo-name{
+        display: none !important;
+    }
+
+    /* TILE */
+    .tile-text-bottom{
+        display: none !important;
+    }
+}

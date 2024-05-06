@@ -5,13 +5,15 @@ import com.unisa.store.tsw_project.other.Data;
 public class ProductBean {
     private int id_prod;
     private String name;
-    private double price;
-    private boolean type;
+    private Double price;
+    private Boolean type;
     private String platform;
-    private String metadata;
+    private String metadataPath;
     private String key;
     private Data.Condition condition;
-    private double discount;
+    private Double discount;
+
+    private MetaData metaData;
 
     public ProductBean() {
     }
@@ -24,11 +26,15 @@ public class ProductBean {
         this.price = price;
         this.type = type;
         this.platform = platform;
-        this.metadata = metadata;
+        this.metadataPath = metadata;
         this.key = key;
         this.condition = condition;
         this.discount = discount;
     }
+
+
+
+    /* - GETTERS - */
 
     public int getId_prod() {
         return id_prod;
@@ -38,7 +44,7 @@ public class ProductBean {
         return name;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
@@ -50,8 +56,8 @@ public class ProductBean {
         return platform;
     }
 
-    public String getMetadata() {
-        return metadata;
+    public String getMetadataPath() {
+        return metadataPath;
     }
 
     public String getKey() {
@@ -62,9 +68,21 @@ public class ProductBean {
         return condition;
     }
 
-    public double getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
+
+    public Boolean getType() {
+        return type;
+    }
+
+    public MetaData getMetaData() {
+        return metaData;
+    }
+
+
+
+    /* - SETTERS - */
 
     public void setId_prod(int id_prod) {
         this.id_prod = id_prod;
@@ -74,11 +92,11 @@ public class ProductBean {
         this.name = name;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public void setType(boolean type) {
+    public void setType(Boolean type) {
         this.type = type;
     }
 
@@ -86,8 +104,8 @@ public class ProductBean {
         this.platform = platform;
     }
 
-    public void setMetadata(String metadata) {
-        this.metadata = metadata;
+    public void setMetadataPath(String metadata) {
+        this.metadataPath = metadata;
     }
 
     public void setKey(String key) {
@@ -98,7 +116,11 @@ public class ProductBean {
         this.condition = condition;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public void setMetaData(MetaData metaData) {
+        this.metaData = metaData;
     }
 }

@@ -1,0 +1,165 @@
+/**
+ * Medium Sized Screens - 450 - 700px
+ */
+@media only screen and (max-width: 700px) { 
+
+    /* ======================= GENERAL ========================= */
+    
+    /* Input not submit in Login Form */
+    .log_form .form-row:has(input:not([type="submit"])){
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        flex-basis: 60%;
+    }
+    /*All other row in form (submit input also) */
+    .log_form .form-row{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+
+
+    /* ================= UPPER MENU BAR ======================== */
+
+    /* Icon for mobile menu  */
+    .menu_icon{
+        display: block;
+        align-self: center;
+        margin-left: 1%;
+    }
+
+    /* Mobile adapt of Upper Bar */
+    div.upper_bar {
+        /*& ul{
+            display: none;
+            transition: display 0.2s;
+        }*/
+
+        & a.upper-name{
+           font-size: 1rem; 
+        }
+
+        & .upper-logo-name{
+            flex-grow: 2;
+            justify-content:center;
+            margin: auto;
+        }
+    }
+
+    /* ====================== CAROUSEL ================== */
+    
+    .carousel {   
+        flex-direction: column;
+        align-items: flex-start;
+        overflow-x: scroll;
+        --slide-count: 5;
+        scroll-snap-type: x mandatory; /* Be mandatory sticky po fixed position when scrolling */
+        scroll-behavior: smooth; /*Be smooth when scrolling */
+        
+        /* Hide scrollbar, keep functionality */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        /*Hide scrollbar for Chrome, Safari, Opera*/
+        &::-webkit-scrollbar{
+            display: none;
+        }
+
+        ul:has(.carousel-slide){
+            padding: 0;
+            width: calc(100% * var(--slide-count));
+            display: flex;
+            -webkit-overflow-scrolling: touch; /* To solve bounce on older iphones */
+        }
+
+        .carousel-slide{
+            display: inline-block;
+            margin: 10px;
+            scroll-snap-align: start;
+        }
+
+        ul.carousel-thumbnails {
+            display: none;
+        }
+
+        .carousel-radio{
+            display: block;
+            align-self: center;
+            /* Keep Centered */
+            position: sticky;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    /* ====================== SEARCH BAR ========================= */
+    .search-bar{
+        width: 90%;
+        transition: width 0.5s;
+    }
+
+    /* ====================== MAIN CONTENT ====================== */
+    
+    /* TILES */
+    .tile{
+        flex-basis: 45%;
+
+        & .tile-text{
+            font-size: 0.9em;
+
+            .tile-desc{
+                overflow: hidden;
+            }
+        }
+    }
+
+
+    /* ======================== MOBILE MENU ========================= */
+
+    .nav{
+        padding-top: 100px;
+        padding-right: 10%;
+        background: #1a1a1af7;
+        height: 100vh;
+        max-width: 90vw;
+        transform: translate(-150%);
+        display: flex;
+        flex-direction: column;
+        padding-left: 50px;
+        transition: transform 0.5s ease-in-out;
+        box-shadow: 3px 0px 5px 0px #121212;
+        position: absolute;
+        box-sizing: border-box;
+        z-index: 4;
+
+        & li{
+            margin: 10px;
+        }
+    }
+
+    /* Manage menu button click with input checkbox trick in css */
+
+    div.upper_bar input[type="checkbox"]:checked ~ .nav { /* .nav preceded by a cheked checkbox */
+        transform: translateX(0);
+    }
+
+    div.upper_bar input[type="checkbox"]:checked ~ .menu_icon img:first-child{
+        transform: rotate(90deg);
+        animation: fadeOut 0.5s;
+        display: none;
+    }
+    
+    div.upper_bar input[type="checkbox"]:checked ~ .menu_icon .close_icon{
+        display: block;
+    }
+
+    div.upper_bar input[type="checkbox"]:not(:checked) ~ .menu_icon .close_icon{
+        display: none;
+    }
+    
+    div.upper_bar input[type="checkbox"]:checked ~ .overlay{
+        display: block;
+    }
+
+  }
