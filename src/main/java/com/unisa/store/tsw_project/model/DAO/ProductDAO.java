@@ -58,4 +58,76 @@ public class ProductDAO {
             return products;
         }
     }
+
+    public ProductBean doRetrieveById(int id) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT * FROM products WHERE id_prod=?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                ProductBean p = new ProductBean();
+                p.setId_prod(rs.getInt(1));
+                p.setName(rs.getString(2));
+                p.setPrice(rs.getDouble(3));
+                p.setType(rs.getBoolean(4));
+                p.setPlatform(rs.getString(5));
+                p.setMetadataPath(rs.getString(6));
+                p.setKey(rs.getString(7));
+                String condition = rs.getString(8);
+
+                // Manage Optional Value to Avoid Illegal Argument Exception when null
+                if (condition != null) {
+                    p.setCondition(Data.Condition.valueOf(condition));
+                } else {
+                    p.setCondition(null);
+                }
+
+                p.setDiscount(rs.getDouble(9));
+                return p;
+            }
+            return null;
+        }
+    }
+
+    public void doSave(ProductBean product) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO products " +
+                    "(name, price, type, platform, metadata_path, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setBoolean(3, product.getType());
+            ps.setString(4, product.getPlatform());
+            ps.setString(5, product.getMetadataPath());
+            ps.setString(6, product.getKey());
+            ps.setString(7, product.getCondition().toString()); //Enum to String Da vedere
+            ps.setDouble(8, product.getDiscount());
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException("INSERT error.");
+            }
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            product.setId_prod(rs.getInt(1));
+        }
+    }
+
+    public void doUpdate(ProductBean product) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE products " +
+                    "SET name=?, price=?, type=?, platform=?, metadata_path=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setBoolean(3, product.getType());
+            ps.setString(4, product.getPlatform());
+            ps.setString(5, product.getMetadataPath());
+            ps.setString(6, product.getKey());
+            ps.setString(7, product.getCondition().toString()); //Enum to String Da vedere
+            ps.setDouble(8, product.getDiscount());
+            ps.setInt(9, product.getId_prod());
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException("UPDATE error.");
+            }
+        }
+    }
 }
