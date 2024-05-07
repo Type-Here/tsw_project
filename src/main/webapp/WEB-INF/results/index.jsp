@@ -102,7 +102,7 @@
             <c:forEach var="prod" items="${products}">
                 <div class="tile">
                     <div class=" tile-img">
-                        <a href="#"><img src="${prod.metaData.images[0]}"></a>
+                        <a href="${prod.metaData.link}"><img src="${prod.metaData.images[0]}"></a>
                     </div>
                     <div class="tile-text">
                         <h3 class="tile-title">${prod.name}</h3>

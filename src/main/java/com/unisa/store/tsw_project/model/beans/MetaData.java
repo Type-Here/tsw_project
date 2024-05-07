@@ -7,6 +7,7 @@ public class MetaData {
     private String description;
     private List<String> images;
     private boolean available;
+    private String link;
 
 
     public MetaData() {
@@ -38,6 +39,9 @@ public class MetaData {
         return available;
     }
 
+    public String getLink() {
+        return link;
+    }
 
     /* - SETTERS - */
 
@@ -55,5 +59,9 @@ public class MetaData {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

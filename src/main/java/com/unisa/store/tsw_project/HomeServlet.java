@@ -2,6 +2,7 @@ package com.unisa.store.tsw_project;
 
 import java.io.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,48 +25,57 @@ public class HomeServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ProductDAO productDAO = new ProductDAO();
-        List<ProductBean> products = productDAO.doRetrieveAll();
 
-        // For Each Product in list
-        for( ProductBean prod : products){
-            String meta = prod.getMetadataPath();
+        try {
+            List<ProductBean> products = productDAO.doRetrieveAll(20, "discount");
 
-            //MetaData Initializing
-            String desc = null;
-            List<String> imagesList = new ArrayList<>();
+            // For Each Product in list
+            for( ProductBean prod : products){
+                String meta = prod.getMetadataPath();
 
-            //Read Buffer from JSON
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(getServletContext().getRealPath("metadata/ps1/" + meta)));
-            //Using Google GSON
-            Gson gson = new Gson();
-            JsonElement element = gson.fromJson(bufferedReader, JsonElement.class);
+                //MetaData Initializing
+                String desc = null;
+                String link_product = null;
+                List<String> imagesList = new ArrayList<>();
 
-            /*
-             * - JsonObject = Use ge("key") to retrieve a JsonElement (key:value/values)
-             * - JsonElement = This is a JSON Element for a previous specified key: use getAs.... to retrieve its value (es getAsString() )
-             * - JsonArray = If the returned element is an array save it here.
-             */
+                //Read Buffer from JSON
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(getServletContext().getRealPath("metadata/ps1/" + meta)));
+                //Using Google GSON
+                Gson gson = new Gson();
+                JsonElement element = gson.fromJson(bufferedReader, JsonElement.class);
 
-            if (element.isJsonObject()) {
-                JsonObject obj = element.getAsJsonObject();
-                desc = obj.get("description").getAsString();
-                JsonObject images = obj.getAsJsonObject("images");
+                /*
+                 * - JsonObject = Use ge("key") to retrieve a JsonElement (key:value/values)
+                 * - JsonElement = This is a JSON Element for a previous specified key: use getAs.... to retrieve its value (es getAsString() )
+                 * - JsonArray = If the returned element is an array save it here.
+                 */
 
-                imagesList.add(images.get("front").getAsString());
+                if (element.isJsonObject()) {
+                    JsonObject obj = element.getAsJsonObject();
+                    desc = obj.get("description").getAsString();
+                    link_product = obj.get("link").getAsString();
+                    JsonObject images = obj.getAsJsonObject("images");
+
+                    imagesList.add(images.get("front").getAsString());
+                }
+
+                //Save metadata in a new MetaData Object
+                MetaData metaData = new MetaData();
+                metaData.setLink(link_product);
+                metaData.setDescription(desc);
+                metaData.setImages(imagesList);
+
+                //Add to product element
+                prod.setMetaData(metaData);
             }
 
-            //Save metadata in a new MetaData Object
-            MetaData metaData = new MetaData();
-            metaData.setDescription(desc);
-            metaData.setImages(imagesList);
+            //Add product list to request and Send to JSP for View
+            req.setAttribute("products", products);
+            req.getRequestDispatcher("/WEB-INF/results/index.jsp").forward(req,resp);
 
-            //Add to product element
-            prod.setMetaData(metaData);
+        } catch (SQLException e){
+            throw new RuntimeException(e); /*TODO*/
         }
-
-        //Add product list to request and Send to JSP for View
-        req.setAttribute("products", products);
-        req.getRequestDispatcher("/WEB-INF/results/index.jsp").forward(req,resp);
     }
 
     @Override
