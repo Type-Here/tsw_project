@@ -14,7 +14,7 @@ public class CartDAO {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM cart WHERE id_client = ?");
             ps.setInt(1, id_client);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 CartBean c = new CartBean();
                 c.setId_cart(rs.getInt(1));
                 c.setTotal(rs.getDouble(2));

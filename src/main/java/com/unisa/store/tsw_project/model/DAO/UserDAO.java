@@ -36,7 +36,7 @@ public class UserDAO {
     public void doSave(UserBean user) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO user " +
-                    "(firstname, lastname, telephone, email, birth, address, city, prov, CAP, id_cred)" +
+                    "(firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred)" +
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getFirstname());
             ps.setString(2, user.getLastname());
@@ -61,7 +61,7 @@ public class UserDAO {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE user " +
                     "SET firstname=?, lastname=?, telephone=?, email=?, birth=?," +
-                    " address=?, city=?, prov=?, CAP=?, id_cred=? WHERE id=?");
+                    " address=?, city=?, prov=?, cap=?, id_cred=? WHERE id=?");
             ps.setString(1, user.getFirstname());
             ps.setString(2, user.getLastname());
             ps.setString(3, user.getTelephone());
