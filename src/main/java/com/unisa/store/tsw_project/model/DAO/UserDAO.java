@@ -9,6 +9,8 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
+    // LocalDate to Date da verificare funzionamento
+
     public UserBean getUserById(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE id = ?");
