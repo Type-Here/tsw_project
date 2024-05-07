@@ -16,10 +16,22 @@ public class ProductDAO {
      * Find all Products
      * @return a list of ProductBean
      */
-    public List<ProductBean> doRetrieveAll() {
-        try (Connection con = ConPool.getConnection()) {
+    public List<ProductBean> doRetrieveAll() throws SQLException {
+        return doRetrieveAll(null, null);
+    }
+
+    public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
+        try (Connection con = ConPool.getConnection()) { //Auto-Closeable
             PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products");
+                    con.prepareStatement("SELECT * FROM products ORDER BY ? LIMIT ? ");
+            if(orderBy != null){
+                ps.setString(1, orderBy);
+            } else ps.setString(1, "id_prod"); //Default Choice
+
+            if(limit != null){
+                ps.setInt(2, limit);
+            } else ps.setInt(2, 200); //Limit 200 is default for MariaDB
+
             ResultSet rs = ps.executeQuery();
             List<ProductBean> products = new ArrayList<>();
             while (rs.next()) {
@@ -34,7 +46,7 @@ public class ProductDAO {
                 String condition = rs.getString(8);
 
                 // Manage Optional Value to Avoid Illegal Argument Exception when null
-                if(condition != null){
+                if (condition != null) {
                     p.setCondition(Data.Condition.valueOf(condition));
                 } else {
                     p.setCondition(null);
@@ -44,8 +56,6 @@ public class ProductDAO {
                 products.add(p);
             }
             return products;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 }
