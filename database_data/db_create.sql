@@ -58,7 +58,7 @@ create table users (
 -- Tabella con Indirizzi di Spedizione /* TODO Aggiungere a Documentazione */
 create table shipping_addresses(
     id_client int not null,
-    id_add int not null,
+    id_add int not null auto_increment,
     firstname varchar(255) not null,
     lastname varchar(255) not null,
     address varchar(255) not null,
