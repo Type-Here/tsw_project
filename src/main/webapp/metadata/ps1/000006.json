@@ -1,8 +1,5 @@
 {
-  "name": "Gran Turismo 2",
-  "description": "Ottieni tutta l'eccitazione delle corse della vita reale con Gran Turismo 2. 20 piste da far rizzare i capelli da Seattle a Tahiti in una delle oltre 500 auto incredibilmente dettagliate e di marca. Quindi personalizza la tua auto acquistando parti con le tue vincite.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Polyphony Digital",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg"]
 }

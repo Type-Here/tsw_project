@@ -1,8 +1,5 @@
 {
-  "name": "TOPOLINO E LE SUE AVVENTURE",
-  "description": "Rivivi tutti i momenti iconici di Topolino e sfida i nemici che si presenteranno ad ogni livello. Topolino ha la possibilità di tornare indietro nel tempo e camminare attraverso le avventure senza tempo che ha vissuto. Mickey Mania è un platform in cui tutti i livelli sono basati sui cartoni animati più famosi di Topolino.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Traveller's Tales",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg"]
 }

@@ -1,8 +1,5 @@
 {
-  "name": "Gran Turismo",
-  "description": "Gran Turismo è la nuova definizione di un grande gioco di corse. Con una grafica meravigliosa, replay simili alla TV e un'intera serie di auto tra cui scegliere, questo classico istantaneo va oltre un gioco di guida nel regno del simulatore di guida. Puoi scegliere tra la versione arcade (con auto classiche come Corvette e Aston Martins) o la simulazione, che è il vero cuore del gioco.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Psygnosis",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.png"]
 }

@@ -1,8 +1,5 @@
 {
-  "name": "Final Fantasy VII",
-  "description": "Final Fantasy VII per PlayStation è il classico gioco di ruolo giapponese con la missione di Cloud Strife di fermare Sephiroth e Shinra come membri di un gruppo ecoterroristico chiamato AVALANCHE.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Naughty Dog",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg"]
 }

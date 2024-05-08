@@ -1,8 +1,5 @@
 {
-  "name": "Star Wars Dark Forces",
-  "description": "Star Wars Dark Forces per PC e Mac è uno sparatutto in prima persona ambientato nell'universo di Star Wars che segue la storia di Kyle Katarn, un mercenario con legami dell'Alleanza.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Capcom",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg"]
 }

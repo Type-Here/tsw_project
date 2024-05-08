@@ -1,8 +1,5 @@
 {
-  "name": "Crash Bandicoot",
-  "description": "Crash Bandicoot è un classico videogioco a piattaforma 3D pieno di personaggi stravaganti, salti difficili, livelli emozionanti e battaglie con i boss mentre giri, salti e ti fai strada attraverso l'avventura.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Square",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg"]
 }
