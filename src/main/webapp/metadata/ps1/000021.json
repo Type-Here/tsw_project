@@ -1,0 +1,8 @@
+{
+  "name": "Hogs of War",
+  "description": "azioni mirano alla conquista della Maialustralasia. Il controllo di questa isola-nazione (dalle fattezze di un maiale) è fondamentale per il controllo del pianeta, poiché è ricca di sbobba, elemento cruciale per la vita dei maiali",
+  "images": {
+    "front": "metadata/ps1/img/1.png"
+  },
+  "available": true
+}
