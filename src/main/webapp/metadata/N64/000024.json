@@ -1,9 +1,5 @@
 {
-  "name": "The legend of Zelda OCARINA OF TIME",
-  "description": "",
-  "developer": "",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Intelligent Systems",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg"]
 }
