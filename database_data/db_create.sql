@@ -10,6 +10,8 @@ create table products (
     price double not null, 
     type boolean not null, -- 0 Fisico - 1 Digitale
     platform varchar(255) not null,
+    developer varchar(255) not null,
+    description varchar(2047) not null,
     metadata varchar(2047) not null,
     `key` varchar(15),
     `condition` enum('A','B','C','D','E'), -- Status: A, B, C, D, E per condizioni
