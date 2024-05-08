@@ -1,8 +1,5 @@
 {
-  "name": "Need for Speed: Underground 2",
-  "description": "",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Visceral Games",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg"]
 }

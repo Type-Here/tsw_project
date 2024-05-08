@@ -1,8 +1,5 @@
 {
-  "name": "Ratchet & Clank 2 Fuoco a Volontà",
-  "description": "Ratchet e Clank sono già famosi per avere fermato il folle Presidente Drek. Abercrombie Fizzwidget, direttamente dalla Galassia Bogon, si mette in contatto con loro per reclutarli nella Megacorp. L'uomo vuole infatti che si mettano sulle tracce del Ladro Sconosciuto che ha rubato l'esperimento supersegreto della compagnia. Le cose, però, non sono esattamente quelle che sembrano, e la Galassia Bogon avrà bisogno di Ratchet e Clank per salvarsi da un'immane catastrofe.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Sucker Punch",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg"]
 }

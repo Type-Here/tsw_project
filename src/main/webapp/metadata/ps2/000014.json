@@ -1,8 +1,5 @@
 {
-  "name": "Il Padrino Edizione Limitata",
-  "description": "Dopo una vita fatta di lavori saltuari e piccoli furti, sei stato accolto nell'organizzazione criminale più famosa d'America. Ora dovrai eseguire gli ordini, ottenere rispetto e tentare la scalata alla gerarchia mafiosa per dominare New York. Se giocherai bene le tue carte, potrai diventare il nuovo e potente Don.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Eurocom",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg", "4.jpeg"]
 }

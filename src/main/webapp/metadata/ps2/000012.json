@@ -1,8 +1,5 @@
 {
-  "name": "James Bond 007: From Russia With Love",
-  "description": "James Bond 007: From Russia With Love sarà il primo gioco a mettere i giocatori nell'universo dei classici film di James Bond. Ambientato nell'era originale di Bond degli anni '60, il gioco presenta missioni basate su film, nonché sequenze originali ad alta intensità d'azione, un'ampia e profonda varietà di gameplay, veicoli completamente integrati, esperienze multiplayer sociali, splendide donne e armi e gadget classici e aggiornabili con meccaniche moderne.",
-  "images": {
-    "front": "metadata/ps1/img/1.png"
-  },
-  "available": true
+  "developer": "Polyphony Digital",
+  "front": "1.jpeg",
+  "gallery": ["2.jpeg", "3.jpeg"]
 }
