@@ -58,7 +58,7 @@ create table users (
 -- Tabella con Indirizzi di Spedizione /* TODO Aggiungere a Documentazione */
 create table shipping_addresses(
     id_client int not null,
-    id_add int not null,
+    id_add int not null auto_increment,
     firstname varchar(255) not null,
     lastname varchar(255) not null,
     address varchar(255) not null,
@@ -102,4 +102,18 @@ create table orders (
     foreign key(id_cart) references cart(id_cart),
     foreign key(id_client, id_add) references shipping_addresses(id_client, id_add),
     primary key(id_cart)
+);
+
+
+-- Tabella Recensioni /*TODO Add to Database */
+create table reviews(
+    id_review int not null auto_increment, 
+    voto int not null, 
+    commento varchar(2047), 
+    review_date date not null, 
+    id_prod int not null, 
+    id_client int not null,
+    foreign key(id_prod) references products(id_prod),
+    foreign key(id_client) references users(id_client),
+    primary key(id_review) 
 );
