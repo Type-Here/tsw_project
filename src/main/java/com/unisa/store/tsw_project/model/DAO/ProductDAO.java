@@ -41,9 +41,11 @@ public class ProductDAO {
                 p.setPrice(rs.getDouble(3));
                 p.setType(rs.getBoolean(4));
                 p.setPlatform(rs.getString(5));
-                p.setMetadataPath(rs.getString(6));
-                p.setKey(rs.getString(7));
-                String condition = rs.getString(8);
+                p.setDeveloper(rs.getString(6));
+                p.setDescription(rs.getString(7));
+                p.setMetadataPath(rs.getString(8));
+                p.setKey(rs.getString(9));
+                String condition = rs.getString(10);
 
                 // Manage Optional Value to Avoid Illegal Argument Exception when null
                 if (condition != null) {
@@ -52,7 +54,7 @@ public class ProductDAO {
                     p.setCondition(null);
                 }
 
-                p.setDiscount(rs.getDouble(9));
+                p.setDiscount(rs.getDouble(11));
                 products.add(p);
             }
             return products;
@@ -72,9 +74,11 @@ public class ProductDAO {
                 p.setPrice(rs.getDouble(3));
                 p.setType(rs.getBoolean(4));
                 p.setPlatform(rs.getString(5));
-                p.setMetadataPath(rs.getString(6));
-                p.setKey(rs.getString(7));
-                String condition = rs.getString(8);
+                p.setDeveloper(rs.getString(6));
+                p.setDescription(rs.getString(7));
+                p.setMetadataPath(rs.getString(8));
+                p.setKey(rs.getString(9));
+                String condition = rs.getString(10);
 
                 // Manage Optional Value to Avoid Illegal Argument Exception when null
                 if (condition != null) {
@@ -83,7 +87,7 @@ public class ProductDAO {
                     p.setCondition(null);
                 }
 
-                p.setDiscount(rs.getDouble(9));
+                p.setDiscount(rs.getDouble(11));
                 return p;
             }
             return null;
@@ -93,16 +97,18 @@ public class ProductDAO {
     public void doSave(ProductBean product) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO products " +
-                    "(name, price, type, platform, metadata_path, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                    "(name, price, type, platform, developer, description, metadata, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setBoolean(3, product.getType());
             ps.setString(4, product.getPlatform());
-            ps.setString(5, product.getMetadataPath());
-            ps.setString(6, product.getKey());
-            ps.setString(7, product.getCondition().toString()); //Enum to String Da vedere
-            ps.setDouble(8, product.getDiscount());
+            ps.setString(5, product.getDeveloper());
+            ps.setString(6, product.getDescription());
+            ps.setString(7, product.getMetadataPath());
+            ps.setString(8, product.getKey());
+            ps.setString(9, product.getCondition().toString()); //Enum to String Da vedere
+            ps.setDouble(10, product.getDiscount());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -115,16 +121,18 @@ public class ProductDAO {
     public void doUpdate(ProductBean product) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE products " +
-                    "SET name=?, price=?, type=?, platform=?, metadata_path=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
+                    "SET name=?, price=?, type=?, platform=?, developer=?, description=?, metadata=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setBoolean(3, product.getType());
             ps.setString(4, product.getPlatform());
-            ps.setString(5, product.getMetadataPath());
-            ps.setString(6, product.getKey());
-            ps.setString(7, product.getCondition().toString()); //Enum to String Da vedere
-            ps.setDouble(8, product.getDiscount());
-            ps.setInt(9, product.getId_prod());
+            ps.setString(5, product.getDeveloper());
+            ps.setString(6, product.getDescription());
+            ps.setString(7, product.getMetadataPath());
+            ps.setString(8, product.getKey());
+            ps.setString(9, product.getCondition().toString()); //Enum to String Da vedere
+            ps.setDouble(10, product.getDiscount());
+            ps.setInt(11, product.getId_prod());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
             }

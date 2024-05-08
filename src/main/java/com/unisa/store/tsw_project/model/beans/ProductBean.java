@@ -8,6 +8,8 @@ public class ProductBean {
     private Double price;
     private Boolean type;
     private String platform;
+    private String developer;
+    private String description;
     private String metadataPath;
     private String key;
     private Data.Condition condition;
@@ -19,13 +21,15 @@ public class ProductBean {
     }
 
     public ProductBean(int id_prod, String name, double price, boolean type,
-                       String platform, String metadata, String key,
-                       Data.Condition condition, double discount) {
+                       String platform, String developer, String description, String metadata,
+                       String key, Data.Condition condition, double discount) {
         this.id_prod = id_prod;
         this.name = name;
         this.price = price;
         this.type = type;
         this.platform = platform;
+        this.developer = developer;
+        this.description = description;
         this.metadataPath = metadata;
         this.key = key;
         this.condition = condition;
@@ -54,6 +58,14 @@ public class ProductBean {
 
     public String getPlatform() {
         return platform;
+    }
+
+    public String getDeveloper() {
+        return developer;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getMetadataPath() {
@@ -102,6 +114,14 @@ public class ProductBean {
 
     public void setPlatform(String platform) {
         this.platform = platform;
+    }
+
+    public void setDeveloper(String developer) {
+        this.developer = developer;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setMetadataPath(String metadata) {
