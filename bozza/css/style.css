@@ -49,7 +49,7 @@ body.body_def{
 .centerized-flex-container{
     justify-content: center;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
 }
 /*End Body*/
 
@@ -153,6 +153,10 @@ li.this-page{
     a{color:#C0C0C0;}   
 }
 
+
+.text-center{
+    text-align: center;
+}
 
 /* ----- DEFAULT STYLES FOR ELEMENTS ----- */
 
@@ -264,7 +268,7 @@ a.upper-name{
     text-decoration: none;
 }
 
-/* LOGO AND NAME */
+/* ----- LOGO AND NAME ----- */
 
 /* Default: Class for logo in nav bar */
 .logo{
@@ -274,7 +278,7 @@ a.upper-name{
     margin-top: -10px;
 }
 
-/* LOGO ALTERNATIVE */
+/* ----- LOGO ALTERNATIVE ----- */
 
 /* Div container for logo central - no nav */
 .central-logo-name{
@@ -296,7 +300,7 @@ a.upper-name{
     width: 50vw;
 }
 
-/* MAIN MENU */
+/* ------- MAIN MENU ------ */
 
 div.upper_bar li {
     float: left;
@@ -347,7 +351,7 @@ div.upper_bar li {
 
 /* ==================== MAIN PAGE CAROUSEL ================== */
 
-/* CAROUSEL CONTAINER */
+/* ------ CAROUSEL CONTAINER ------ */
 
 .carousel{
     width: 80%;
@@ -367,7 +371,7 @@ div.upper_bar li {
     }
 }
 
-/* SLIDE */
+/* ----- SLIDE ----- */
 
 li.carousel-slide{
     display: none;
@@ -403,7 +407,7 @@ li.carousel-slide{
     }*/
 }
 
-/* THUMBNAILS */
+/* ----- THUMBNAILS ----- */
 
 ul.carousel-thumbnails{
     width: 20%;
@@ -577,7 +581,7 @@ ul.carousel-thumbnails{
 
 /* ===================== MAIN HOME CONTENT ===================== */
 
-/* CONTAINER */
+/* ----- CONTAINER ----- */
 .main_home{
     margin: 5% auto 0 auto;
     width: 80%;
@@ -683,7 +687,7 @@ ul.carousel-thumbnails{
 
 /* ======================== FORM FOR LOGIN ============================= */
 
-/* Form Main Div */
+/* ----- Form Main Div ----- */
 .log_form{
     /*background-color: #C0C0C0;*/
     align-self: center;
@@ -723,7 +727,7 @@ ul.carousel-thumbnails{
 
 }
 
-/* --- Register Form Overrides ---- */
+/* ---- Register Form Overrides ---- */
 .reg_form{
     max-width: 800px;
 }
@@ -760,7 +764,10 @@ input#pass{
 }
 
 
-
+.admin-login{
+    text-align: center;
+    color: #f0b50f;
+}
 
 /* ========================================= PRODUCT PAGE ========================================== */
 
@@ -865,7 +872,7 @@ input#pass{
     }
 }
 
-/* ----------- Prod Main Container ------------- */
+/* ----------- Product Main Container ------------- */
 
 /* ------ Description Box ------ */
 .prod-description{
