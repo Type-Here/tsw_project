@@ -1,8 +1,8 @@
 -- Testing Elements
 
 -- 1 Product
-insert into retrogamer.products(name, price, type, platform, metadata, condition) values
-('Crash Team Racing', 15.00, 0, 'ps1', '0000001.json','A');
+insert into retrogamer.products(name, price, type, platform, developer, description, metadata, condition) values
+('Crash Team Racing', 15.00, 0, 'ps1', 'Naughty Dog', 'Test description', '0000001.json','A');
 
 -- Credentials
 insert into retrogamer.credentials(pass_hash, pass_salt. creation_date) values
