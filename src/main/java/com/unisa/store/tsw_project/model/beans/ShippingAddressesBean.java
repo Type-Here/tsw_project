@@ -8,12 +8,12 @@ public class ShippingAddressesBean {
     private String address;
     private String city;
     private String prov;
-    private String cap;
+    private String CAP;
 
     public ShippingAddressesBean() {
     }
 
-    public ShippingAddressesBean(int id_client, int id_add, String firstname, String lastname, String address, String city, String prov, String cap) {
+    public ShippingAddressesBean(int id_client, int id_add, String firstname, String lastname, String address, String city, String prov, String CAP) {
         this.id_client = id_client;
         this.id_add = id_add;
         this.firstname = firstname;
@@ -21,7 +21,7 @@ public class ShippingAddressesBean {
         this.address = address;
         this.city = city;
         this.prov = prov;
-        this.cap = cap;
+        this.CAP = CAP;
     }
 
 
@@ -56,8 +56,8 @@ public class ShippingAddressesBean {
         return prov;
     }
 
-    public String getCap() {
-        return cap;
+    public String getCAP() {
+        return CAP;
     }
 
     /* - SETTERS - */
@@ -90,7 +90,7 @@ public class ShippingAddressesBean {
         this.prov = prov;
     }
 
-    public void setCap(String cap) {
-        this.cap = cap;
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
     }
 }
