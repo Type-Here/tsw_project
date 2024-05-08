@@ -1,0 +1,8 @@
+{
+  "name": "Spider-Man",
+  "description": "Dai un'occhiata sopra l'alto--Spider-Man sta arrivando sulla PlayStation giusto in tempo. Come amato fotoreporter-webslinger, esplorerai liberamente lo skyline, le fogne e i nascondigli di New York per compiere diverse missioni. Usa la forza sovrumana di Spider-Man per combattere nemici famosi come Scorpion, Venom e Rhino.",
+  "images": {
+    "front": "metadata/ps1/img/1.png"
+  },
+  "available": true
+}

@@ -1,0 +1,8 @@
+{
+  "name": "WWF Smackdown!",
+  "description": "WWF Smackdown! Entra nel ring del gioco di wrestling con molte caratteristiche che dovrebbero entusiasmare i fan del wrestling virtuale. Questo gioco vanta un cast impressionante di oltre 30 mega-star della World Wrestling Federation, tra cui The Rock, Stone Cold Steve Austin e The Undertaker.",
+  "images": {
+    "front": "metadata/ps1/img/1.png"
+  },
+  "available": true
+}
