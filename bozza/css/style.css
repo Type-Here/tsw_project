@@ -228,6 +228,7 @@ input:focus, input:focus-visible {
 div.upper_bar{
     display: flex; 
     height:fit-content;
+    min-height: 70px;
     background-color: #202020;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -782,7 +783,7 @@ input#pass{
     justify-content: center;   
 }
 
-/* - Main Image - */
+/* ------- Main Image ----- */
 .prod-front-image{
     width: 60%;
     max-width: 800px;
@@ -801,10 +802,10 @@ input#pass{
     }
 }
 
-/* - Lateral Overview - */
+/* ------ Lateral Overview ------ */
 .prod-overview{
     width: 20%;
-    min-width: 200px;
+    min-width: 300px;
     margin: 20px 50px;
     padding: 50px 10px;
     background-color: #5a5a5a;
@@ -831,7 +832,7 @@ input#pass{
         }
     }
 
-    /* Metadata Table */
+    /* - Metadata Table - */
 
     & .prod-meta-table{
         margin: 10px 0;
@@ -864,9 +865,9 @@ input#pass{
     }
 }
 
-/* ---- Prod Main Container ---- */
+/* ----------- Prod Main Container ------------- */
 
-/* Description Box */
+/* ------ Description Box ------ */
 .prod-description{
     font-size: 0.9rem;
     width: 100%;
@@ -906,7 +907,9 @@ input#pass{
 
 }
 
-/* Review Box */
+/* ------ Review Box ------- */
+
+/* Section */
 .prod-reviews{
     margin: 50px auto;
     width: 100%;
@@ -917,12 +920,15 @@ input#pass{
         padding: 0px 10px;
     }
 
+    /* Content container */
     & .prod-reviews-internal{
         padding: 30px 5px;
         width: 90%;
         margin: auto;
+        overflow-x:scroll;
     }
 
+    /* First Row contains Review heading and average vote */
     & .prod-review-first-row{
         padding: 10px 10px;
         display: flex;
@@ -930,6 +936,7 @@ input#pass{
         align-items: center;
     }
 
+    /* Average of Product votes display */
     & .review-average{
         padding: 5px 10px;
         margin: 0 20px;
@@ -938,6 +945,7 @@ input#pass{
         border: 2px groove #5a5a5a;
     }
 
+    /* Table with Reviews */
     & .prod-reviews-table{
         margin: 0 auto;
         width: 90%;
