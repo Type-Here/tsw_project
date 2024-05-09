@@ -2,7 +2,7 @@ package com.unisa.store.tsw_project.other;
 
 public class DataValidator {
     public enum PatternType{
-        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition;
+        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool;
     }
 
     /**
@@ -32,26 +32,24 @@ public class DataValidator {
                 if(min != null && data.length() < min) return false;
                 if(max != null && data.length() > max) return false;
             }
-            switch (patternType) {
-                case Email:
-                    return data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
-                case Username:
-                    return data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
-                case Password:
-                    return data.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
-                case Int:
+
+            return switch (patternType) {
+                case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
+                case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
+                case Password -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
+                case Int -> {
                     int val = Integer.parseInt(data);
-                    return (max == null || !(val > max)) && (min == null || !(val < min));
-                case Double:
+                    yield (max == null || !(val > max)) && (min == null || !(val < min));
+                }
+                case Double -> {
                     double vald = Double.parseDouble(data);
-                    return (max == null || !(vald > max)) && (min == null || !(vald < min));
-                case GenericAlphaNumeric:
-                    return !data.matches("\\W*");
-                case Condition:
-                    return data.matches("[ABCDE]");
-                default:
-                    return false;
-            }
+                    yield (max == null || !(vald > max)) && (min == null || !(vald < min));
+                }
+                case GenericAlphaNumeric -> !data.matches("\\W*");
+                case Condition -> data.matches("[ABCDE]");
+                case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
+                default -> false;
+            };
         } catch (NullPointerException|NumberFormatException e){
             return false;
         }

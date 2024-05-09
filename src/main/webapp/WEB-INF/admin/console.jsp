@@ -59,7 +59,7 @@
                         </select>
                     </label>
                 </fieldset>
-                <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
+                <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" name="description" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
                 <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required/></label>
                 <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required/></label>
                 <label class="form-row"><span>Key:</span><input type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
