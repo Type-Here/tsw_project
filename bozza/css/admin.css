@@ -1,12 +1,21 @@
 /* =============== STYLESHEET FOR ADMIN USER ===================== */
 
-#add_prod{
+section{
     border: 1px solid #5a5a5a;
     width: 100%;
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
-    padding: 20px;
+}
+
+.section-header{
+    width: 100%;
+    margin: auto;
+    background-color: #5a5a5acc;
+    padding: 10px 0;
+    h2{
+        font-weight: bold;
+    }
 }
 
 .add-prod-info{

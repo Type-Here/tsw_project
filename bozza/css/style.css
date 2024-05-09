@@ -53,6 +53,8 @@ body.body_def{
 }
 /*End Body*/
 
+/* ------- HTML TAG Defaults ------- */
+
 img {
     max-width: 100%;
 }
@@ -93,6 +95,14 @@ a{
         transition: all ease-in 0.2s;
     }
 }
+
+hr{
+    width: 70%;
+    border: 1px solid #5a5a5a;
+}
+
+
+/* -------- SOME GENERAL USE CLASSES ----- */
 
 .overlay{
     box-sizing: border-box;
@@ -163,7 +173,7 @@ li.this-page{
     margin-right: 10px;
 }
 
-/* ----- DEFAULT STYLES FOR ELEMENTS ----- */
+/* ----- DEFAULT STYLES FOR INPUT ELEMENTS ----- */
 
 /* Default Classes */
 
@@ -910,11 +920,6 @@ input#pass{
         padding: 30px 5px;
         width: 90%;
         margin: auto;
-    }
-
-    hr{
-        width: 70%;
-        border: 1px solid #5a5a5a;
     }
 
     .req-table{
