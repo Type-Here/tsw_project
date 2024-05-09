@@ -22,18 +22,18 @@
                 <div><h2 class="admin-login"><b>ADMIN CONSOLE</b></h2></div>
                 <div class="log_form">
                     <!--TODO-->
-                    <form action="log_admin_servlet">
+                    <form action="log_admin_servlet" method="post">
                         <fieldset class="form-row">
                             <label for="user">Username</label>
-                            <input id="user" type="email" placeholder="Username" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" /> <!-- Email -->
+                            <input id="user" type="email" name="user" placeholder="Username" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" /> <!-- Email -->
                             <!-- General username pattern="^(?=.*[a-z])(?=.*[A-Z])(?!.*[\s]).{3,}$" -->
                         </fieldset>
                         <fieldset class="form-row">
                             <label for="pass">Password</label>
-                            <input id="pass" type="password" placeholder="Password" required pattern="^.{8,}$" maxlength="30"/>
+                            <input id="pass" type="password" name="pass" placeholder="Password" required pattern="^.{8,}$" maxlength="30"/>
                         </fieldset>                
                         <fieldset class="form-row centerized-row"><a href="#">Password Dimenticata?</a></fieldset>
-                        <fieldset class="form-row">
+                        <fieldset class="form-row centerized-row">
                             <input class="default" type="submit" value="Login">
                         </fieldset>
                     </form>
