@@ -1,0 +1,28 @@
+/* =============== STYLESHEET FOR ADMIN USER ===================== */
+
+#add_prod{
+    border: 1px solid #5a5a5a;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.add-prod-info{
+    width: 80%;
+    max-width: 600px;
+    border: none;
+    margin: auto;
+    align-items: center;
+
+    & .centerized-row{
+        justify-content: center;
+    }
+
+    & label:has(:required) span::after, 
+    & span:has(+ label.required)::after {
+        content: "*";
+        color: #ad212e;
+    }
+}
