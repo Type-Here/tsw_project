@@ -158,11 +158,16 @@ li.this-page{
     text-align: center;
 }
 
+.margin-h-10{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 /* ----- DEFAULT STYLES FOR ELEMENTS ----- */
 
 /* Default Classes */
 
-input[type="submit"].default, button.default{
+input[type="reset"].default, input[type="submit"].default, button.default{
     background-color:#0a78f5;
     line-height: normal;
     color: #f5f5f5;
@@ -186,7 +191,7 @@ button.yellow{
     }
 }
 
-input:not([type="submit"]){
+input:not([type="submit"], [type="radio"], [type="reset"]){
     border: 2px solid #5a5a5a;
     border-radius: 20px;
     padding: 10px 15px;
@@ -211,7 +216,7 @@ input::placeholder{
     color: #c0c0c0;
 }
 
-button.alternative{
+input[type="submit"].alternative, input[type="reset"].alternative, button.alternative{
     border: 2px solid #0a78f5;
     background-color: #f5f5f5;
     color: #5a5a5a;
@@ -225,6 +230,15 @@ button.alternative{
 
 input:focus, input:focus-visible {
     outline: solid 1px #5a5a5a !important;
+}
+
+textarea{
+    margin: 20px 20px;
+    padding: 10px;
+    color: #f5f5f5;
+    background-color: #202020;
+    border: 2px solid #5a5a5a;
+    border-radius: 5px;
 }
 
 /* ===================  MAIN UPPER BAR  =================== */
@@ -713,7 +727,7 @@ ul.carousel-thumbnails{
     }
     
     /* Every FieldSet that doesn't have a submit type input */
-    & .form-row:has(input:not([type="submit"])){
+    & .form-row{
         justify-content: space-between;
         align-items: center;
         display: flex;
@@ -721,8 +735,13 @@ ul.carousel-thumbnails{
     }
 
     /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
-    & .form-row:has(input:not([type="submit"])).centerized-row{
+    & .form-row.centerized-row{
         justify-content: center;
+    }
+
+    /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
+    & .form-row.flex-start-row{
+        justify-content: flex-start;
     }
 
 }
