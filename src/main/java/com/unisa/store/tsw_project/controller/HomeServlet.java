@@ -55,7 +55,7 @@ public class HomeServlet extends HttpServlet {
                     front = obj.get("front").getAsString();
                     galleryArr = obj.get("gallery").getAsJsonArray();
                     for(JsonElement o : galleryArr){
-                        gallery.add(o.getAsString());
+                        gallery.add(o.getAsString()); /*TODO*/
                     }
                 }
 
