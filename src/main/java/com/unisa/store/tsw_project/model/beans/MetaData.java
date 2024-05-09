@@ -3,65 +3,46 @@ package com.unisa.store.tsw_project.model.beans;
 import java.util.List;
 
 public class MetaData {
-    private String name;
-    private String description;
-    private List<String> images;
-    private boolean available;
-    private String link;
+    private String path;
+    private String front;
+    private List<String> gallery;
 
 
     public MetaData() {
     }
 
-    public MetaData(String name, String description, List<String> images, boolean available) {
-        this.name = name;
-        this.description = description;
-        this.images = images;
-        this.available = available;
+    public MetaData(String path, String front, List<String> gallery) {
+        this.path = path;
+        this.front = front;
+        this.gallery = gallery;
     }
 
 
     /* - GETTERS - */
 
-    public String getName() {
-        return name;
+    public String getPath() {
+        return path;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFront() {
+        return front;
     }
 
-    public List<String> getImages() {
-        return images;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public String getLink() {
-        return link;
+    public List<String> getGallery() {
+        return gallery;
     }
 
     /* - SETTERS - */
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFront(String front) {
+        this.front = front;
     }
 
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
+    public void setGallery(List<String> gallery) {
+        this.gallery = gallery;
     }
 }

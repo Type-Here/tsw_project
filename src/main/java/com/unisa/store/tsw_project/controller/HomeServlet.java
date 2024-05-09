@@ -27,19 +27,19 @@ public class HomeServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
 
         try {
-            List<ProductBean> products = productDAO.doRetrieveAll(20, "discount");
+            List<ProductBean> products = productDAO.doRetrieveAll(18, "discount");
 
             // For Each Product in list
             for( ProductBean prod : products){
                 String meta = prod.getMetadataPath();
 
                 //MetaData Initializing
-                String desc = null;
-                String link_product = null;
-                List<String> imagesList = new ArrayList<>();
+                String front = null;
+                JsonArray galleryArr = null;
+                List<String> gallery = new ArrayList<>();
 
                 //Read Buffer from JSON
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(getServletContext().getRealPath("metadata/ps1/" + meta)));
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(getServletContext().getRealPath("metadata/" + prod.getPlatform() + '/' + meta)));
                 //Using Google GSON
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(bufferedReader, JsonElement.class);
@@ -52,18 +52,20 @@ public class HomeServlet extends HttpServlet {
 
                 if (element.isJsonObject()) {
                     JsonObject obj = element.getAsJsonObject();
-                    desc = obj.get("description").getAsString();
-                    link_product = obj.get("link").getAsString();
-                    JsonObject images = obj.getAsJsonObject("images");
-
-                    imagesList.add(images.get("front").getAsString());
+                    front = obj.get("front").getAsString();
+                    galleryArr = obj.get("gallery").getAsJsonArray();
+                    for(JsonElement o : galleryArr){
+                        gallery.add(o.getAsString());
+                    }
                 }
 
                 //Save metadata in a new MetaData Object
                 MetaData metaData = new MetaData();
-                metaData.setLink(link_product);
-                metaData.setDescription(desc);
-                metaData.setImages(imagesList);
+                metaData.setPath("metadata/" + prod.getPlatform() + "/img/" + prod.getId_prod() + '/');
+                metaData.setFront(front);
+                metaData.setGallery(gallery);
+
+                System.out.println("Path" + metaData.getPath() + ",Front:" + metaData.getFront() + ",Gallery:" + metaData.getGallery());
 
                 //Add to product element
                 prod.setMetaData(metaData);
