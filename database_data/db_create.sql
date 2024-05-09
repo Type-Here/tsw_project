@@ -119,3 +119,9 @@ create table reviews(
     foreign key(id_client) references users(id_client),
     primary key(id_review) 
 );
+
+-- Tabella Admin
+create table admin(
+    user varchar(255) primary key,
+    hash varchar(255) not null
+);
