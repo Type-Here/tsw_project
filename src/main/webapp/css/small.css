@@ -2,16 +2,36 @@
  * Small Sized Screens - Less than 450px
  */
 @media only screen and (max-width: 450px) { 
+    
+    /* ---- TILES ----- */
     .tile{
         flex-basis: 80%;
+    }
+
+    /*Adapt Home to use 100% on smaller screens */
+    div.main_home{
+        width: 95%;
+    }
+
+    /* ---- PRODUCT PAGE ---- */
+    section.prod-description{
+        border: none;
+
+        & h2{
+            margin: 20px auto;
+        }
+
+        & hr{
+            margin: 30px auto;
+        }
     }
 
 }
 
 
 
-/* ============== RULES LESS THAN 350px SCREEN WIDTH =============== */
-@media only screen and (max-width: 350px) {
+/* ============== RULES LESS THAN 360px SCREEN WIDTH =============== */
+@media only screen and (max-width: 360px) {
     /* UPPER BAR */
     .upper-logo-name{
         object-fit: cover;
@@ -21,6 +41,13 @@
     .upper-name{
         display: none;
     }
+
+    /* Hide WebSite Logo Iame in <360px only if search bar is inside upper bar */
+    div.upper_bar .upper-logo-name:has(~ .search_container) {
+        display: none;
+    }
+
+
 
     /* TILE */
     .tile{

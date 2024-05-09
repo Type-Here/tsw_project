@@ -14,7 +14,7 @@
 
 @font-face {
     font-family: "Inter";
-    src: url(../fonts/Inter-VariableFont_slnt\,wght.ttf);
+    src: url(../fonts/Inter-VariableFont.ttf);
 }
 
 @keyframes fadeIn {
@@ -49,18 +49,29 @@ body.body_def{
 .centerized-flex-container{
     justify-content: center;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
 }
 /*End Body*/
+
+/* ------- HTML TAG Defaults ------- */
 
 img {
     max-width: 100%;
 }
 
-h3{
+h2, h3{
     margin: 0;
     font-family: Inter, sans-serif;
     font-weight: normal;
+}
+
+p {
+    font-size: 0.85rem;
+}
+
+h3{
+    font-weight: bold;
+    font-size: 0.93rem;
 }
 
 /*Slogan*/
@@ -84,6 +95,14 @@ a{
         transition: all ease-in 0.2s;
     }
 }
+
+hr{
+    width: 70%;
+    border: 1px solid #5a5a5a;
+}
+
+
+/* -------- SOME GENERAL USE CLASSES ----- */
 
 .overlay{
     box-sizing: border-box;
@@ -145,11 +164,20 @@ li.this-page{
 }
 
 
-/* ----- DEFAULT STYLES FOR ELEMENTS ----- */
+.text-center{
+    text-align: center;
+}
+
+.margin-h-10{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* ----- DEFAULT STYLES FOR INPUT ELEMENTS ----- */
 
 /* Default Classes */
 
-input[type="submit"].default, button.default{
+input[type="reset"].default, input[type="submit"].default, button.default{
     background-color:#0a78f5;
     line-height: normal;
     color: #f5f5f5;
@@ -164,7 +192,16 @@ input[type="submit"].default, button.default{
     }
 }
 
-input:not([type="submit"]){
+button.yellow{
+    background-color: #ffc30a;
+    color: #121212;
+
+    &:hover{
+        background-color: #f0b50f !important;
+    }
+}
+
+input:not([type="submit"], [type="radio"], [type="reset"]){
     border: 2px solid #5a5a5a;
     border-radius: 20px;
     padding: 10px 15px;
@@ -189,7 +226,7 @@ input::placeholder{
     color: #c0c0c0;
 }
 
-button.alternative{
+input[type="submit"].alternative, input[type="reset"].alternative, button.alternative{
     border: 2px solid #0a78f5;
     background-color: #f5f5f5;
     color: #5a5a5a;
@@ -205,11 +242,21 @@ input:focus, input:focus-visible {
     outline: solid 1px #5a5a5a !important;
 }
 
+textarea{
+    margin: 20px 20px;
+    padding: 10px;
+    color: #f5f5f5;
+    background-color: #202020;
+    border: 2px solid #5a5a5a;
+    border-radius: 5px;
+}
+
 /* ===================  MAIN UPPER BAR  =================== */
 
 div.upper_bar{
     display: flex; 
     height:fit-content;
+    min-height: 70px;
     background-color: #202020;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -229,6 +276,11 @@ div.upper_bar{
         position: absolute;*/
         display: none;
     } 
+
+    /* Applies only when the search bar is inside the upper-bar div container ! */
+    & .search_container{
+        width: 30%;
+    }
 }
 
 a.upper-name{
@@ -240,16 +292,17 @@ a.upper-name{
     text-decoration: none;
 }
 
-/* LOGO AND NAME */
+/* ----- LOGO AND NAME ----- */
 
 /* Default: Class for logo in nav bar */
 .logo{
     width: 100px;
+    min-width: 90px;
     object-fit: fill;
     margin-top: -10px;
 }
 
-/* LOGO ALTERNATIVE */
+/* ----- LOGO ALTERNATIVE ----- */
 
 /* Div container for logo central - no nav */
 .central-logo-name{
@@ -271,7 +324,7 @@ a.upper-name{
     width: 50vw;
 }
 
-/* MAIN MENU */
+/* ------- MAIN MENU ------ */
 
 div.upper_bar li {
     float: left;
@@ -322,7 +375,7 @@ div.upper_bar li {
 
 /* ==================== MAIN PAGE CAROUSEL ================== */
 
-/* CAROUSEL CONTAINER */
+/* ------ CAROUSEL CONTAINER ------ */
 
 .carousel{
     width: 80%;
@@ -342,7 +395,7 @@ div.upper_bar li {
     }
 }
 
-/* SLIDE */
+/* ----- SLIDE ----- */
 
 li.carousel-slide{
     display: none;
@@ -378,7 +431,7 @@ li.carousel-slide{
     }*/
 }
 
-/* THUMBNAILS */
+/* ----- THUMBNAILS ----- */
 
 ul.carousel-thumbnails{
     width: 20%;
@@ -461,6 +514,7 @@ ul.carousel-thumbnails{
     span img{
         filter: invert(1);
         display: block;
+        min-width: 20px;
         max-height: 100%;
         width: auto;
     }
@@ -551,7 +605,7 @@ ul.carousel-thumbnails{
 
 /* ===================== MAIN HOME CONTENT ===================== */
 
-/* CONTAINER */
+/* ----- CONTAINER ----- */
 .main_home{
     margin: 5% auto 0 auto;
     width: 80%;
@@ -657,7 +711,7 @@ ul.carousel-thumbnails{
 
 /* ======================== FORM FOR LOGIN ============================= */
 
-/* Form Main Div */
+/* ----- Form Main Div ----- */
 .log_form{
     /*background-color: #C0C0C0;*/
     align-self: center;
@@ -683,7 +737,7 @@ ul.carousel-thumbnails{
     }
     
     /* Every FieldSet that doesn't have a submit type input */
-    & .form-row:has(input:not([type="submit"])){
+    & .form-row{
         justify-content: space-between;
         align-items: center;
         display: flex;
@@ -691,13 +745,18 @@ ul.carousel-thumbnails{
     }
 
     /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
-    & .form-row:has(input:not([type="submit"])).centerized-row{
+    & .form-row.centerized-row{
         justify-content: center;
+    }
+
+    /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
+    & .form-row.flex-start-row{
+        justify-content: flex-start;
     }
 
 }
 
-/* --- Register Form Overrides ---- */
+/* ---- Register Form Overrides ---- */
 .reg_form{
     max-width: 800px;
 }
@@ -731,4 +790,227 @@ input#pass{
     background-position: 5px center;
     background-repeat: no-repeat;
     text-indent: 20px;
+}
+
+
+.admin-login{
+    text-align: center;
+    color: #f0b50f;
+}
+
+/* Error if Username or Password are wrong */
+.invalid-credentials{
+    color: #ad212e;
+}
+
+/* ========================================= PRODUCT PAGE ========================================== */
+
+/* ------ FRONT VIEW (MAIN IMAGE AND PRICE/ADD CART DIV) ------ */
+
+/* Product Title Page */
+.game-name{
+    margin: auto;
+    text-align: center;
+    font-size: large;
+    font-family: Inter, 'OpenSans', sans-serif;
+}
+
+/* ------------- Container of Front View ------------ */
+.front-view{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;   
+}
+
+/* ------- Main Image ----- */
+.prod-front-image{
+    width: 60%;
+    max-width: 800px;
+    min-width: 300px;
+    margin: 20px 50px;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
+    transition: transform 0.3s linear;
+
+    &:hover{
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    &:not(:hover){
+        transform: scale(1);
+    }
+}
+
+/* ------ Lateral Overview ------ */
+.prod-overview{
+    width: 20%;
+    min-width: 300px;
+    margin: 20px 50px;
+    padding: 50px 10px;
+    background-color: #5a5a5a;
+    border-radius: 5px;
+    align-self: center;
+
+    & .prod-price{
+        background-color: #c0c0c0;
+        border: 1px solid #121212;
+        border-radius: 5px;
+        color: #121212;
+        font-size: medium;
+        text-align: center;
+        padding: 10px 0px;
+        margin: 10px 15%;
+    }
+
+    & .prod-add-to-cart{
+        display: flex;
+        flex-flow: column wrap;
+
+        & button{
+            margin: 10px 20%;
+        }
+    }
+
+    /* - Metadata Table - */
+
+    & .prod-meta-table{
+        margin: 10px 0;
+    }
+
+    & .prod-meta-table table{
+        width: 90%;
+        margin: auto;
+        font-size: 0.9rem;
+        border-collapse: collapse; /* Collapse cell borders on table row (unifies them) */
+
+        & th, & td {
+            padding: 5px 0;
+        }
+
+        & tr{
+            border-bottom: 1px solid #202020;
+        }
+    }
+
+    & .social-overview{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+
+        & img{
+            margin: 5px 10px;
+        }
+    }
+}
+
+/* ----------- Product Main Container ------------- */
+
+/* ------ Description Box ------ */
+.prod-description{
+    font-size: 0.9rem;
+    width: 100%;
+    border: 1px solid #5a5a5a;
+
+    h2{
+        text-align: center;
+        padding: 5px;
+        color: #f5f5f5;
+        font-size: 1rem;
+    }
+
+    & .prod-desc-internal{
+        padding: 30px 5px;
+        width: 90%;
+        margin: auto;
+    }
+
+    .req-table{
+        border-collapse: collapse;
+        border: none;
+        margin: 10px;
+        width: 30%;
+        max-width: 400px;
+        min-width: 200px;
+
+        th{
+            text-align: left;
+            width: 50%;
+        }
+    }
+
+}
+
+/* ------ Review Box ------- */
+
+/* Section */
+.prod-reviews{
+    margin: 50px auto;
+    width: 100%;
+    border: 1px solid #5a5a5a;
+    font-size: 0.82rem;
+
+    & h3{
+        padding: 0px 10px;
+    }
+
+    /* Content container */
+    & .prod-reviews-internal{
+        padding: 30px 5px;
+        width: 90%;
+        margin: auto;
+        overflow-x:scroll;
+    }
+
+    /* First Row contains Review heading and average vote */
+    & .prod-review-first-row{
+        padding: 10px 10px;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+    }
+
+    /* Average of Product votes display */
+    & .review-average{
+        padding: 5px 10px;
+        margin: 0 20px;
+        background-color: #303030d5;
+        border-radius: 5px;
+        border: 2px groove #5a5a5a;
+    }
+
+    /* Table with Reviews */
+    & .prod-reviews-table{
+        margin: 0 auto;
+        width: 90%;
+        border-collapse: collapse;
+
+        th, td{
+            border-bottom: 1px solid #5a5a5a;
+            border-right: 1px solid #5a5a5a;
+            padding: 10px 20px;
+        }
+        
+        th:first-child, td:first-child{width: 20%;}
+        th:nth-child(2), td:nth-child(2){width: 10%;}
+        th:nth-child(3), td:nth-child(3){width: 50%;}
+
+        td:last-child, th:last-child{
+            border-right: none;
+        }
+
+        span.star-on::before{
+            content: "\2605";
+            color:#ffc30a;
+            font: 1.1em sans-serif;
+        }
+
+        span.star-off::before{
+            content: "\2606";
+            color: #f5f5f5;
+            font: 1.1em sans-serif;
+        }
+    }
 }

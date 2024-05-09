@@ -46,6 +46,16 @@
             justify-content:center;
             margin: auto;
         }
+        
+        /* Hide WebSite Name in <700px only if search bar is inside upper bar */
+        & .upper-logo-name:has(~ .search_container) .upper-name{
+            display: none;
+        }
+
+        /* Do NOT Flex-Grow in <700px only if search bar is inside upper bar */
+        & .upper-logo-name:has(~ .search_container){
+            flex-grow: 0;
+        }
     }
 
     /* ====================== CAROUSEL ================== */
