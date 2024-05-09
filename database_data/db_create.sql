@@ -1,6 +1,5 @@
 drop database if exists retrogamer;
 create database retrogamer;
-
 use retrogamer;
 
 -- Tabella Prodotti
@@ -68,13 +67,13 @@ create table shipping_addresses(
     prov varchar(2) not null,
     cap varchar(5) not null,
     foreign key(id_client) references users(id_client),
-    primary key(id_client, id_add)
+    primary key(id_add)
 );
 
 
 -- Tabella Carrello
 create table cart(
-    id_cart int null auto_increment,
+    id_cart int not null auto_increment,
     total double not null,
     id_client int not null,
     discount_code varchar(15),
