@@ -1,8 +1,10 @@
 package com.unisa.store.tsw_project.other;
 
+import java.util.Arrays;
+
 public class DataValidator {
     public enum PatternType{
-        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool;
+        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool, Platform;
     }
 
     /**
@@ -48,6 +50,7 @@ public class DataValidator {
                 case GenericAlphaNumeric -> !data.matches("\\W*");
                 case Condition -> data.matches("[ABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
+                case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equals(e.name()));
                 default -> false;
             };
         } catch (NullPointerException|NumberFormatException e){

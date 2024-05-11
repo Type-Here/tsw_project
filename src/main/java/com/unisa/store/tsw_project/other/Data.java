@@ -1,6 +1,13 @@
 package com.unisa.store.tsw_project.other;
 
 public interface Data {
+    enum Type{
+        PHYSICAL(false), DIGITAL(true);
+        public final boolean val;
+        Type(boolean val){
+            this.val=val;
+        }
+    }
 
     enum Condition{
         A("Nuovo"),
@@ -28,5 +35,10 @@ public interface Data {
         OrderStatus(String value){
             this.value=value;
         }
+    }
+
+
+    enum Platform{
+        Atari2600, C64, GameBoy, GameCube, N64, PC, ps1, ps2, SegaMegaDrive
     }
 }
