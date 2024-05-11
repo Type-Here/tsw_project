@@ -143,4 +143,23 @@ public class ProductBean {
     public void setMetaData(MetaData metaData) {
         this.metaData = metaData;
     }
+
+
+    @Override
+    public String toString() {
+        return "ProductBean{" +
+                "id_prod=" + id_prod +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", type=" + type +
+                ", platform='" + platform + '\'' +
+                ", developer='" + developer + '\'' +
+                ", description='" + description + '\'' +
+                ", metadataPath='" + metadataPath + '\'' +
+                ", key='" + key + '\'' +
+                ", condition=" + condition +
+                ", discount=" + discount +
+                ", metaData=" + metaData +
+                '}';
+    }
 }
