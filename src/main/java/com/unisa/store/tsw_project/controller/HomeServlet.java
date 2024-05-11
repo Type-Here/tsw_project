@@ -65,8 +65,6 @@ public class HomeServlet extends HttpServlet {
                 metaData.setFront(front);
                 metaData.setGallery(gallery);
 
-                System.out.println("Path" + metaData.getPath() + ",Front:" + metaData.getFront() + ",Gallery:" + metaData.getGallery());
-
                 //Add to product element
                 prod.setMetaData(metaData);
             }
