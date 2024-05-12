@@ -67,12 +67,7 @@
                 </ul>
             </div>
             
-            <div class="search_container">
-                <form action="#" method="get" class="search-bar">
-                    <span><img src="img/icons/search.svg" alt="Search"/></span>
-                    <input type="text" name="search" placeholder="Cerca un prodotto" alt="Cerca" />
-                </form>
-            </div>
+            <%@include file="/WEB-INF/include/search-bar.jsp"%>
         </div>
 
         <div class="main_home">
