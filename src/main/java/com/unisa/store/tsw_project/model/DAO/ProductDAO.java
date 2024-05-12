@@ -114,7 +114,7 @@ public class ProductDAO {
             }
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            product.setId_prod(rs.getInt(1));
+            product.setId_prod(rs.getInt(1)); //Set the new ID in the ProductBean
         }
     }
 
