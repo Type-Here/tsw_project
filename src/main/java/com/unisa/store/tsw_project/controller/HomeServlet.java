@@ -30,8 +30,8 @@ public class HomeServlet extends HttpServlet {
         try {
             List<ProductBean> products = productDAO.doRetrieveAll(18, "discount");
 
-            JSONMetaParser parser = new JSONMetaParser(products, getServletContext());
-            parser.doParseMetaData();
+            JSONMetaParser parser = new JSONMetaParser();
+            parser.doParseMetaData(products, getServletContext());
 
             //Add product list to request and Send to JSP for View
             req.setAttribute("products", products);
