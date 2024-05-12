@@ -10,12 +10,15 @@
     <div class="overlay" onclick="overlay_menu()"></div>
 
     <ul class="nav">
-        <li class="this-page"><a href="${pageContext.request.contextPath}/">Home</a></li>
+        <li class=""><a href="${pageContext.request.contextPath}/">Home</a></li>
         <li><a href="#">Catalogo</a></li>
         <li><a href="#">Chi Siamo</a></li>
         <li><a href="#">Assistenza</a></li>
         <li><a href="#">Newsletter</a></li>
     </ul>
+
+    <%@include file="/WEB-INF/include/search-bar.jsp"%>
+
     <div class="upper-bar-right">
         <span><img src="img/icons/shopping_cart.svg" alt="Carrello" class="general_icon"></span>
         <span><img src="img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span>
