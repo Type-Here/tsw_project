@@ -23,7 +23,7 @@ public class ProductDAO {
     public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
         try (Connection con = ConPool.getConnection()) { //Auto-Closeable
             PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products ORDER BY ? LIMIT ? ");
+                    con.prepareStatement("SELECT * FROM products ORDER BY ? DESC LIMIT ? ");
             if(orderBy != null){
                 ps.setString(1, orderBy);
             } else ps.setString(1, "id_prod"); //Default Choice
@@ -138,4 +138,40 @@ public class ProductDAO {
             }
         }
     }
+
+    public List<ProductBean> doRetrieveByName(String name) throws SQLException{
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT * FROM products WHERE name LIKE ?");
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            List<ProductBean> products = new ArrayList<>();
+            while (rs.next()) {
+                ProductBean p = new ProductBean();
+                p.setId_prod(rs.getInt(1));
+                p.setName(rs.getString(2));
+                p.setPrice(rs.getDouble(3));
+                p.setType(rs.getBoolean(4));
+                p.setPlatform(rs.getString(5));
+                p.setDeveloper(rs.getString(6));
+                p.setDescription(rs.getString(7));
+                p.setMetadataPath(rs.getString(8));
+                p.setKey(rs.getString(9));
+                String condition = rs.getString(10);
+
+                // Manage Optional Value to Avoid Illegal Argument Exception when null
+                if (condition != null) {
+                    p.setCondition(Data.Condition.valueOf(condition));
+                } else {
+                    p.setCondition(null);
+                }
+
+                p.setDiscount(rs.getDouble(11));
+                products.add(p);
+            }
+            return products;
+        }
+    }
+
+
 }
