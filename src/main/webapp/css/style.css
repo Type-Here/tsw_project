@@ -181,6 +181,18 @@ li.this-page{
     margin-top: 10px;
 }
 
+span.star-on::before{
+    content: "\2605";
+    color:#ffc30a;
+    font: 1.1em sans-serif;
+}
+
+span.star-off::before{
+    content: "\2606";
+    color: #f5f5f5;
+    font: 1.1em sans-serif;
+}
+
 /* ----- DEFAULT STYLES FOR INPUT ELEMENTS ----- */
 
 /* Default Classes */
@@ -1007,18 +1019,6 @@ input#pass{
 
         td:last-child, th:last-child{
             border-right: none;
-        }
-
-        span.star-on::before{
-            content: "\2605";
-            color:#ffc30a;
-            font: 1.1em sans-serif;
-        }
-
-        span.star-off::before{
-            content: "\2606";
-            color: #f5f5f5;
-            font: 1.1em sans-serif;
         }
     }
 }
