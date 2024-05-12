@@ -19,7 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-@WebServlet(name = "HomeServlet", urlPatterns = "")
+@WebServlet(name = "HomeServlet", urlPatterns = {"", "/index"})
 public class HomeServlet extends HttpServlet {
 
     public void init() { }
