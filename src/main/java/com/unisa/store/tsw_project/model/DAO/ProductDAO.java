@@ -107,8 +107,8 @@ public class ProductDAO {
             ps.setString(6, product.getDescription());
             ps.setString(7, product.getMetadataPath());
             ps.setString(8, product.getKey());
-            ps.setString(9, product.getCondition().toString()); //Enum to String Da vedere
-            ps.setDouble(10, product.getDiscount());
+            ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
+            ps.setObject(10, product.getDiscount());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -130,8 +130,8 @@ public class ProductDAO {
             ps.setString(6, product.getDescription());
             ps.setString(7, product.getMetadataPath());
             ps.setString(8, product.getKey());
-            ps.setString(9, product.getCondition().toString()); //Enum to String Da vedere
-            ps.setDouble(10, product.getDiscount());
+            ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
+            ps.setObject(10, product.getDiscount());
             ps.setInt(11, product.getId_prod());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
