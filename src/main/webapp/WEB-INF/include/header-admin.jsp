@@ -23,6 +23,6 @@
     </ul>
     <div class="upper-bar-right">
         <button class="default" name="action" value="Admin">${user}</button>
-        <button class="default alternative margin-h-10" name="action" onclick="" value="Exit">Exit</button>
+        <button class="default alternative margin-h-10" name="action" onclick="location.href='${pageContext.request.contextPath}/exit_admin;'" value="Exit">Exit</button>
     </div>
 </div>
