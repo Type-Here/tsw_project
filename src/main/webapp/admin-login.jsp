@@ -13,6 +13,9 @@
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <script src="js/overlay.js"></script>
 </head>
+<c:if test="${admin == true and valid == true} ">
+    <c:redirect url="/console">User already Logged: Redirect</c:redirect>
+</c:if>
 
 <body class="body_def">
 
