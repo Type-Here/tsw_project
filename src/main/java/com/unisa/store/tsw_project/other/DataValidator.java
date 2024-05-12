@@ -47,7 +47,7 @@ public class DataValidator {
                     double vald = Double.parseDouble(data);
                     yield (max == null || !(vald > max)) && (min == null || !(vald < min));
                 }
-                case GenericAlphaNumeric -> !data.matches("\\W*");
+                case GenericAlphaNumeric -> data.matches("[\\w' -]*");
                 case Condition -> data.matches("[ABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
                 case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equals(e.name()));
