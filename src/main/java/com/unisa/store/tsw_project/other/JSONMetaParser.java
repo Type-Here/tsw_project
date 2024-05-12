@@ -15,15 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONMetaParser {
-    private final List<ProductBean> products;
-    private final ServletContext application;
 
-    public JSONMetaParser(List<ProductBean> products, ServletContext application) {
-        this.products = products;
-        this.application = application;
+    public JSONMetaParser() {
+
     }
 
-    public void doParseMetaData() throws FileNotFoundException {
+    public void doParseMetaData(ProductBean product, ServletContext application) throws FileNotFoundException {
+        List<ProductBean> p = new ArrayList<>();
+        p.add(product);
+        doParseMetaData(p, application);
+    }
+
+
+    public void doParseMetaData(List<ProductBean> products, ServletContext application) throws FileNotFoundException {
         // For Each Product in list
         for( ProductBean prod : products) {
             String meta = prod.getMetadataPath();
@@ -34,7 +38,7 @@ public class JSONMetaParser {
             List<String> gallery = new ArrayList<>();
 
             //Read Buffer from JSON
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(this.application.getRealPath("metadata/" + prod.getPlatform() + '/' + meta)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(application.getRealPath("metadata/" + prod.getPlatform() + '/' + meta)));
             //Using Google GSON
             Gson gson = new Gson();
             JsonElement element = gson.fromJson(bufferedReader, JsonElement.class);
