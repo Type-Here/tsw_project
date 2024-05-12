@@ -218,7 +218,7 @@ input:not([type="submit"], [type="radio"], [type="reset"]){
 }
 
 /* Override size imposition of previous css style. Now html style tag is used */
-input.free-size{
+input.free-size, button.free-size{
     min-width: 10px;
     width: fit-content;
 }

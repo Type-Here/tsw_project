@@ -10,11 +10,19 @@
         <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
         <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="css/small.css" />
         <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-        <script src="js/carousel.js"></script>
         <script src="js/overlay.js"></script>
     </head>
     <body class="body_def">
-        
+
+        <div class="info-popup">
+            <h3 class="text-center">Info</h3>
+            <div class="info-text">
+                <span>Inserimento è andato a buon fine</span>
+            </div>
+            <button class="default free-size" onclick="hidePopup()">OK</button>
+        </div>
+        <div class="overlay-popup" onclick="hidePopup()"></div>
+
         <div class="upper_bar">
             <input type="checkbox" id="nav" name="nav" />
             <span class="menu_icon">
