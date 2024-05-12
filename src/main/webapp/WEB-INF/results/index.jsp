@@ -75,7 +75,7 @@
             <c:forEach var="prod" items="${products}">
                 <div class="tile">
                     <div class=" tile-img">
-                        <a href="${prod.id_prod}"><img src="${prod.metaData.path}${prod.metaData.front}"></a>
+                        <a href="${pageContext.request.contextPath}/desc?id_prod=${prod.id_prod}"><img alt="front cover image" src="${prod.metaData.path}${prod.metaData.front}"></a>
                     </div>
                     <div class="tile-text">
                         <h3 class="tile-title">${prod.name}</h3>
@@ -92,7 +92,7 @@
                                             <span class="discount">${prod.discount}</span>
                                                 <span class="original-rem-price">${prod.price}</span>
                                                 <span class="actual-price">
-                                            <c:out value="${prod.price - prod.price*prod.discount}"/>
+                                            <c:out value="${prod.price - prod.price*prod.discount/100}"/>
                                                 </span>
                                         </c:otherwise>
                                     </c:choose>

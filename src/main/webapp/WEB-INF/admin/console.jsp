@@ -21,7 +21,7 @@
         <h3 class="text-center">Info</h3>
         <div class="info-text">
             <c:choose>
-                <c:when test="${upload == false}">
+                <c:when test="${upload == true}">
                     <span>Inserimento è andato a buon fine</span>
                 </c:when>
                 <c:otherwise>
