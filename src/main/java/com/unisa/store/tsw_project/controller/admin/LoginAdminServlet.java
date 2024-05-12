@@ -34,7 +34,7 @@ public class LoginAdminServlet extends HttpServlet {
                 return;
             }
 
-            resp.sendRedirect("index"); /*TODO*/
+            resp.sendRedirect("/console"); /*TODO*/
             return;
         }
 
