@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -14,6 +15,25 @@
     <script src="js/overlay.js"></script>
 </head>
 <body class="body_def">
+
+<c:if test="${not empty upload}">
+    <div class="info-popup">
+        <h3 class="text-center">Info</h3>
+        <div class="info-text">
+            <c:choose>
+                <c:when test="${upload == false}">
+                    <span>Inserimento è andato a buon fine</span>
+                </c:when>
+                <c:otherwise>
+                    <span class="error-popup">Inserimento ha provocato un errore, impossibile inserire elemento</span>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <button class="default free-size" onclick="hidePopup()">OK</button>
+    </div>
+    <div class="overlay-popup" onclick="hidePopup()"></div>
+</c:if>
+
 
 <%@include file="/WEB-INF/include/header-admin.jsp"%>
 
@@ -36,7 +56,7 @@
             <h2 class="text-center">Aggiungi Prodotto</h2>
         </div>
         <div class="log_form add-prod-info">
-            <form action="#" method="post">
+            <form action="console" method="post" enctype="multipart/form-data">
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
                 <label class="form-row"><span>Prezzo:</span><input type="number" step="0.01" name="price" required pattern="[0-9]+"/></label>
                 <fieldset class="form-row">
@@ -60,10 +80,10 @@
                     </label>
                 </fieldset>
                 <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" name="description" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
-                <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required/></label>
-                <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required/></label>
+                <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required /></label>
+                <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required /></label>
+                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\-]{2,}" required /> </label>
                 <label class="form-row"><span>Key:</span><input type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
-                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\-]{2,}"> </label>
                 <fieldset class="form-row centerized-row">
                     <label><span>&percnt; Sconto:</span><input class="free-size" size="5" type="number" name="discount" min="0" max="100" /></label>
                     <label><span>Condizione: </span>
