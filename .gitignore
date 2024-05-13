@@ -39,6 +39,8 @@ build/
 .idea/*
 .mvn/*
 
+bozza/css/test.css
+bozza/chisiamotest.html
 
 ### Manual ###
 /internal_docs/
