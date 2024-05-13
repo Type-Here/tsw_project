@@ -1,0 +1,70 @@
+/* Recenzioni */
+
+.star{
+    cursor: pointer;
+}
+
+.span.star-on::before{
+    content: "\2605";
+    color:#ffc30a;
+    font: 1.1em sans-serif;
+}
+
+.span.star-off::before{
+    content: "\2606";
+    color: #f5f5f5;
+    font: 1.1em sans-serif;
+}
+
+
+
+.recensione-container {
+    min-width: 50%;
+    max-width: 80%;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 55px 20px 1fr;
+    grid-template-areas:
+            "header"
+            "stelle"
+            "testo";
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #f5f5f5;
+    border-radius: 5px;
+}
+
+.recensione-form-textarea {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+            "textArea"
+            "buttonArea";
+    margin: 10px; /* gap tra le righe */
+}
+
+.recensione-form-textarea textarea {
+    grid-area: textArea;
+}
+
+#recensione-bottone-form {
+    justify-self: center;
+    align-self: center;
+    grid-area: buttonArea;
+}
+
+#recensione-stelle {
+    user-select: none;
+}
+
+#recensione-header {
+    grid-area: header
+}
+
+#recensione-txt {
+    grid-area: testo;
+}
+
