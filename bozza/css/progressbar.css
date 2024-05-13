@@ -1,0 +1,100 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.body {
+    padding: 0;
+    margin: 0;
+}
+
+.progress-bar {
+    position: relative;
+    width: 80%;
+    height: 28px;
+    background-color: #111;
+    border-radius: 14px;
+    color: white;
+    transition: width 0.5s ease; /* Added transition property */
+}
+
+
+.progress-bar::before {
+    content: "";
+    background-image: url(../img/logo.png);
+    background-repeat: repeat-x;
+    background-size: contain;
+    background-position: right center;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    bottom: 4px;
+    width: calc(var(--width, 0) * 1%);
+    min-width: 16px;
+    max-width: calc(100% - 8px);
+    background-color: #007bff;
+    border-radius: 9px;
+    padding: 8px;
+
+}
+
+.popup {
+    display: flex; /* Added to create a flex context */
+    justify-content: center; /* Added to align the children horizontally in the center */
+    align-items: center; /* Added to align the children vertically in the center */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 5px; /* Decrease this value to reduce the white space around the popup content */
+    border: 1px solid #888;
+    width: 500px;
+     /* Could be more or less, depending on screen size */
+    display: flex; /* Added to create a flex context */
+    flex-direction: column; /* Added to stack the children vertically */
+    justify-content: center; /* Added to align the children horizontally in the center */
+    align-items: center; /* Added to align the children vertically in the center */
+    border-radius: 12px; /* Add this line to round the corners of the popup */
+}
+
+.popup-header {
+    background-color: #f1f1f1;
+    padding: 2px 16px;
+    display: flex; /* Added to create a flex context */
+    justify-content: center; /* Added to align the children horizontally with space between them */
+    align-items: center; /* Added to align the children vertically in the center */
+    width: 100%;
+    border-radius: 7px; /* Add this line to round the corners of the popup */
+}
+
+.popup-body {
+    padding: 2px 16px;
+    display: flex; /* Added to create a flex context */
+    flex-direction: column; /* Added to stack the children vertically */
+    justify-content: center; /* Added to align the children horizontally in the center */
+    align-items: center; /* Added to align the children vertically in the center */
+    width: 100%;
+}
+
+/* Add the following CSS to style the button */
+
+#btn {
+    /* Increase the size of the button */
+    padding: 20px 40px;
+    font-size: 20px;
+
+    /* Center the button */
+    display: block;
+    margin: 0 auto;
+}
