@@ -74,8 +74,15 @@ public class JSONMetaParser {
 
     public List<Integer> doParseHighlights(String path, ServletContext application) throws IOException{
         List<Integer> highlightsIds = new ArrayList<>();
+        String pathCorrected;
+        if(System.getProperty("os.name").contains("mac") || System.getProperty("os.name").contains("Mac")){
+            pathCorrected = path.replaceAll("[%20]", " ");
+        } else {
+            pathCorrected = path;
+        }
+
         try( BufferedReader bufferedReader = new BufferedReader(
-                new FileReader(application.getResource(path).getFile())) ){
+                new FileReader(application.getResource(pathCorrected).getFile())) ){
             Gson gson = new Gson();
             JsonObject obj = gson.fromJson(bufferedReader, JsonElement.class).getAsJsonObject();
             for(int i = 1; i <= 5; i++){
