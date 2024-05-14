@@ -114,22 +114,21 @@ public class ProductDAO {
     public ProductBean doRetrieveCarousel(int id) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
-                    con.prepareStatement("SELECT (id_prod, platform, name, metadata) FROM products WHERE id_prod=?");
+                    con.prepareStatement("SELECT * FROM products WHERE id_prod=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ProductBean p = new ProductBean();
                 p.setId_prod(rs.getInt(1));
-                p.setPlatform(rs.getString(2));
-                p.setName(rs.getString(3));
-                p.setMetadataPath(rs.getString(4));
+                p.setPlatform(rs.getString(5));
+                p.setMetadataPath(rs.getString(8));
                 return p;
             }
             return null;
         }
     }
 
-    private void psSetAllCamp(ProductBean product, PreparedStatement ps) throws SQLException {
+    private void setpsAllCampProductBean(ProductBean product, PreparedStatement ps) throws SQLException {
         ps.setString(1, product.getName());
         ps.setDouble(2, product.getPrice());
         ps.setBoolean(3, product.getType());
@@ -147,7 +146,7 @@ public class ProductDAO {
             PreparedStatement ps = con.prepareStatement("INSERT INTO products " +
                     "(name, price, type, platform, developer, description, metadata, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            psSetAllCamp(product, ps);
+            setpsAllCampProductBean(product, ps);
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -161,7 +160,7 @@ public class ProductDAO {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE products " +
                     "SET name=?, price=?, type=?, platform=?, developer=?, description=?, metadata=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
-            psSetAllCamp(product, ps);
+            setpsAllCampProductBean(product, ps);
             ps.setInt(11, product.getId_prod());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
