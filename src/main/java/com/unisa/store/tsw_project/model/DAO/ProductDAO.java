@@ -114,14 +114,15 @@ public class ProductDAO {
     public ProductBean doRetrieveCarousel(int id) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products WHERE id_prod=?");
+                    con.prepareStatement("SELECT  name, platform, description FROM products WHERE id_prod=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ProductBean p = new ProductBean();
-                p.setId_prod(rs.getInt(1));
-                p.setPlatform(rs.getString(5));
-                p.setMetadataPath(rs.getString(8));
+                p.setId_prod(id);
+                p.setName(rs.getString(1));
+                p.setPlatform(rs.getString(2));
+                p.setMetadataPath(rs.getString(3));
                 return p;
             }
             return null;

@@ -35,21 +35,25 @@ public class UserDAO {
         }
     }
 
+    private void setpsAllCampUserBean(UserBean user, PreparedStatement ps) throws SQLException {
+        ps.setString(1, user.getFirstname());
+        ps.setString(2, user.getLastname());
+        ps.setString(3, user.getTelephone());
+        ps.setString(4, user.getEmail());
+        ps.setDate(5, java.sql.Date.valueOf(user.getBirth()));
+        ps.setString(6, user.getAddress());
+        ps.setString(7, user.getCity());
+        ps.setString(8, user.getProv());
+        ps.setString(9, user.getCAP());
+        ps.setInt(10, user.getId_cred());
+    }
+
     public void doSave(UserBean user) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO user " +
                     "(firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred)" +
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, user.getFirstname());
-            ps.setString(2, user.getLastname());
-            ps.setString(3, user.getTelephone());
-            ps.setString(4, user.getEmail());
-            ps.setDate(5, java.sql.Date.valueOf(user.getBirth()));
-            ps.setString(6, user.getAddress());
-            ps.setString(7, user.getCity());
-            ps.setString(8, user.getProv());
-            ps.setString(9, user.getCAP());
-            ps.setInt(10, user.getId_cred());
+            setpsAllCampUserBean(user, ps);
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -64,16 +68,7 @@ public class UserDAO {
             PreparedStatement ps = con.prepareStatement("UPDATE user " +
                     "SET firstname=?, lastname=?, telephone=?, email=?, birth=?," +
                     " address=?, city=?, prov=?, cap=?, id_cred=? WHERE id=?");
-            ps.setString(1, user.getFirstname());
-            ps.setString(2, user.getLastname());
-            ps.setString(3, user.getTelephone());
-            ps.setString(4, user.getEmail());
-            ps.setDate(5, java.sql.Date.valueOf(user.getBirth()));
-            ps.setString(6, user.getAddress());
-            ps.setString(7, user.getCity());
-            ps.setString(8, user.getProv());
-            ps.setString(9, user.getCAP());
-            ps.setInt(10, user.getId_cred());
+            setpsAllCampUserBean(user, ps);
             ps.setInt(11, user.getId());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
