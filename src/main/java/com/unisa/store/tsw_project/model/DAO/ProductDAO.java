@@ -20,6 +20,39 @@ public class ProductDAO {
         return doRetrieveAll(null, null);
     }
 
+    private List<ProductBean> getProductBeansListSelectAll(PreparedStatement ps) throws SQLException {
+        ResultSet rs = ps.executeQuery();
+        List<ProductBean> products = new ArrayList<>();
+        while (rs.next()) {
+            ProductBean p = new ProductBean();
+            p.setId_prod(rs.getInt(1));
+            p.setName(rs.getString(2));
+            p.setPrice(rs.getDouble(3));
+            p.setType(rs.getBoolean(4));
+            p.setPlatform(rs.getString(5));
+            p.setDeveloper(rs.getString(6));
+            p.setDescription(rs.getString(7));
+            p.setMetadataPath(rs.getString(8));
+            p.setKey(rs.getString(9));
+            String condition = rs.getString(10);
+
+            // Manage Optional Value to Avoid Illegal Argument Exception when null
+            if (condition != null) {
+                p.setCondition(Data.Condition.valueOf(condition));
+            } else {
+                p.setCondition(null);
+            }
+
+            p.setDiscount(rs.getDouble(11));
+            products.add(p);
+        }
+        if (products.isEmpty()) {
+            return null;
+        } else {
+            return products;
+        }
+    }
+
     public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
         try (Connection con = ConPool.getConnection()) { //Auto-Closeable
             PreparedStatement ps =
@@ -32,32 +65,16 @@ public class ProductDAO {
                 ps.setInt(2, limit);
             } else ps.setInt(2, 200); //Limit 200 is default for MariaDB
 
-            ResultSet rs = ps.executeQuery();
-            List<ProductBean> products = new ArrayList<>();
-            while (rs.next()) {
-                ProductBean p = new ProductBean();
-                p.setId_prod(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setPrice(rs.getDouble(3));
-                p.setType(rs.getBoolean(4));
-                p.setPlatform(rs.getString(5));
-                p.setDeveloper(rs.getString(6));
-                p.setDescription(rs.getString(7));
-                p.setMetadataPath(rs.getString(8));
-                p.setKey(rs.getString(9));
-                String condition = rs.getString(10);
+            return getProductBeansListSelectAll(ps);
+        }
+    }
 
-                // Manage Optional Value to Avoid Illegal Argument Exception when null
-                if (condition != null) {
-                    p.setCondition(Data.Condition.valueOf(condition));
-                } else {
-                    p.setCondition(null);
-                }
-
-                p.setDiscount(rs.getDouble(11));
-                products.add(p);
-            }
-            return products;
+    public List<ProductBean> doRetrieveByName(String name) throws SQLException{
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT * FROM products WHERE name LIKE ?");
+            ps.setString(1, "%" + name + "%");
+            return getProductBeansListSelectAll(ps);
         }
     }
 
@@ -97,18 +114,32 @@ public class ProductDAO {
     public ProductBean doRetrieveCarousel(int id) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products WHERE id_prod=?");
+                    con.prepareStatement("SELECT (id_prod, platform, name, metadata) FROM products WHERE id_prod=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ProductBean p = new ProductBean();
                 p.setId_prod(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setMetadataPath(rs.getString(8));
+                p.setPlatform(rs.getString(2));
+                p.setName(rs.getString(3));
+                p.setMetadataPath(rs.getString(4));
                 return p;
             }
             return null;
         }
+    }
+
+    private void psSetAllCamp(ProductBean product, PreparedStatement ps) throws SQLException {
+        ps.setString(1, product.getName());
+        ps.setDouble(2, product.getPrice());
+        ps.setBoolean(3, product.getType());
+        ps.setString(4, product.getPlatform());
+        ps.setString(5, product.getDeveloper());
+        ps.setString(6, product.getDescription());
+        ps.setString(7, product.getMetadataPath());
+        ps.setString(8, product.getKey());
+        ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
+        ps.setObject(10, product.getDiscount());
     }
 
     public void doSave(ProductBean product) throws SQLException {
@@ -116,16 +147,7 @@ public class ProductDAO {
             PreparedStatement ps = con.prepareStatement("INSERT INTO products " +
                     "(name, price, type, platform, developer, description, metadata, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setBoolean(3, product.getType());
-            ps.setString(4, product.getPlatform());
-            ps.setString(5, product.getDeveloper());
-            ps.setString(6, product.getDescription());
-            ps.setString(7, product.getMetadataPath());
-            ps.setString(8, product.getKey());
-            ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
-            ps.setObject(10, product.getDiscount());
+            psSetAllCamp(product, ps);
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -139,56 +161,11 @@ public class ProductDAO {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE products " +
                     "SET name=?, price=?, type=?, platform=?, developer=?, description=?, metadata=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setBoolean(3, product.getType());
-            ps.setString(4, product.getPlatform());
-            ps.setString(5, product.getDeveloper());
-            ps.setString(6, product.getDescription());
-            ps.setString(7, product.getMetadataPath());
-            ps.setString(8, product.getKey());
-            ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
-            ps.setObject(10, product.getDiscount());
+            psSetAllCamp(product, ps);
             ps.setInt(11, product.getId_prod());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
             }
         }
     }
-
-    public List<ProductBean> doRetrieveByName(String name) throws SQLException{
-        try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products WHERE name LIKE ?");
-            ps.setString(1, "%" + name + "%");
-            ResultSet rs = ps.executeQuery();
-            List<ProductBean> products = new ArrayList<>();
-            while (rs.next()) {
-                ProductBean p = new ProductBean();
-                p.setId_prod(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setPrice(rs.getDouble(3));
-                p.setType(rs.getBoolean(4));
-                p.setPlatform(rs.getString(5));
-                p.setDeveloper(rs.getString(6));
-                p.setDescription(rs.getString(7));
-                p.setMetadataPath(rs.getString(8));
-                p.setKey(rs.getString(9));
-                String condition = rs.getString(10);
-
-                // Manage Optional Value to Avoid Illegal Argument Exception when null
-                if (condition != null) {
-                    p.setCondition(Data.Condition.valueOf(condition));
-                } else {
-                    p.setCondition(null);
-                }
-
-                p.setDiscount(rs.getDouble(11));
-                products.add(p);
-            }
-            return products;
-        }
-    }
-
-
 }
