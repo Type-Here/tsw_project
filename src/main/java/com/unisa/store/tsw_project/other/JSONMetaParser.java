@@ -72,6 +72,8 @@ public class JSONMetaParser {
     public List<Integer> doParseHighlights(String path, ServletContext application) throws IOException{
         List<Integer> highlightsIds = new ArrayList<>();
         String pathCorrected;
+
+        //MacOS Parsing of getResource gives problems with WhiteSpaces: replace %20 with a whitespace
         if(System.getProperty("os.name").contains("mac") || System.getProperty("os.name").contains("Mac")){
             pathCorrected = application.getResource(path).getFile().replaceAll("%20", " ");
         } else {
