@@ -11,6 +11,8 @@ import jakarta.servlet.ServletContext;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +22,14 @@ public class JSONMetaParser {
 
     }
 
-    public void doParseMetaData(ProductBean product, ServletContext application) throws FileNotFoundException {
+    public void doParseMetaData(ProductBean product, ServletContext application) throws IOException {
         List<ProductBean> p = new ArrayList<>();
         p.add(product);
         doParseMetaData(p, application);
     }
 
 
-    public void doParseMetaData(List<ProductBean> products, ServletContext application) throws FileNotFoundException {
+    public void doParseMetaData(List<ProductBean> products, ServletContext application) throws IOException {
         // For Each Product in list
         for( ProductBean prod : products) {
             String meta = prod.getMetadataPath();
@@ -42,6 +44,7 @@ public class JSONMetaParser {
             //Using Google GSON
             Gson gson = new Gson();
             JsonElement element = gson.fromJson(bufferedReader, JsonElement.class);
+            bufferedReader.close();
 
             /*
              * - JsonObject = Use ge("key") to retrieve a JsonElement (key:value/values)
@@ -69,5 +72,18 @@ public class JSONMetaParser {
         }
     }
 
+    public List<Integer> doParseHighlights(String path, ServletContext application) throws IOException{
+        List<Integer> highlightsIds = new ArrayList<>();
+        try( BufferedReader bufferedReader = new BufferedReader(
+                new FileReader(application.getResource(path).getFile())) ){
+            Gson gson = new Gson();
+            JsonObject obj = gson.fromJson(bufferedReader, JsonElement.class).getAsJsonObject();
+            for(int i = 1; i <= 5; i++){
+                 highlightsIds.add(obj.get(String.valueOf(i)).getAsInt());
+            }
+        }
+
+        return highlightsIds;
+    }
 
 }
