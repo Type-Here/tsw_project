@@ -22,8 +22,6 @@ import jakarta.servlet.annotation.*;
 @WebServlet(name = "HomeServlet", urlPatterns = {"", "/index"})
 public class HomeServlet extends HttpServlet {
 
-    public void init() { }
-
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ProductDAO productDAO = new ProductDAO();
 
