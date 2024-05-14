@@ -23,21 +23,18 @@
 
             <div class="carousel">
                 <ul>
-                    <li class="carousel-slide active-slide">
-                        <img src="img/placeholder.svg">
-                    </li>
-                    <li class="carousel-slide">
-                        <img src="img/placeholder2.svg">
-                    </li>
-                    <li class="carousel-slide">
-                        <img src="img/placeholder.svg">
-                    </li>
-                    <li class="carousel-slide">
-                        <img src="img/placeholder2.svg">
-                    </li>
-                    <li class="carousel-slide">
-                        <img src="img/placeholder.svg">
-                    </li>
+                    <c:set var="index" value="1" />
+                    <c:forEach var="high" items="${highlights}">
+                        <li class="carousel-slide <c:if test="${index == 1}">active-slide</c:if>">
+                            <a href="${pageContext.request.contextPath}/desc?id_prod=${high.id_prod}">
+                                <img src="${high.metaData.path}${high.metaData.front}" alt="Slide front Image of ${high.name}">
+                            </a>
+                            <c:set var="index" value="0"/>
+                            <div class="carousel-slide-text">
+                                <h3>${high.name}</h3>
+                            </div>
+                        </li>
+                    </c:forEach>
                 </ul>
 
                 <div class="carousel-radio">
@@ -49,21 +46,13 @@
                 </div>
 
                 <ul class="carousel-thumbnails">
-                    <li>
-                        <label for="carousel-slide-1"><img src="img/placeholder.svg" alt="" class="active-thumbnail"></label>
-                    </li>
-                    <li>
-                        <label for="carousel-slide-2"><img src="img/placeholder2.svg" alt=""></label>
-                    </li>
-                    <li>
-                        <label for="carousel-slide-3"><img src="img/placeholder.svg" alt=""></label>
-                    </li>
-                    <li>
-                        <label for="carousel-slide-4"><img src="img/placeholder2.svg" alt=""></label>
-                    </li>
-                    <li>
-                        <label for="carousel-slide-5"><img src="img/placeholder.svg" alt=""></label>
-                    </li>
+                    <c:set var="index" value="1" />
+                    <c:forEach items="${highlights}" var="high">
+                        <li>
+                            <label for="carousel-slide-<c:out value='${index}'/>"><img src="${high.metaData.path}${high.metaData.front}" alt="Thumbnail front image of${high.name}"  <c:if test="${index == 1}">class="active-thumbnail"</c:if>></label>
+                            <c:set var="index" value="${index  + 1}"/>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
             
