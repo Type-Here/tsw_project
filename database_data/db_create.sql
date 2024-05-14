@@ -11,7 +11,7 @@ create table products (
     platform varchar(255) not null,
     developer varchar(255) not null,
     description varchar(2047) not null,
-    metadata varchar(2047) not null,
+    metadata varchar(2047),
     `key` varchar(15),
     `condition` enum('A','B','C','D','E'), -- Status: A, B, C, D, E per condizioni
     discount double,
