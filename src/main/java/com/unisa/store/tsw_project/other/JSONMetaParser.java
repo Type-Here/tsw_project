@@ -8,10 +8,7 @@ import com.unisa.store.tsw_project.model.beans.MetaData;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import jakarta.servlet.ServletContext;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +73,13 @@ public class JSONMetaParser {
         List<Integer> highlightsIds = new ArrayList<>();
         String pathCorrected;
         if(System.getProperty("os.name").contains("mac") || System.getProperty("os.name").contains("Mac")){
-            pathCorrected = path.replaceAll("[%20]", " ");
+            pathCorrected = application.getResource(path).getFile().replaceAll("%20", " ");
         } else {
-            pathCorrected = path;
+            pathCorrected = application.getResource(path).getFile();
         }
 
         try( BufferedReader bufferedReader = new BufferedReader(
-                new FileReader(application.getResource(pathCorrected).getFile())) ){
+                new FileReader(pathCorrected)) ){
             Gson gson = new Gson();
             JsonObject obj = gson.fromJson(bufferedReader, JsonElement.class).getAsJsonObject();
             for(int i = 1; i <= 5; i++){
