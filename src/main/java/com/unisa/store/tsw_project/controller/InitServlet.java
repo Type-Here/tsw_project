@@ -25,11 +25,12 @@ public class InitServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         try {
+            System.out.println("\n----- INIT ------");
 
-            System.out.println("\n----- INIT: MI sono avviata ------");
+            /* IMPORTANT: ServletContext needs to be gotten from Config! */
             ServletContext app = config.getServletContext();
-            /*Logger logger = Logger.getLogger("base-log");
 
+            /* Logger logger = Logger.getLogger("base-log");
             URL resource = getServletContext().getResource("/WEB-INF/log");
             Files.createDirectories(Path.of(resource.getPath()));
             File log = new File(resource + "log.txt");
@@ -43,19 +44,26 @@ public class InitServlet extends HttpServlet {
             logger.addHandler(new FileHandler(log.getPath(), true));
             app.setAttribute("logger", logger);*/
 
+            /*Get IDs Info from highlights.json for Carousel Products */
             JSONMetaParser parser = new JSONMetaParser();
-            List<Integer> high = parser.doParseHighlights("/WEB-INF/data/highlights.json", config.getServletContext());
+            List<Integer> high = parser.doParseHighlights(File.separator + "WEB-INF" +
+                                        File.separator +"data" + File.separator + "highlights.json", config.getServletContext());
             List<ProductBean> highProd = new ArrayList<>();
             ProductDAO dao = new ProductDAO();
-            System.out.println("\n----- INIT: MI sono avviata ------");
 
+            //Get Products from IDs
             for(int id : high){
-                highProd.add(dao.doRetrieveById(id));
+                ProductBean p = dao.doRetrieveCarousel(id);
+                //Protect from Errors: check if null
+                if(p != null) highProd.add(p);
             }
+            //Get Metadata Image for Products
             parser.doParseMetaData(highProd, config.getServletContext());
 
+            //Set list in ServletContext
             app.setAttribute("highlights", highProd);
-            System.out.println(highProd + "\n" + highProd.get(0));
+
+            System.out.println("--- END OF INIT ---");
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
