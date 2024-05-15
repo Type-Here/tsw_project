@@ -18,15 +18,20 @@ create table products (
     primary key (id_prod)
 );
 
+create table categories (
+    id_cat int not null auto_increment,
+    typename varchar(255) not null,
+    primary key(id_cat)
+);
 
 -- Tabella che attribuisce ad ogni gioco 1 o più categorie di cui fa parte
 create table prod_categories (
-    typename varchar(255) not null,
+    id_cat int not null,
     id_prod int not null,
     foreign key(id_prod) references products(id_prod),
-    primary key(typename, id_prod)
+    foreign key(id_cat) references categories(id_cat),
+    primary key(id_cat, id_prod)
 );
-
 
 -- Tabella Credenziali, gestisce solo le credenziali di accesso di utenti
 create table credentials (
