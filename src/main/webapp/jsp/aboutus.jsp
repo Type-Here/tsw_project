@@ -21,7 +21,9 @@
 
             <div class="grid-container">
 
-                <div class="grid-item grid-img1"><img src="../img/chisiamo/gentechegiocaretro.jpeg" alt="Immagine Storia"></div>
+                <div class="grid-item grid-img1"><img
+                        src="${pageContext.request.contextPath}/img/chisiamo/gentechegiocaretro.jpeg"
+                        alt="Immagine Storia"></div>
 
                 <div class="grid-item grid-txt1">
                     <h2>Storia</h2>
@@ -39,14 +41,16 @@
                     <h3>Un sogno che prende vita</h3>
                     <p>
                         Retrogamers non era solo un negozio, ma un tempio dedicato ai videogiochi del passato.
-                        Tra gli scaffali ordinati si potevano trovare rarità come Atari 2600, N64, Commodore64 e Sega Mega Drive
+                        Tra gli scaffali ordinati si potevano trovare rarità come Atari 2600, N64, Commodore64 e Sega
+                        Mega Drive
                         accanto a classici indimenticabili come Pac-Man, Super Mario Bros. e Zelda. Manuel e Gianluigi
                         non si limitavano a vendere, ma condividevano la loro passione con i clienti,
                         raccontando aneddoti e curiosità su ogni titolo.
                     </p>
                 </div>
 
-                <div class="grid-item grid-img2"><img src="../img/chisiamo/negozio.jpeg" alt="Immagine Chi siamo"></div>
+                <div class="grid-item grid-img2"><img src="${pageContext.request.contextPath}/img/chisiamo/negozio.jpeg"
+                                                      alt="Immagine Chi Siamo"></div>
 
                 <div class="grid-item grid-txt3">
                     <h2>Valori</h2>
@@ -89,7 +93,8 @@
                         </p>
                         <h4>Email</h4>
                         <p>
-                            Supporto: <strong><a href="mailto:supporto@retrogamer.it">supporto@retrogamer.it</a></strong>
+                            Supporto: <strong><a
+                                href="mailto:supporto@retrogamer.it">supporto@retrogamer.it</a></strong>
                             <br>
                             Vendi i tuoi giochi: <strong><a href="mailto:vendituoigiochi@retrogamer.it">vendituoigiochi@retrogamer.it</a></strong>
                             <br>
@@ -152,13 +157,15 @@
                         </p>
                         <h4>Luca & Martina</h4>
                         <p>
-                            Esperto e disponibile, Giuseppe si occupa del reparto assistenza, risolvendo problemi
-                            tecnici e fornendo supporto ai clienti.
+                            Il duo dinamico di Retrogamers, Luca e Martina, si occupano del reparto marketing
+                            e comunicazione, promuovendo il negozio e coinvolgendo i clienti con iniziative
+                            creative e originali.
                         </p>
                         <br>
                         <p>
                             Oltre a queste figure chiave, il team è composto da altri membri altrettanto appassionati
-                            e dedicati, che lavorano insieme per offrire ai clienti un'esperienza unica e indimenticabile.
+                            e dedicati, che lavorano insieme per offrire ai clienti un'esperienza unica e
+                            indimenticabile.
                             <br><br>
                             Insieme, il nostro team rappresenta una forza di passione, competenza e dedizione,
                             garantendo a tutti gli amanti dei retrogames un luogo accogliente e ricco di tesori

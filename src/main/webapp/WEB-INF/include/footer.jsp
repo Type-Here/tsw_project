@@ -11,8 +11,8 @@
         <p>&#169; 2024, RetroGamer. Tutti i diritti riservati.</p>
     </div>
     <div class="ft-terms">
-        <a href="#">Termini di Servizio</a>
-        <a href="#">Gestione Cookies</a>
-        <a href="#">Termini di Privacy</a>
+        <a href="${pageContext.request.contextPath}/html/termsofservice.html">Termini di Servizio</a>
+        <a href="${pageContext.request.contextPath}/html/cookies.html">Gestione Cookies</a>
+        <a href="${pageContext.request.contextPath}/html/termsofprivacy.html">Termini di Privacy</a>
     </div>
 </div>
