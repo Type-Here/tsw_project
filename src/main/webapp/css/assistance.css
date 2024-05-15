@@ -1,0 +1,127 @@
+/* FAQ */
+
+.grid-container-faq {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 1em;
+    border: #5a5a5a;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    grid-template-areas:
+            "header header header header"
+            "q1 q2 q3 q4"
+            "faq-base faq-base faq-base faq-base"
+            "faq1 faq1 faq1 faq1";
+}
+
+.grid-item-faq {
+    border: 1px solid #5a5a5a;
+    padding: 2em;
+
+}
+
+.grid-faq-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    padding: 1em;
+}
+
+.grid-faq0 {
+    grid-column: span 1;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: center;
+    justify-content: center;
+    display: grid;
+    grid-template-rows: subgrid;
+    padding: 1em;
+}
+
+.grid-faq0:hover {
+    background-color: #CCCCCC;
+    cursor: pointer;
+}
+
+.grid-faq0:active {
+    background-color: #5a5a5a;
+}
+
+
+
+#q-header{
+    grid-area: header;
+}
+
+#q-domande-frequenti{
+    grid-area: faq-base;
+}
+
+#q-spedizioni{
+    grid-area: q1;
+}
+
+#q-pagamento{
+    grid-area: q2;
+}
+
+#q-prodotti{
+    grid-area: q3;
+}
+
+#q-lavora-con-noi{
+    grid-area: q4;
+}
+
+#q-domande-frequenti{
+    grid-area: faq-base;
+}
+
+#faq-spedizioni, #faq-prodotti, #faq-pagamento, #faq-lavora-con-noi {
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    grid-area: faq1;
+}
+
+ul li {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Modifica la griglia per i dispositivi con una larghezza del viewport inferiore a 600px */
+@media (max-width: 600px) {
+    .grid-container-faq {
+        grid-template-columns: repeat(2, 1fr); /* Cambia il numero di colonne a 2 */
+        grid-template-areas:
+            "header header"
+            "q1 q2"
+            "q3 q4"
+            "faq-base faq-base"
+            "faq1 faq1";
+    }
+
+    .grid-faq-header {
+        font-size: 1.2em;
+    }
+
+    .grid-faq0 {
+        font-size: 0.5em;
+    }
+
+}
+
+/* Modifica la griglia per i dispositivi con una larghezza del viewport inferiore a 400px */
+@media (max-width: 400px) {
+    .grid-container-faq {
+        grid-template-columns: 1fr; /* Cambia il numero di colonne a 1 */
+        grid-template-areas:
+            "header"
+            "q1"
+            "q2"
+            "q3"
+            "q4"
+            "faq-base"
+            "faq1";
+    }
+}
