@@ -1,0 +1,65 @@
+/* TOS */
+
+.tos-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 1rem;
+    border: 1px solid #5a5a5a;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    grid-template-areas:
+            "header"
+            "tos-base";
+    padding: 1rem;
+}
+
+.tos-container a:hover {
+    color: #0a78f5;
+}
+
+.tos-header {
+    text-align: center;
+    padding: 1em;
+    margin-top: 1em;
+    grid-area: header;
+}
+
+.tos-body {
+    grid-area: tos-base;
+}
+
+.tos-body li {
+    margin: 16px 0;
+}
+
+.tos-body li::marker {
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+
+}
+
+
+.tos-container h1 {
+    font-size: 2.0rem;
+    font-weight: bold;
+}
+
+.tos-container h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.tos-container p {
+    margin: 10px 0;
+    font-size: 1.22rem;
+    font-weight: normal;
+    padding: 10px;
+}
+
+p.internolist {
+    margin: 0;
+    padding: 1px;
+}

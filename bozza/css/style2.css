@@ -1,4 +1,3 @@
-
 /* Chi siamo */
 
 /* Test Grid */
@@ -9,32 +8,35 @@
     grid-auto-rows: minmax(150px, auto);
     grid-gap: 12px;
     border: #5a5a5a;
+}
 
+.grid-container a:hover {
+    color: #0a78f5;
 }
 
 .grid-item {
     border: 1px solid #5a5a5a;
+    border-radius: 10px;
     padding: 20px;
 }
 
 .grid-item  h2{
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.5rem;
     text-align: center;
 }
 
 .grid-item h3{
     font-weight: normal;
-    font-size: 1.7em;
+    font-size: 1.3rem;
     text-align: center;
 
 }
 
 .grid-item p{
-    font-size: 1.3em;
-    text-align: justify;
+    font-size: 1.22rem;
+    text-align: center;
     line-height: 1.5;
-
 }
 
 /* Row 1 */
@@ -112,7 +114,7 @@
 
 .grid-txt4 h4{
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.27rem;
     text-align: left;
 }
 
