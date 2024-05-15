@@ -2,6 +2,8 @@ package com.unisa.store.tsw_project.model.beans;
 
 import com.unisa.store.tsw_project.other.Data;
 
+import java.util.List;
+
 public class ProductBean {
     private int id_prod;
     private String name;
@@ -14,6 +16,7 @@ public class ProductBean {
     private String key;
     private Data.Condition condition;
     private Double discount;
+    private List<CategoryBean> categoryBeanList;
 
     private MetaData metaData;
 
@@ -22,7 +25,7 @@ public class ProductBean {
 
     public ProductBean(int id_prod, String name, double price, boolean type,
                        String platform, String developer, String description, String metadata,
-                       String key, Data.Condition condition, double discount) {
+                       String key, Data.Condition condition, double discount, List<CategoryBean> categoryBeanList) {
         this.id_prod = id_prod;
         this.name = name;
         this.price = price;
@@ -34,6 +37,7 @@ public class ProductBean {
         this.key = key;
         this.condition = condition;
         this.discount = discount;
+        this.categoryBeanList = categoryBeanList;
     }
 
 
@@ -92,7 +96,9 @@ public class ProductBean {
         return metaData;
     }
 
-
+    public List<CategoryBean> getCategoryBeanList() {
+        return categoryBeanList;
+    }
 
     /* - SETTERS - */
 
@@ -144,6 +150,9 @@ public class ProductBean {
         this.metaData = metaData;
     }
 
+    public void setCategoryBeanList(List<CategoryBean> categoryBeanList) {
+        this.categoryBeanList = categoryBeanList;
+    }
 
     @Override
     public String toString() {

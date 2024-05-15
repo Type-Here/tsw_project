@@ -49,6 +49,7 @@ public class ProductDAO {
         if (products.isEmpty()) {
             return null;
         } else {
+            setCategoryList(products);
             return products;
         }
     }
@@ -105,6 +106,7 @@ public class ProductDAO {
                 }
 
                 p.setDiscount(rs.getDouble(11));
+                setCategoryList(p);
                 return p;
             }
             return null;
@@ -154,6 +156,8 @@ public class ProductDAO {
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             product.setId_prod(rs.getInt(1)); //Set the new ID in the ProductBean
+            CategoryDAO categoryDAO = new CategoryDAO();
+            categoryDAO.doSave;
         }
     }
 
@@ -166,6 +170,17 @@ public class ProductDAO {
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
             }
+        }
+    }
+
+    private void setCategoryList(ProductBean productBean) throws SQLException {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        productBean.setCategoryBeanList(categoryDAO.doRetriveCategoryListByProductId(productBean.getId_prod()));
+    }
+
+    private void setCategoryList(List<ProductBean> productBeanList) throws SQLException {
+        for (ProductBean p: productBeanList){
+            setCategoryList(p);
         }
     }
 }
