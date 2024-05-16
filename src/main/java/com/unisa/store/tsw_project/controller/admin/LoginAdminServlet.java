@@ -16,9 +16,6 @@ import java.util.Optional;
 @WebServlet(name = "LoginAdmin", urlPatterns = "/admin-login")
 public class LoginAdminServlet extends HttpServlet {
 
-    @Override
-    public void init() {
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,7 +31,7 @@ public class LoginAdminServlet extends HttpServlet {
                 return;
             }
 
-            resp.sendRedirect("/console"); /*TODO*/
+            resp.sendRedirect(req.getContextPath() + "/console");
             return;
         }
 

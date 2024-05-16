@@ -188,15 +188,16 @@ public class ConsoleServlet extends HttpServlet {
      * @throws InvalidParameterException if Category is not valid
      */
     private void validateCategoriesAndSet(ProductBean p, String[] categories) {
-        List<CategoryBean> categoriesList = (List<CategoryBean>) getServletContext().getAttribute("categories");
+        List<CategoryBean> categoriesList = (List<CategoryBean>) getServletContext().getAttribute("category");
         List<CategoryBean> newCat = new ArrayList<>();
         DataValidator validator = new DataValidator();
 
         for(String cat: categories){
 
             //Validator Throws Error if Value not Valid
-            validator.validatePattern(cat, DataValidator.PatternType.GenericAlphaNumeric);
-            CategoryBean found = categoriesList.stream().filter(c -> c.getTypename().equalsIgnoreCase(cat))
+            validator.validatePattern(cat, DataValidator.PatternType.Int);
+            int catVal = Integer.parseInt(cat);
+            CategoryBean found = categoriesList.stream().filter(c -> c.getId_cat() == catVal)
                     .findFirst().orElseThrow(() -> new InvalidParameterException("category"));
             CategoryBean c = new CategoryBean();
             c.setTypename(found.getTypename());
@@ -217,6 +218,17 @@ public class ConsoleServlet extends HttpServlet {
      * @throws InvalidParameterException if Category is not valid
      */
     private void validateConditionsAndSet(ProductBean p, String[] conditions, String[] quantities) {
+
+        //If product is Digital no need for Quantity
+        if(conditions[0].equals(Data.Condition.X.toString())){
+            ConditionBean c = new ConditionBean();
+            c.setId_cond(Data.Condition.valueOf(conditions[0]).dbValue);
+            c.setQuantity(0);
+            p.addCondition(c);
+            return;
+        }
+
+        //Else is a Physical Item: Check for Values
         if(conditions.length != quantities.length) throw new InvalidParameterException("conditions != quantities");
         DataValidator validator = new DataValidator();
         for(int i = 0; i < conditions.length; i++){
@@ -235,7 +247,7 @@ public class ConsoleServlet extends HttpServlet {
 
     /**
      * Sets all other parameters of ProductBean from the request after validating user input
-     * @param p PorductBean to set
+     * @param p ProductBean to set
      * @param parameters Map of Key:String[] values to Validate and Set
      * @throws InvalidParameterException if some required value is not valid
      */
@@ -248,7 +260,7 @@ public class ConsoleServlet extends HttpServlet {
             switch (key) {
                 case "name":
                     validateAndSet(p::setName,
-                            validator.validatePattern(value[0], DataValidator.PatternType.GenericAlphaNumeric), value[0], key);
+                            validator.validatePattern(value[0], DataValidator.PatternType.Generic), value[0], key);
                     break;
 
                 case "price":
