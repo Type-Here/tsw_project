@@ -1,7 +1,6 @@
 package com.unisa.store.tsw_project.model.DAO;
 
 import com.unisa.store.tsw_project.model.beans.ProductBean;
-import com.unisa.store.tsw_project.other.Data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO {
-
     /**
      * Find all Products
      * @return a list of ProductBean
@@ -20,36 +18,13 @@ public class ProductDAO {
         return doRetrieveAll(null, null);
     }
 
-    private List<ProductBean> getProductBeansListSelectAll(PreparedStatement ps) throws SQLException {
-        ResultSet rs = ps.executeQuery();
-        List<ProductBean> products = new ArrayList<>();
-        while (rs.next()) {
-            ProductBean p = new ProductBean();
-            p.setId_prod(rs.getInt(1));
-            p.setName(rs.getString(2));
-            p.setPrice(rs.getDouble(3));
-            p.setType(rs.getBoolean(4));
-            p.setPlatform(rs.getString(5));
-            p.setDeveloper(rs.getString(6));
-            p.setDescription(rs.getString(7));
-            p.setMetadataPath(rs.getString(8));
-            p.setKey(rs.getString(9));
-            String condition = rs.getString(10);
-
-            // Manage Optional Value to Avoid Illegal Argument Exception when null
-            if (condition != null) {
-                p.setCondition(Data.Condition.valueOf(condition));
-            } else {
-                p.setCondition(null);
-            }
-
-            p.setDiscount(rs.getDouble(11));
-            products.add(p);
-        }
-        setCategoryList(products);
-        return products;
-    }
-
+    /**
+     * Retrieve all product
+     * @param limit number of product retrieved, if null = 200
+     * @param orderBy order by string value, if null by id_prod
+     * @return List of ProductBean
+     * @throws SQLException of fails
+     */
     public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
         try (Connection con = ConPool.getConnection()) { //Auto-Closeable
             PreparedStatement ps =
@@ -82,26 +57,8 @@ public class ProductDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                ProductBean p = new ProductBean();
-                p.setId_prod(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setPrice(rs.getDouble(3));
-                p.setType(rs.getBoolean(4));
-                p.setPlatform(rs.getString(5));
-                p.setDeveloper(rs.getString(6));
-                p.setDescription(rs.getString(7));
-                p.setMetadataPath(rs.getString(8));
-                p.setKey(rs.getString(9));
-                String condition = rs.getString(10);
-
-                // Manage Optional Value to Avoid Illegal Argument Exception when null
-                if (condition != null) {
-                    p.setCondition(Data.Condition.valueOf(condition));
-                } else {
-                    p.setCondition(null);
-                }
-
-                p.setDiscount(rs.getDouble(11));
+                ProductBean p = populateProduct(rs);
+                //Set Categories for All Products in list
                 setCategoryList(p);
                 return p;
             }
@@ -109,6 +66,12 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Method to Optimize data retrieve for Main Page <b>Carousel Only</b>
+     * @param id of a Product from the carousel
+     * @return ProductBean with only ip, name, platform and metadataPath selected
+     * @throws SQLException if query fails
+     */
     public ProductBean doRetrieveCarousel(int id) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
@@ -127,25 +90,12 @@ public class ProductDAO {
         }
     }
 
-    private void setpsAllCampProductBean(ProductBean product, PreparedStatement ps) throws SQLException {
-        ps.setString(1, product.getName());
-        ps.setDouble(2, product.getPrice());
-        ps.setBoolean(3, product.getType());
-        ps.setString(4, product.getPlatform());
-        ps.setString(5, product.getDeveloper());
-        ps.setString(6, product.getDescription());
-        ps.setString(7, product.getMetadataPath());
-        ps.setString(8, product.getKey());
-        ps.setString(9, product.getCondition()== null ? null : product.getCondition().toString()); //Enum to String Da vedere
-        ps.setObject(10, product.getDiscount());
-    }
-
     public void doSave(ProductBean product) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO products " +
-                    "(name, price, type, platform, developer, description, metadata, `key`, `condition`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "(name, price, type, platform, developer, description, metadata, `key`, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            setpsAllCampProductBean(product, ps);
+            setPSAllCampProductBean(product, ps);
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -162,14 +112,74 @@ public class ProductDAO {
     public void doUpdate(ProductBean product) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE products " +
-                    "SET name=?, price=?, type=?, platform=?, developer=?, description=?, metadata=?, `key`=?, `condition`=?, discount=? WHERE id_prod=?");
-            setpsAllCampProductBean(product, ps);
-            ps.setInt(11, product.getId_prod());
+                    "SET name=?, price=?, type=?, platform=?, developer=?, description=?, metadata=?, `key`=?, discount=? WHERE id_prod=?");
+            setPSAllCampProductBean(product, ps);
+            ps.setInt(10, product.getId_prod());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
             }
         }
     }
+
+    /* ----------------------- PRIVATE METHODS ------------------- */
+
+
+    private List<ProductBean> getProductBeansListSelectAll(PreparedStatement ps) throws SQLException {
+        ResultSet rs = ps.executeQuery();
+        List<ProductBean> products = new ArrayList<>();
+        while (rs.next()) {
+            ProductBean p = populateProduct(rs);
+            products.add(p);
+        }
+        //Set Categories for All Products in list
+        setCategoryList(products);
+
+        return products;
+    }
+
+    /**
+     * Create a new ProductBean and populate it with ResultSet Data (1 row)
+     * @param rs ResultSet to retrieve data from. Must <b>be checked for 'rs.next' before</b> this method call
+     * @return a ProductBean with all setters done except for Category -- TODO
+     * @throws SQLException if ConditionBean List retrieve fails
+     */
+    private ProductBean populateProduct(ResultSet rs) throws SQLException{
+        ProductBean p = new ProductBean();
+        p.setId_prod(rs.getInt(1));
+        p.setName(rs.getString(2));
+        p.setPrice(rs.getDouble(3));
+        p.setType(rs.getBoolean(4));
+        p.setPlatform(rs.getString(5));
+        p.setDeveloper(rs.getString(6));
+        p.setDescription(rs.getString(7));
+        p.setMetadataPath(rs.getString(8));
+        p.setKey(rs.getString(9));
+        p.setDiscount(rs.getDouble(10));
+
+        //Retrieve all Conditions and Quantity of a product
+        ConditionDAO conditionDAO = new ConditionDAO();
+        p.setConditions(conditionDAO.doRetrieveAllByIdProduct(p));
+        return p;
+    }
+
+    /**
+     * Prepare a Statement with all Product Data, for Update / Save
+     * @param product Bean to retrieve data from
+     * @param ps to fill with data from bean (update/save)
+     * @throws SQLException if query fails
+     */
+    private void setPSAllCampProductBean(ProductBean product, PreparedStatement ps) throws SQLException {
+        ps.setString(1, product.getName());
+        ps.setDouble(2, product.getPrice());
+        ps.setBoolean(3, product.getType());
+        ps.setString(4, product.getPlatform());
+        ps.setString(5, product.getDeveloper());
+        ps.setString(6, product.getDescription());
+        ps.setString(7, product.getMetadataPath());
+        ps.setString(8, product.getKey());
+        ps.setObject(9, product.getDiscount());
+    }
+
 
     private void setCategoryList(ProductBean productBean) throws SQLException {
         CategoryDAO categoryDAO = new CategoryDAO();
@@ -181,4 +191,8 @@ public class ProductDAO {
             setCategoryList(p);
         }
     }
+
+
+
+
 }
