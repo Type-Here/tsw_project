@@ -1,7 +1,4 @@
 package com.unisa.store.tsw_project.model.beans;
-
-import com.unisa.store.tsw_project.other.Data;
-
 import java.util.List;
 
 public class ProductBean {
@@ -14,7 +11,8 @@ public class ProductBean {
     private String description;
     private String metadataPath;
     private String key;
-    private Data.Condition condition;
+
+    private List<ConditionBean> conditions;
     private Double discount;
     private List<CategoryBean> categoryBeanList;
 
@@ -25,7 +23,7 @@ public class ProductBean {
 
     public ProductBean(int id_prod, String name, double price, boolean type,
                        String platform, String developer, String description, String metadata,
-                       String key, Data.Condition condition, double discount, List<CategoryBean> categoryBeanList) {
+                       String key, List<ConditionBean> conditions, double discount, List<CategoryBean> categoryBeanList) {
         this.id_prod = id_prod;
         this.name = name;
         this.price = price;
@@ -35,7 +33,7 @@ public class ProductBean {
         this.description = description;
         this.metadataPath = metadata;
         this.key = key;
-        this.condition = condition;
+        this.conditions = conditions;
         this.discount = discount;
         this.categoryBeanList = categoryBeanList;
     }
@@ -80,8 +78,8 @@ public class ProductBean {
         return key;
     }
 
-    public Data.Condition getCondition() {
-        return condition;
+    public List<ConditionBean> getConditions() {
+        return conditions;
     }
 
     public Double getDiscount() {
@@ -138,8 +136,8 @@ public class ProductBean {
         this.key = key;
     }
 
-    public void setCondition(Data.Condition condition) {
-        this.condition = condition;
+    public void setConditions(List<ConditionBean> conditions) {
+        this.conditions = conditions;
     }
 
     public void setDiscount(Double discount) {
@@ -166,7 +164,7 @@ public class ProductBean {
                 ", description='" + description + '\'' +
                 ", metadataPath='" + metadataPath + '\'' +
                 ", key='" + key + '\'' +
-                ", condition=" + condition +
+                ", conditions=" + conditions +
                 ", discount=" + discount +
                 ", metaData=" + metaData +
                 '}';
