@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class DataValidator {
     public enum PatternType{
-        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool, Platform;
+        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool, Platform, Category;
     }
 
     /**
@@ -48,7 +48,7 @@ public class DataValidator {
                     yield (max == null || !(vald > max)) && (min == null || !(vald < min));
                 }
                 case GenericAlphaNumeric -> data.matches("[\\w' -]*");
-                case Condition -> data.matches("[ABCDE]");
+                case Condition -> data.matches("[XABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
                 case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equals(e.name()));
                 default -> false;

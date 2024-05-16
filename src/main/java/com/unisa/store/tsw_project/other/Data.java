@@ -10,15 +10,18 @@ public interface Data {
     }
 
     enum Condition{
-        A("Nuovo"),
-        B("Quasi Nuovo"),
-        C("Buono"),
-        D("Sufficiente"),
-        E("Danneggiato");
+        X(0, "Digitale"),
+        A(1, "Nuovo"),
+        B(2, "Quasi Nuovo"),
+        C(3, "Buono"),
+        D(4, "Sufficiente"),
+        E(5, "Danneggiato");
 
         public final String description;
+        public final int dbValue;
 
-        Condition(String description){
+        Condition(int dbValue, String description){
+            this.dbValue = dbValue;
             this.description=description;
         }
     }
