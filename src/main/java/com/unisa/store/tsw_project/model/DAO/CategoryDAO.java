@@ -1,6 +1,7 @@
 package com.unisa.store.tsw_project.model.DAO;
 
 import com.unisa.store.tsw_project.model.beans.CategoryBean;
+import com.unisa.store.tsw_project.model.beans.ProductBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,7 +41,17 @@ public class CategoryDAO {
         }
     }
 
-    public void doSaveProductCategories(){
-        
+    public void doSaveProductCategories(ProductBean productBean) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            for (CategoryBean categoryBean: productBean.getCategoryBeanList()){
+                PreparedStatement ps =
+                        con.prepareStatement("INSERT INTO prod_categories (id_prod, id_cat) VALUES (?, ?)");
+                ps.setInt(1, productBean.getId_prod());
+                ps.setInt(1, categoryBean.getId_cat());
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException("INSERT error.");
+                }
+            }
+        }
     }
 }

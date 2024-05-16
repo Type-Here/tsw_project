@@ -13,11 +13,20 @@ create table products (
     description varchar(2047) not null,
     metadata varchar(2047),
     `key` varchar(15),
-    `condition` enum('A','B','C','D','E'), -- Status: A, B, C, D, E per condizioni
     discount double,
     primary key (id_prod)
 );
 
+-- Quantità per condizione
+create table quantity_condition (
+    id_prod int not null,
+    id_cond int not null,
+    quantity int not null,
+    foreign key(id_prod) references products(id_prod),
+    primary key(id_prod, id_cond)
+);
+
+-- Tabella Categorie
 create table categories (
     id_cat int not null auto_increment,
     typename varchar(255) not null,

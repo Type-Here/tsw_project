@@ -46,12 +46,8 @@ public class ProductDAO {
             p.setDiscount(rs.getDouble(11));
             products.add(p);
         }
-        if (products.isEmpty()) {
-            return null;
-        } else {
-            setCategoryList(products);
-            return products;
-        }
+        setCategoryList(products);
+        return products;
     }
 
     public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
@@ -156,8 +152,10 @@ public class ProductDAO {
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             product.setId_prod(rs.getInt(1)); //Set the new ID in the ProductBean
+
             CategoryDAO categoryDAO = new CategoryDAO();
-            categoryDAO.doSave;
+            categoryDAO.doSaveProductCategories(product);
+
         }
     }
 
