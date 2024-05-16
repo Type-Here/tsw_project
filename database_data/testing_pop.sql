@@ -89,8 +89,10 @@ insert into retrogamer.products(name, price, type, platform, developer, descript
 
 -- Credentials
 insert into retrogamer.credentials(pass_hash, pass_salt, creation_date) values
-('timidone', 'dinosauri','2024-05-12');
+(SHA2('Timid0n&dinosauri', 256), 'dinosauri','2024-05-12');
 
 -- Users
 insert into retrogamer.users(id_client,firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred) values
 (2,'Domenico','Amorelli','+3932010234455','timidone@so.org','2004-05-15','Via Girolamo Savonarola','Sapri','SA','84073',1);
+
+
