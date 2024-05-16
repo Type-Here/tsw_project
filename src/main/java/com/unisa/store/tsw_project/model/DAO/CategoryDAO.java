@@ -12,6 +12,27 @@ import java.util.List;
 
 public class CategoryDAO {
 
+    /**
+     * Retrieve a list of CategoryBeans with all category in DataBase
+     * @return List of All Category in DB
+     * @throws SQLException if query fails
+     */
+    public List<CategoryBean> doRetrieveAll() throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT * FROM categories");
+            ResultSet rs = ps.executeQuery();
+            List<CategoryBean> categoryBeanList = new ArrayList<>();
+            while (rs.next()) {
+                CategoryBean c = setCategoryBean(rs);
+                categoryBeanList.add(c);
+            }
+            return categoryBeanList;
+        }
+    }
+
+
+
     public List<CategoryBean> doRetriveCategoryListByProductId(int id) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
@@ -21,9 +42,7 @@ public class CategoryDAO {
             ResultSet rs = ps.executeQuery();
             List<CategoryBean> categoryBeanList = new ArrayList<>();
             while (rs.next()) {
-                CategoryBean c = new CategoryBean();
-                c.setId_cat(rs.getInt(1));
-                c.setTypename(rs.getString(2));
+                CategoryBean c = setCategoryBean(rs);
                 categoryBeanList.add(c);
             }
             return categoryBeanList;
@@ -54,4 +73,21 @@ public class CategoryDAO {
             }
         }
     }
+
+
+    /* ------------------ PRIVATE METHODS ------------------- */
+
+    /**
+     * Set a new CategoryBean from data of a ResultSet
+     * @param rs ResultSet (check if not null is needed before this method call)
+     * @return a full CategoryBean
+     * @throws SQLException if get values from rs fails
+     */
+    private CategoryBean setCategoryBean(ResultSet rs) throws SQLException{
+        CategoryBean c = new CategoryBean();
+        c.setId_cat(rs.getInt(1));
+        c.setTypename(rs.getString(2));
+        return c;
+    }
+
 }

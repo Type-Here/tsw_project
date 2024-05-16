@@ -1,6 +1,8 @@
 package com.unisa.store.tsw_project.controller;
 
+import com.unisa.store.tsw_project.model.DAO.CategoryDAO;
 import com.unisa.store.tsw_project.model.DAO.ProductDAO;
+import com.unisa.store.tsw_project.model.beans.CategoryBean;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.JSONMetaParser;
 import jakarta.servlet.ServletConfig;
@@ -29,6 +31,11 @@ public class InitServlet extends HttpServlet {
 
             /* IMPORTANT: ServletContext needs to be gotten from Config! */
             ServletContext app = config.getServletContext();
+
+            /* Load Category List in Application at Startup */
+            CategoryDAO categoryDAO = new CategoryDAO();
+            List<CategoryBean> catlist = categoryDAO.doRetrieveAll();
+            app.setAttribute("category", catlist);
 
             /* Logger logger = Logger.getLogger("base-log");
             URL resource = getServletContext().getResource("/WEB-INF/log");
