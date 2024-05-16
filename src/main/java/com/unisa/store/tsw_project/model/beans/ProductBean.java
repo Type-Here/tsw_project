@@ -1,4 +1,5 @@
 package com.unisa.store.tsw_project.model.beans;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductBean {
@@ -150,6 +151,18 @@ public class ProductBean {
 
     public void setCategoryBeanList(List<CategoryBean> categoryBeanList) {
         this.categoryBeanList = categoryBeanList;
+    }
+
+    /* OTHER SPECIFIC */
+
+    /**
+     * Add a Single Condition to the list in ProductBean
+     */
+    public void addCondition(ConditionBean conditionBean){
+        if(this.getConditions() == null){
+            this.setConditions(new ArrayList<>());
+        }
+        this.getConditions().add(conditionBean);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.unisa.store.tsw_project.controller.admin;
 
 import com.unisa.store.tsw_project.model.DAO.ProductDAO;
+import com.unisa.store.tsw_project.model.beans.CategoryBean;
+import com.unisa.store.tsw_project.model.beans.ConditionBean;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
@@ -20,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,31 +40,25 @@ public class ConsoleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
-        Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("user"));
-
-        if(adminAtt.isEmpty() || !(adminAtt.get() instanceof Boolean b) || !b){
-            throw new InvalidUserException(user.map(o -> (String) o).orElse("undefined"));
-        }
-
+        this.verifyAdminUser(req);
         req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
     }
 
+
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
-        Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("user"));
-
-        if(adminAtt.isEmpty() || !(adminAtt.get() instanceof Boolean b) || !b){
-            throw new InvalidUserException(user.map(o -> (String) o).orElse("undefined"));
-        }
+        this.verifyAdminUser(req);
 
         req.setAttribute("upload", false);
 
         ProductBean p = new ProductBean();
+
         Map<String, String[]> parameters = req.getParameterMap();
 
-        validateParametersAndSetProd(p, parameters); //Throws Error if Values are not valid
+        /* Each validate throws Error if Values are not valid */
+        validateCategoriesAndSet(p, req.getParameterValues("category"));
+        validateConditionsAndSet(p, req.getParameterValues("condition"), req.getParameterValues("quantity"));
+        validateParametersAndSetProd(p, parameters);
 
         try {
 
@@ -168,6 +165,80 @@ public class ConsoleServlet extends HttpServlet {
 
     /* --- Private Methods --- */
 
+    /**
+     * Verifies if User is Correctly logged as Admin
+     * @param req request to retrieve session data
+     * @throws InvalidUserException if user is not logged / incorrect
+     */
+    private void verifyAdminUser(HttpServletRequest req) {
+        Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
+        Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("user"));
+
+        if(adminAtt.isEmpty() || !(adminAtt.get() instanceof Boolean b) || !b){
+            throw new InvalidUserException(user.map(o -> (String) o).orElse("undefined"));
+        }
+    }
+
+    /**
+     * Get valid Categories from ServletContext (application) and check if input is valid. <br />
+     * After that insert categories from form to a list. <br />
+     * The list is then set to the ProductBean p.
+     * @param p ProductBean to set data to
+     * @param categories Arrays of category parameters (from request)
+     * @throws InvalidParameterException if Category is not valid
+     */
+    private void validateCategoriesAndSet(ProductBean p, String[] categories) {
+        List<CategoryBean> categoriesList = (List<CategoryBean>) getServletContext().getAttribute("categories");
+        List<CategoryBean> newCat = new ArrayList<>();
+        DataValidator validator = new DataValidator();
+
+        for(String cat: categories){
+
+            //Validator Throws Error if Value not Valid
+            validator.validatePattern(cat, DataValidator.PatternType.GenericAlphaNumeric);
+            CategoryBean found = categoriesList.stream().filter(c -> c.getTypename().equalsIgnoreCase(cat))
+                    .findFirst().orElseThrow(() -> new InvalidParameterException("category"));
+            CategoryBean c = new CategoryBean();
+            c.setTypename(found.getTypename());
+            c.setId_cat(found.getId_cat());
+
+            newCat.add(c);
+        }
+        p.setCategoryBeanList(newCat);
+    }
+
+    /**
+     * Get valid Condition and Quantity for each condition and check if input is valid. <br />
+     * After that insert conditions (with quantity inside the bean) to a list. <br />
+     * The list is then set to the ProductBean p.
+     * @param p ProductBean to set data to
+     * @param conditions Arrays of Condition parameters (from request)
+     * @param quantities Arrays of Quantities one for each condition (from request)
+     * @throws InvalidParameterException if Category is not valid
+     */
+    private void validateConditionsAndSet(ProductBean p, String[] conditions, String[] quantities) {
+        if(conditions.length != quantities.length) throw new InvalidParameterException("conditions != quantities");
+        DataValidator validator = new DataValidator();
+        for(int i = 0; i < conditions.length; i++){
+
+            //Validator Throws Error if Value not Valid
+            validator.validatePattern(conditions[i], DataValidator.PatternType.Condition);
+            validator.validatePattern(quantities[i], DataValidator.PatternType.Int);
+
+            ConditionBean c = new ConditionBean();
+            c.setId_cond(Data.Condition.valueOf(conditions[i]).dbValue);
+            c.setQuantity(Integer.parseInt(quantities[i]));
+            p.addCondition(c);
+        }
+    }
+
+
+    /**
+     * Sets all other parameters of ProductBean from the request after validating user input
+     * @param p PorductBean to set
+     * @param parameters Map of Key:String[] values to Validate and Set
+     * @throws InvalidParameterException if some required value is not valid
+     */
     private void validateParametersAndSetProd(ProductBean p, Map<String, String[]> parameters) {
         DataValidator validator = new DataValidator();
         for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
@@ -210,13 +281,6 @@ public class ConsoleServlet extends HttpServlet {
                             value[0], key);
                     break;
 
-                case "condition":
-                    if(value[0] ==  null || value[0].isEmpty()) break;
-                    validateAndSet(p::setCondition,
-                            validator.validatePattern(value[0], DataValidator.PatternType.Condition),
-                            Data.Condition.valueOf(value[0]), key);
-                    break;
-
                 case "discount":
                     if(value[0] ==  null || value[0].isEmpty()) break;
                     validateAndSet(p::setDiscount,
@@ -234,12 +298,25 @@ public class ConsoleServlet extends HttpServlet {
                     if(value == null) throw new InvalidParameterException(key);
                     break;
 
+                case "condition":
+                case "category":
+                    // Validated in other methods
+                    break;
+
                 default:
                     throw new InvalidParameterException(key);
             }
         }
     }
 
+    /**
+     * Supplier for validateParametersAndSetProd
+     * @param setter method to use to set Value after validation
+     * @param isValid condition, if valid set otherwise throw error
+     * @param value value to set parameter with setter
+     * @param key key of the parameter to return in exception if not valid
+     * @throws InvalidParameterException if isValid == false
+     */
     private <T> void validateAndSet(Consumer<T> setter, boolean isValid, T value, String key) {
         if (!isValid) {
             throw new InvalidParameterException(key + "=" + value);
