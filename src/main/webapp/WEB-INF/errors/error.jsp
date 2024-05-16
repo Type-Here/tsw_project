@@ -2,11 +2,11 @@
 <html>
 <head>
     <title>Error</title>
-    <link type="text/css" rel="stylesheet" href="css/style.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="css/medium-size.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="css/small.css" />
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="${pageContext.request.contextPath}/css/medium-size.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="${pageContext.request.contextPath}/css/widescreen.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
 </head>
 <body>
     <h2>Error:</h2>

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class DataValidator {
     public enum PatternType{
-        GenericAlphaNumeric, Email, Password, Username, Path, Double, Int, Condition, Bool, Platform, Category;
+        GenericAlphaNumeric, Email, Phone, Password, Username, Path, Double, Int, Condition, Bool, Platform, Category;
     }
 
     /**
@@ -36,6 +36,7 @@ public class DataValidator {
             }
 
             return switch (patternType) {
+                case Phone -> data.matches("\\+39[0-9]{8,10}");
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
                 case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
                 case Password -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");

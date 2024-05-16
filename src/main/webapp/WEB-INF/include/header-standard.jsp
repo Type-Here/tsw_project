@@ -18,6 +18,6 @@
     </ul>
     <div class="upper-bar-right">
         <span><img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon"></span>
-        <span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span>
+        <a href="${pageContext.request.contextPath}/jsp/login.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>
     </div>
 </div>

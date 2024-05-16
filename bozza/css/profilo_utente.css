@@ -1,0 +1,59 @@
+/* Profilo Utente */
+
+.utente-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.utente-container a:hover {
+    color: #0a78f5;
+}
+
+.utente-container h1 {
+    font-size: 2.0rem;
+    font-weight: bold;
+}
+
+.utente-container h2 {
+    margin: 5px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.utente-container p {
+    margin: 10px 0;
+    font-size: 1.22rem;
+    font-weight: normal;
+    padding: 10px;
+}
+
+.utente-header{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.utente-content-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.utente-sidebar {
+    padding: 8px;
+    width: 20%;
+    border: 1px solid #5a5a5a;
+    margin-right: 16px;
+    border-radius: 10px;
+}
+
+.utente-main-content {
+    width: calc(80% - 16px);
+    border: 1px solid #5a5a5a;
+    border-radius: 10px;
+    padding: 10px;
+}
