@@ -47,6 +47,7 @@ public class LoginAdminServlet extends HttpServlet {
             req.getSession().invalidate(); //To be sure, to be sure
             req.setAttribute("invalidUser", true);
             req.getRequestDispatcher("admin-login.jsp").forward(req, resp);
+            return;
         }
 
         try{
