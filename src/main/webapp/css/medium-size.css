@@ -223,4 +223,13 @@
         display: block;
     }
 
+    /* ========== FORM CHECKBOX =============== */
+    .category-form{
+        & label{
+            flex-basis: 45%;
+        }
+    }
+
+
+
   }

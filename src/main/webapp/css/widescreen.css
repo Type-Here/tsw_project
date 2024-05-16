@@ -41,6 +41,13 @@
         }
     }
 
+    /* ========== FORM CHECKBOX =============== */
+    .category-form{
+        & label{
+            flex-basis: 30%;
+        }
+    }
+
 }
 
 

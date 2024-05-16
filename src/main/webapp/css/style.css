@@ -858,6 +858,38 @@ input#pass{
     color: #ad212e;
 }
 
+
+.category-form{
+    justify-content: space-around;
+    & span.title-row{
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    & label{
+        display: flex;
+        flex-flow: row nowrap;
+        /*flex basis modified for media screen*/
+    }
+}
+
+.form-row label.condition-row{
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &.flex-start-row{
+        justify-content: flex-start;
+    }
+}
+
+.bordered-row{
+    border-radius: 3px;
+    border: 1px solid #5a5a5a;
+}
+
+
 /* ========================================= PRODUCT PAGE ========================================== */
 
 /* ------ FRONT VIEW (MAIN IMAGE AND PRICE/ADD CART DIV) ------ */

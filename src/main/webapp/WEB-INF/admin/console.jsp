@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/add-product.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -56,14 +57,14 @@
             <h2 class="text-center">Aggiungi Prodotto</h2>
         </div>
         <div class="log_form add-prod-info">
-            <form action="console" method="post" enctype="multipart/form-data">
+            <form id="add-form" action="console" method="post" enctype="multipart/form-data">
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
                 <label class="form-row"><span>Prezzo:</span><input type="number" step="0.01" name="price" required pattern="[0-9]+"/></label>
                 <fieldset class="form-row">
                     <div>
                         <span>Tipo:</span>
-                        <label class="required"><input type="radio" name="type" value="physic" required/>Fisico</label>
-                        <label class="required"><input type="radio" name="type" value="digital" required/>Digitale</label>
+                        <label class="required"><input class="type-prod" type="radio" name="type" value="physic" required/>Fisico</label>
+                        <label class="required"><input class="type-prod" type="radio" name="type" value="digital" required/>Digitale</label>
                     </div>
                     <label class="margin-h-10"><span>Piattaforma: </span>
                         <select name="platform" required>
@@ -84,21 +85,43 @@
                 <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required /></label>
                 <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\-]{2,}" required /> </label>
                 <label class="form-row"><span>Key:</span><input type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
-                <fieldset class="form-row centerized-row">
-                    <label><span>&percnt; Sconto:</span><input class="free-size" size="5" type="number" name="discount" min="0" max="100" /></label>
-                    <label><span>Condizione: </span>
-                        <select name="condition">
-                            <option selected value>None</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                        </select>
-                    </label>
+                <fieldset class="form-row category-form"><span class="title-row">Categorie:*</span>
+                    <c:forEach var="cat" items="${category}">
+                        <label><input type="checkbox" class="category-input free-size" name="category" value="${cat.id_cat}">${cat.typename}</label>
+                    </c:forEach>
                 </fieldset>
                 <fieldset class="form-row centerized-row">
-                    <input class="default" type="submit" value="Invia" />
+                    <label><span>&percnt; Sconto:</span><input class="free-size" size="5" type="number" name="discount" min="0" max="100" /></label>
+                </fieldset>
+                <fieldset class="form-row category-form">
+                    <span class="title-row">Condizione:* </span>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="X">Digitale</label>
+                    </div>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="A"/>A</label>
+                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                    </div>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="B"/>B</label>
+                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                    </div>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="C"/>C</label>
+                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                    </div>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="D"/>D</label>
+                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                    </div>
+                    <div class="condition-input form-row flex-start-row bordered-row">
+                        <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="E"/>E</label>
+                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-row centerized-row">
+                    <input id="add-submit" class="default" type="submit" value="Invia" />
                     <input class="default alternative" type="reset" value="Reimposta"/>
                 </fieldset>
             </form>
