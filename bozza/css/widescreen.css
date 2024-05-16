@@ -50,4 +50,8 @@
     .tile{
         flex-basis: 45%;
     }
+
+    .filter-bar ~ .main_home{
+       width: fit-content;
+    }
 }

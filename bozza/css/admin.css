@@ -32,7 +32,6 @@ section{
     & label:has(:required) span::after, 
     & span:has(+ label.required)::after {
         content: "*";
-        color: #ad212e;
     }
 }
 

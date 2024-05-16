@@ -172,4 +172,55 @@
         display: block;
     }
 
+
+    /* ======================= FILTER BAR ===================== */
+
+    /* Re-adapt MAIN DIV to filter bar */
+    .filter-bar ~ .main_home{
+        margin-left: auto;
+    }
+
+    /* Re-adapt UPPER BODY DIV to filter bar */
+    .filter-bar ~.upper_body{
+        margin-left: 0;
+    }
+
+    aside.filter-bar{
+        box-sizing: border-box;
+        width: 100vw;
+        height: 90vh;
+        max-width: unset;
+        left: 0;
+        transform: translateY(-150vh);
+    }
+
+    aside.filter-bar-showdown{
+        transform: translateY(-5vh);
+    }
+
+    .drop-down-filter{
+       margin: auto;
+    }
+
+    .filter-buttons{
+        margin: auto;
+    }
+
+    #filter-mobile{
+        display: block;
+        margin: auto;
+        width: fit-content;
+        font-size: medium;
+        border-radius: 3px;
+        background-color: #a5a5a5;
+    }
+
+    div:has(> #filter-mobile){
+        width: 100%;
+    }
+
+    .overlay.show{
+        display: block;
+    }
+
   }
