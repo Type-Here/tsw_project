@@ -53,6 +53,7 @@ body.body_def{
     justify-content: center;
     display: flex;
     flex-flow: column wrap;
+    align-content: center;
 }
 /*End Body*/
 
@@ -212,6 +213,18 @@ input[type="reset"].default, input[type="submit"].default, button.default{
     }
 }
 
+input[type="reset"].default:disabled,
+input[type="submit"].default:disabled,
+button.default:disabled{
+    background-color: #5a5a5a;
+    color: #c0c0c0;
+
+    &:hover{
+        background-color: #5a5a5a;
+        transform: scale(1);
+    }
+}
+
 button.yellow{
     background-color: #ffc30a;
     color: #121212;
@@ -221,7 +234,7 @@ button.yellow{
     }
 }
 
-input:not([type="submit"], [type="radio"], [type="reset"]){
+input:not([type="submit"], [type="radio"], [type="reset"], [type="checkbox"]){
     border: 2px solid #5a5a5a;
     border-radius: 20px;
     padding: 10px 15px;
@@ -230,7 +243,7 @@ input:not([type="submit"], [type="radio"], [type="reset"]){
 }
 
 /* Override size imposition of previous css style. Now html style tag is used */
-input.free-size{
+input.free-size, button.free-size{
     min-width: 10px;
     width: fit-content;
 }
@@ -270,6 +283,16 @@ textarea{
     border: 2px solid #5a5a5a;
     border-radius: 5px;
 }
+
+input[type="range"]{
+    width: 80%;
+    cursor: pointer;
+    background: #5a5a5a;
+}
+
+/*input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb{
+
+} */
 
 /* ===================  MAIN UPPER BAR  =================== */
 
@@ -1032,5 +1055,173 @@ input#pass{
         td:last-child, th:last-child{
             border-right: none;
         }
+    }
+}
+
+
+/* ====================================== FILTER BAR ==================================== */
+
+/* -- Filter Bar Container -- */
+aside.filter-bar{
+    background-color: inherit;
+    height: 60vh;
+    width: 20vw;
+    overflow: scroll;
+    color: #C0C0C0;
+    min-width: 200px;
+    max-width: 230px;
+    position: fixed;
+    /*background-color: #0a78f590;*/
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    /*box-shadow: 0 2px 1px 1px #202020a8;*/
+    top: 10vh;
+    left: -30vh;
+    transform: translateX(30vh);
+    transition: transform 1s ease-in-out;
+    padding: 15px 0 30px 0;
+    box-shadow: inset 0 -7px 8px -7px rgba(44, 41, 41, 0.8); /*Box Shadow only bottom*/
+    z-index: 2;
+}
+
+/* Adapt MAIN DIV to filter bar on the left */
+/* Only wide screen - Check medium-size.css to mobile view */
+.filter-bar ~ .main_home{
+    margin-left: max(10%, 210px);
+}
+
+/* Adapt MAIN DIV to filter bar on the left */
+/* Only wide screen - Check medium-size.css to mobile view */
+.filter-bar ~.upper_body{
+    margin-left: max(20vw, 200px);
+}
+
+.filter-bar label{
+    user-select: none;
+}
+
+/* - Container for a specific filter type - */
+.drop-down-filter{
+    padding: 0;
+    width: 100%;
+    max-width: 250px;
+    hr{
+        border-bottom: 0;
+        border-top: 1px solid #C0C0C0;
+        margin: 2px auto 4px auto;
+        width: 80%;
+    }
+}
+
+/* Container for Filter Name and Arrow */
+.filter-title{
+    margin: 5px 2px 0px 2px;
+    padding: 5px;
+    /*border: 1px solid #c0c0c0;*/
+    border-radius: 2px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover{
+        outline: 1px solid #f5f5f5;
+
+        svg, h4{
+            color: #f5f5f5;
+        }
+    }
+
+    span{
+        margin-right: 20px;
+    }
+
+    h4{
+        padding: 10px 20px;
+        margin: 0;
+        cursor: pointer;
+    }
+}
+
+.filter-arrow{
+    line-height: 1;
+    cursor: pointer;
+    width: 24px;
+    height: 15px;
+
+    svg{
+        width: 100%;
+        height: 100%;
+        user-select: none;
+        pointer-events: none;
+        transform: rotate(-90deg);
+        transition: all 0.5s ease-out;
+    }
+}
+
+/* Div for filter selection elements */
+.filter-list{
+    display: flex;
+    flex-flow: column wrap;
+    gap: 15px 20px;
+    padding: 10px 0 0 20px;
+    overflow: hidden;
+    transition: all 2s ease-out;
+}
+
+/* Filter Buttons */
+.filter-buttons{
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    max-width: 250px;
+}
+
+/* Button to remove filters */
+#remove-filter{
+    background: none;
+    border: none;
+    color: #f5f5f5;
+    font-size: 30px;
+    user-select: none;
+    text-align: center;
+    line-height: 30px;
+    transition: all 1s ease-out;
+    transform: rotate(0deg);
+    display: none;
+
+    &.animation{
+        visibility: visible;
+        transform: rotate(-180deg);
+    }
+}
+
+#remove-filter:hover{
+    opacity: 0.8;
+    border: 1px solid #5a5a5a;
+    border-radius: 5px;
+}
+
+
+#filter-mobile{
+    display: none;
+    padding: 5px 10px;
+    color: #202020;
+}
+
+/* Click to hide filter bar on mobile only */
+/* See medium-size.css for display */
+.hide-filter-mobile{
+    text-decoration: underline;
+    font-size: medium;
+    text-align: right;
+    width: 95%;
+    display: inline-block;
+
+    & span:hover{
+        color: #f5f5f5;
+        border-radius: 3px;
     }
 }
