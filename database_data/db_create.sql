@@ -17,8 +17,8 @@ create table products (
     primary key (id_prod)
 );
 
--- Quantità per condizione
-create table quantity_condition (
+-- Tabella Quantità per condizione
+create table prod_quantity (
     id_prod int not null,
     id_cond int not null,
     quantity int not null,
