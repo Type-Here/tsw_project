@@ -47,7 +47,7 @@ public class CategoryDAO {
                 PreparedStatement ps =
                         con.prepareStatement("INSERT INTO prod_categories (id_prod, id_cat) VALUES (?, ?)");
                 ps.setInt(1, productBean.getId_prod());
-                ps.setInt(1, categoryBean.getId_cat());
+                ps.setInt(2, categoryBean.getId_cat());
                 if (ps.executeUpdate() != 1) {
                     throw new RuntimeException("INSERT error.");
                 }
