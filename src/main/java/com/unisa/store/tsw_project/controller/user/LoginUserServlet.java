@@ -46,14 +46,8 @@ public class LoginUserServlet extends HttpServlet{
 
         // Validazione campi
         DataValidator validator = new DataValidator();
-        if (!validator.validatePattern(email.get(), DataValidator.PatternType.Email) ||
-                !validator.validatePattern(password.get(), DataValidator.PatternType.Password)){
-
-            request.getSession().invalidate();
-            request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-            return;
-        }
+        validator.validatePattern(email.get(), DataValidator.PatternType.Email);
+        validator.validatePattern(password.get(), DataValidator.PatternType.Password);
 
         UserBean userBean = new UserBean();
         UserDAO userDAO = new UserDAO();

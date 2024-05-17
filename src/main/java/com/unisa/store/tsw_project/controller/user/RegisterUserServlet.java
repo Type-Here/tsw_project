@@ -50,18 +50,20 @@ public class RegisterUserServlet extends HttpServlet {
         }
 
         // Validazione campi DA VEDERE DATA
+
         DataValidator validator = new DataValidator();
-        !validator.validatePattern(name.get(), DataValidator.PatternType.Username) || !validator.validatePattern(surname.get(), DataValidator.PatternType.Surname) ||
-                !validator.validatePattern(phone.get(), DataValidator.PatternType.Phone) ||
-                !validator.validatePattern(email.get(), DataValidator.PatternType.Email) ||
-                !validator.validatePattern(birthdate.get(), DataValidator.PatternType.Birthdate) ||
-                !validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic) ||
-                !validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic) ||
-                !validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric) ||
-                !validator.validatePattern(city.get(), DataValidator.PatternType.Generic) ||
-                !validator.validatePattern(province.get(), DataValidator.PatternType.Generic) ||
-                !validator.validatePattern(cap.get(), DataValidator.PatternType.CAP) ||
-                !validator.validatePattern(password.get(), DataValidator.PatternType.Password)){
+        validator.validatePattern(name.get(), DataValidator.PatternType.Username);
+        validator.validatePattern(surname.get(), DataValidator.PatternType.Surname);
+        validator.validatePattern(phone.get(), DataValidator.PatternType.Phone);
+        validator.validatePattern(email.get(), DataValidator.PatternType.Email);
+        validator.validatePattern(birthdate.get(), DataValidator.PatternType.Birthdate);
+        validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
+        validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
+        validator.validatePattern(password.get(), DataValidator.PatternType.Password);
 
 
 
