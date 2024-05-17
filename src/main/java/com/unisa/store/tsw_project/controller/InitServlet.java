@@ -37,9 +37,12 @@ public class InitServlet extends HttpServlet {
             ServletContext app = config.getServletContext();
 
             /* Load Category List in Application at Startup */
-
             List<CategoryBean> catlist = categoryDAO.doRetrieveAll();
             app.setAttribute("category", catlist);
+
+            /* Load Developers List in Application at Startup */
+            List<String> developers = productDAO.doRetrieveDevelopers();
+            app.setAttribute("developers", developers);
 
             /* Load Product Number */
             int prodNum = productDAO.doCountAll();

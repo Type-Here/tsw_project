@@ -153,6 +153,24 @@ public class ProductDAO {
         return value;
     }
 
+    /**
+     * Retrieve a List of different Developers inside product Table
+     * @return List of String with developers name
+     * @throws SQLException if query fails
+     */
+    public List<String> doRetrieveDevelopers() throws SQLException{
+        List<String> values = new ArrayList<>();
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT developer FROM products GROUP BY developer");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                values.add(rs.getString(1));
+            }
+        }
+        return values;
+    }
+
     /* ----------------------- PRIVATE METHODS ------------------- */
 
 

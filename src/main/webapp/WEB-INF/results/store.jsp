@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Retrogamer: Home</title>
+    <title>Catalogo - Retrogamer</title>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="${pageContext.request.contextPath}/css/medium-size.css" />
     <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="${pageContext.request.contextPath}/css/widescreen.css" />
@@ -34,10 +34,14 @@
         <hr/>
         <div class="filter-list platform-filter">
             <label><input type="radio" name="platform" value="ps1"/>PS1</label>
+            <label><input type="radio" name="platform" value="n64"/>N64</label>
             <label><input type="radio" name="platform" value="ps2"/>PS2</label>
-            <label><input type="radio" name="platform" value="sega"/>Sega</label>
-            <label><input type="radio" name="platform" value="atari"/>Atari</label>
-            <label><input type="radio" name="platform" value="ps1"/>PS1</label>
+            <label><input type="radio" name="platform" value="pc"/>PC</label>
+            <label><input type="radio" name="platform" value="atari-2600"/>Atari 2600</label>
+            <label><input type="radio" name="platform" value="c64"/>C64</label>
+            <label><input type="radio" name="platform" value="gameboy"/>Gameboy</label>
+            <label><input type="radio" name="platform" value="gamecube"/>GameCube</label>
+            <label><input type="radio" name="platform" value="sega"/>Sega MD</label>
         </div>
     </div>
     <div class="drop-down-filter">
@@ -49,11 +53,9 @@
         </div>
         <hr/>
         <div class="filter-list category-filter">
-            <label><input type="checkbox" name="cat" value="ps1"/>PS1</label>
-            <label><input type="checkbox" name="cat" value="ps2"/>PS2</label>
-            <label><input type="checkbox" name="cat" value="sega"/>Sega</label>
-            <label><input type="checkbox" name="cat" value="atari"/>Atari</label>
-            <label><input type="checkbox" name="cat" value="ps1"/>PS1</label>
+            <c:forEach var="cat" items="${category}">
+                <label><input type="checkbox" name="cat" value="${cat.id_cat}"/>${cat.typename}</label>
+            </c:forEach>
         </div>
     </div>
     <div class="drop-down-filter">
@@ -65,11 +67,9 @@
         </div>
         <hr/>
         <div class="filter-list dev-filter">
-            <label><input type="radio" name="developer" value="ps1"/>PS1</label>
-            <label><input type="radio" name="developer" value="ps2"/>PS2</label>
-            <label><input type="radio" name="developer" value="sega"/>Sega</label>
-            <label><input type="radio" name="developer" value="atari"/>Atari</label>
-            <label><input type="radio" name="developer" value="ps1"/>PS1</label>
+            <c:forEach var="dev" items="${developers}">
+                <label><input type="radio" name="developer" value="${dev}"/>${dev}</label>
+            </c:forEach>
         </div>
     </div>
     <div class="drop-down-filter">
