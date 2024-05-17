@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductDAO {
     /**
@@ -21,25 +22,38 @@ public class ProductDAO {
     /**
      * Retrieve all product
      * @param limit number of product retrieved, if null = 200
-     * @param orderBy order by string value, if null by id_prod
+     * @param orderBy order by string value, if null by id_prod DESC
      * @return List of ProductBean
      * @throws SQLException of fails
      */
     public List<ProductBean> doRetrieveAll(Integer limit, String orderBy) throws SQLException {
+        return doRetrieveAll(limit, orderBy, null);
+    }
+
+    /**
+     * Retrieve all product
+     * @param limit number of product retrieved, if null = 200
+     * @param orderBy order by string value, if null by id_prod DESC
+     * @param offset offset to start giving result from
+     * @return List of ProductBean
+     * @throws SQLException of fails
+     */
+    public List<ProductBean> doRetrieveAll(Integer limit, String orderBy, Integer offset) throws SQLException {
         try (Connection con = ConPool.getConnection()) { //Auto-Closeable
             PreparedStatement ps =
-                    con.prepareStatement("SELECT * FROM products ORDER BY ? DESC LIMIT ? ");
-            if(orderBy != null){
-                ps.setString(1, orderBy);
-            } else ps.setString(1, "id_prod"); //Default Choice
-
-            if(limit != null){
-                ps.setInt(2, limit);
-            } else ps.setInt(2, 200); //Limit 200 is default for MariaDB
+                    con.prepareStatement("SELECT * FROM products ORDER BY ? DESC LIMIT ? OFFSET ?");
+            //Default Choice by ID
+            ps.setString(1, Objects.requireNonNullElse(orderBy, "id_prod"));
+            //Limit 200 is default for MariaDB
+            ps.setInt(2, Objects.requireNonNullElse(limit, 200));
+            //Default offset = 0
+            ps.setInt(3, Objects.requireNonNullElse(offset, 0));
 
             return getProductBeansListSelectAll(ps);
         }
     }
+
+
 
     public List<ProductBean> doRetrieveByName(String name) throws SQLException{
         try (Connection con = ConPool.getConnection()) {
@@ -119,6 +133,24 @@ public class ProductDAO {
                 throw new RuntimeException("UPDATE error.");
             }
         }
+    }
+
+    /**
+     * Count Number of Products (Not Single products but Product Type) Available
+     * @return Number of Products
+     * @throws SQLException if SQL fails
+     */
+    public int doCountAll() throws SQLException{
+        int value = -1;
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement("SELECT COUNT(*) FROM products");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                value = rs.getInt(1);
+            }
+        }
+        return value;
     }
 
     /* ----------------------- PRIVATE METHODS ------------------- */
