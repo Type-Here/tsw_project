@@ -39,6 +39,8 @@ public class StoreServlet extends HttpServlet {
             parser.doParseMetaData(products, getServletContext());
 
             //Add product list to request and Send to JSP for View
+            req.setAttribute("maxPage", pages);
+            req.setAttribute("page", page);
             req.setAttribute("products", products);
             req.getRequestDispatcher("/WEB-INF/results/store.jsp").forward(req, resp);
 
