@@ -12,7 +12,7 @@ import java.util.List;
 
 public class OrdersDAO {
 
-    public List<OrdersBean> doRetriveAllOrdersByUserId(int id_client) throws SQLException {
+    public List<OrdersBean> doRetrieveAllOrdersByUserId(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM orders WHERE id_client = ?");
             ps.setInt(1, id_client);
@@ -35,15 +35,11 @@ public class OrdersDAO {
                 o.setOrder_date(rs.getDate(5).toLocalDate());
                 orders.add(o);
             }
-            if (orders.isEmpty()){
-                return null;
-            } else {
-                return orders;
-            }
+            return orders;
         }
     }
 
-    public OrdersBean doRetriveOrderByCartId(int id_cart) throws SQLException {
+    public OrdersBean doRetrieveOrderByCartId(int id_cart) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM orders WHERE id_cart = ?");
             ps.setInt(1, id_cart);

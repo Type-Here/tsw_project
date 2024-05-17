@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class CartDAO {
 
-    public CartBean doRetriveByUserId(int id_client) throws SQLException {
+    public CartBean doRetrieveByUserId(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM cart WHERE id_client = ?");
             ps.setInt(1, id_client);
