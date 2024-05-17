@@ -6,36 +6,61 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class UserDAO {
 
     // LocalDate to Date da verificare funzionamento
 
-    public UserBean getUserById(int id_client) throws SQLException {
+    public UserBean getUserByEmail(String email) throws SQLException {
         try (Connection con = ConPool.getConnection()){
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE id = ?");
-            ps.setInt(1, id_client);
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE email =?");
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
                 UserBean u = new UserBean();
-                u.setId(ps.executeQuery().getInt(1));
-                u.setFirstname(ps.executeQuery().getString(2));
-                u.setLastname(ps.executeQuery().getString(3));
-                u.setTelephone(ps.executeQuery().getString(4));
-                u.setEmail(ps.executeQuery().getString(5));
-                u.setBirth(ps.executeQuery().getDate(6).toLocalDate());
-                u.setAddress(ps.executeQuery().getString(7));
-                u.setCity(ps.executeQuery().getString(8));
-                u.setProv(ps.executeQuery().getString(9));
-                u.setCAP(ps.executeQuery().getString(10));
-                u.setId_cred(ps.executeQuery().getInt(11));
+                u.setId(rs.getInt(1));
+                u.setFirstname(rs.getString(2));
+                u.setLastname(rs.getString(3));
+                u.setTelephone(rs.getString(4));
+                u.setEmail(rs.getString(5));
+                u.setBirth(rs.getDate(6).toLocalDate());
+                u.setAddress(rs.getString(7));
+                u.setCity(rs.getString(8));
+                u.setProv(rs.getString(9));
+                u.setCAP(rs.getString(10));
+                u.setId_cred(rs.getInt(11));
                 return u;
             }
             return null;
         }
     }
 
-    private void setpsAllCampUserBean(UserBean user, PreparedStatement ps) throws SQLException {
+    public UserBean getUserById(int id_client) throws SQLException {
+        try (Connection con = ConPool.getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id_client = ?");
+            ps.setInt(1, id_client);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                UserBean u = new UserBean();
+                u.setId(rs.getInt(1));
+                u.setFirstname(rs.getString(2));
+                u.setLastname(rs.getString(3));
+                u.setTelephone(rs.getString(4));
+                u.setEmail(rs.getString(5));
+                u.setBirth(rs.getDate(6).toLocalDate());
+                u.setAddress(rs.getString(7));
+                u.setCity(rs.getString(8));
+                u.setProv(rs.getString(9));
+                u.setCAP(rs.getString(10));
+                u.setId_cred(rs.getInt(11));
+                return u;
+            }
+            return null;
+        }
+    }
+
+    private void setPsAllCampUserBean(UserBean user, PreparedStatement ps) throws SQLException {
         ps.setString(1, user.getFirstname());
         ps.setString(2, user.getLastname());
         ps.setString(3, user.getTelephone());
@@ -50,10 +75,10 @@ public class UserDAO {
 
     public void doSave(UserBean user) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO user " +
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users " +
                     "(firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred)" +
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-            setpsAllCampUserBean(user, ps);
+            setPsAllCampUserBean(user, ps);
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -65,13 +90,54 @@ public class UserDAO {
 
     public void doUpdate(UserBean user) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE user " +
+            PreparedStatement ps = con.prepareStatement("UPDATE users " +
                     "SET firstname=?, lastname=?, telephone=?, email=?, birth=?," +
-                    " address=?, city=?, prov=?, cap=?, id_cred=? WHERE id=?");
-            setpsAllCampUserBean(user, ps);
+                    " address=?, city=?, prov=?, cap=?, id_cred=? WHERE id_client=?");
+            setPsAllCampUserBean(user, ps);
             ps.setInt(11, user.getId());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
+            }
+        }
+    }
+
+    public String[] doRetrieveHashAndSaltByUserId(int id_cred) throws SQLException {
+        try (Connection con = ConPool.getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT pass_hash, pass_salt FROM credentials WHERE id_cred = ?");
+            ps.setInt(1, id_cred);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                String[] result = new String[2];
+                result[0] = rs.getString(1);
+                result[1] = rs.getString(2);
+                return result;
+            }
+            return null;
+        }
+    }
+
+    public int doSaveCredentials(String hash, String salt) throws SQLException {
+        try (Connection con = ConPool.getConnection()){
+            PreparedStatement ps = con.prepareStatement("INSERT INTO credentials (pass_hash, pass_salt, creation_date) VALUES (SHA2(?, 256), ?, ?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, hash+salt);
+            ps.setString(2, salt);
+            ps.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+            if (ps.executeUpdate() != 1){
+                throw new RuntimeException("INSERT error.");
+            }
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            return rs.getInt(1);
+        }
+    }
+
+    public void doDeleteCredentials(int id_cred) throws SQLException {
+        try (Connection con = ConPool.getConnection()){
+            PreparedStatement ps = con.prepareStatement("DELETE FROM credentials WHERE id_cred = ?");
+            ps.setInt(1, id_cred);
+            if (ps.executeUpdate() != 1){
+                throw new RuntimeException("DELETE error.");
             }
         }
     }
