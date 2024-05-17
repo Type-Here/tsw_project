@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Retrogamer: Home</title>
+    <title>Catalogo - Retrogamer</title>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="css/medium-size.css" />
     <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
@@ -72,8 +72,9 @@
             <h2>${product.name}</h2>
             <h3>Categorie</h3>
             <ul>
-                <li>Piattaforma</li>
-                <li>Avventura</li>
+                <c:forEach var="cat" items="${product.categoryBeanList}">
+                <li>${cat.typename}</li>
+                </c:forEach>
             </ul>
             <hr />
             <h3>Descrizione</h3>
@@ -84,7 +85,6 @@
             <h3>Requirements</h3>
             <table class="req-table">
                 <tr><th>Piattaforma</th><td>${product.platform}</td></tr>
-                <tr><th>Lettore Ottico</th><td>Funzionante</td></tr>
             </table>
         </div>
         <div>
