@@ -1125,7 +1125,7 @@ aside.filter-bar{
 /* Adapt MAIN DIV to filter bar on the left */
 /* Only wide screen - Check medium-size.css to mobile view */
 .filter-bar ~.upper_body{
-    margin-left: max(20vw, 200px);
+    margin-left: max(10%, 210px);
 }
 
 .filter-bar label{
@@ -1250,7 +1250,7 @@ aside.filter-bar{
     font-size: medium;
     text-align: right;
     width: 95%;
-    display: inline-block;
+    display: none;
 
     & span:hover{
         color: #f5f5f5;

@@ -11,7 +11,7 @@
 
     <ul class="nav">
         <li class=""><a href="${pageContext.request.contextPath}/">Home</a></li>
-        <li><a href="#">Catalogo</a></li>
+        <li><a href="${pageContext.request.contextPath}/store">Catalogo</a></li>
         <li><a href="${pageContext.request.contextPath}/jsp/aboutus.jsp">Chi Siamo</a></li>
         <li><a href="${pageContext.request.contextPath}/jsp/assistance.jsp">Assistenza</a></li>
         <li><a href="#">Newsletter</a></li>

@@ -223,6 +223,10 @@
         display: block;
     }
 
+    div.hide-filter-mobile{
+        display: inline-block;
+    }
+
     /* ========== FORM CHECKBOX =============== */
     .category-form{
         & label{
