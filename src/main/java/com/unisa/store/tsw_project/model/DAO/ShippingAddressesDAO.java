@@ -1,6 +1,7 @@
 package com.unisa.store.tsw_project.model.DAO;
 
 import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
+import com.unisa.store.tsw_project.model.beans.UserBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class ShippingAddressesDAO {
 
-    public List<ShippingAddressesBean> doRetriveAllByUserId(int id_client) throws SQLException {
+    public List<ShippingAddressesBean> doRetrieveAllByUserId(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM shipping_addresses WHERE id_client = ?");
             ps.setInt(1, id_client);
@@ -56,6 +57,26 @@ public class ShippingAddressesDAO {
             rs.next();
             shippingAddress.setId_add(rs.getInt(2)); // Da controllare
         }
+    }
+
+
+    public void doSaveFirstShippingAddresses(UserBean userBean){
+        ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
+        shippingAddressesBean.setId_client(userBean.getId());
+        shippingAddressesBean.setFirstname(userBean.getFirstname());
+        shippingAddressesBean.setLastname(userBean.getLastname());
+        shippingAddressesBean.setAddress(userBean.getAddress());
+        shippingAddressesBean.setCity(userBean.getCity());
+        shippingAddressesBean.setProv(userBean.getProv());
+        shippingAddressesBean.setCAP(userBean.getCAP());
+
+        ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
+        try {
+            shippingAddressesDAO.doSave(shippingAddressesBean);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void doUpdate(ShippingAddressesBean shippingAddress) throws SQLException {
