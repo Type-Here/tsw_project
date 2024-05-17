@@ -28,6 +28,7 @@ public class HomeServlet extends HttpServlet {
         try {
             List<ProductBean> products = productDAO.doRetrieveAll(18, "discount");
 
+            //Retrieve Images for Products from JSON
             JSONMetaParser parser = new JSONMetaParser();
             parser.doParseMetaData(products, getServletContext());
 

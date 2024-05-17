@@ -29,13 +29,22 @@ public class InitServlet extends HttpServlet {
         try {
             System.out.println("\n----- INIT ------");
 
+            /* Variables */
+            ProductDAO productDAO = new ProductDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
+
             /* IMPORTANT: ServletContext needs to be gotten from Config! */
             ServletContext app = config.getServletContext();
 
             /* Load Category List in Application at Startup */
-            CategoryDAO categoryDAO = new CategoryDAO();
+
             List<CategoryBean> catlist = categoryDAO.doRetrieveAll();
             app.setAttribute("category", catlist);
+
+            /* Load Product Number */
+            int prodNum = productDAO.doCountAll();
+            app.setAttribute("prod-number", prodNum);
+
 
             /* Logger logger = Logger.getLogger("base-log");
             URL resource = getServletContext().getResource("/WEB-INF/log");
@@ -51,16 +60,17 @@ public class InitServlet extends HttpServlet {
             logger.addHandler(new FileHandler(log.getPath(), true));
             app.setAttribute("logger", logger);*/
 
+
             /*Get IDs Info from highlights.json for Carousel Products */
             JSONMetaParser parser = new JSONMetaParser();
             List<Integer> high = parser.doParseHighlights(File.separator + "WEB-INF" +
                                         File.separator +"data" + File.separator + "highlights.json", config.getServletContext());
             List<ProductBean> highProd = new ArrayList<>();
-            ProductDAO dao = new ProductDAO();
+
 
             //Get Products from IDs
             for(int id : high){
-                ProductBean p = dao.doRetrieveCarousel(id);
+                ProductBean p = productDAO.doRetrieveCarousel(id);
                 //Protect from Errors: check if null
                 if(p != null) highProd.add(p);
             }
