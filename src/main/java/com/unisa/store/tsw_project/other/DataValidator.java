@@ -1,10 +1,11 @@
 package com.unisa.store.tsw_project.other;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 public class DataValidator {
     public enum PatternType{
-        Generic, GenericAlphaNumeric, Email, Phone, Password, Username, Path, Double, Int, Condition, Bool, Platform, Category;
+        Generic, GenericAlphaNumeric, Email, Surname, Phone, Password, CAP, Birthdate, Username, Path, Double, Int, Condition, Bool, Platform, Category;
     }
 
     /**
@@ -36,9 +37,15 @@ public class DataValidator {
             }
 
             return switch (patternType) {
-                case Phone -> data.matches("\\+39[0-9]{8,10}");
+                case Birthdate -> {
+                    LocalDate date = LocalDate.parse(data);
+                    yield date.isBefore(LocalDate.now().minusYears(16));
+                }
+                case CAP -> data.matches("[0-9]{5,6}");
+                case Phone -> data.matches("\\+39 [0-9]{8,10}");
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
                 case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
+                case Surname -> data.matches("^[a-zA-Z0-9' ]+$");
                 case Password -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
                 case Int -> {
                     int val = Integer.parseInt(data);
