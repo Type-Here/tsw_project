@@ -23,7 +23,7 @@
 <aside class="filter-bar">
 
     <div class="hide-filter-mobile"><span id="hide-filter">Hide</span></div>
-    <span class="centerized-flex-container">Filtri(1)</span>
+    <span class="centerized-flex-container" id="filter-number">Filtri(0)</span>
     <div class="drop-down-filter">
         <div class="filter-title">
             <h4>Piattaforma</h4>

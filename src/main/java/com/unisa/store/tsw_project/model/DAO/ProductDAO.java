@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ProductDAO {
@@ -172,27 +173,39 @@ public class ProductDAO {
     }
 
 
-    public List<ProductBean> doRetrieveByParameters(String[] parameterName, String[] values) throws SQLException {
-        StringBuilder stm = new StringBuilder("SELECT * FROM products WHERE ");
+    public List<ProductBean> doRetrieveByParameters(Map<String, String> params) throws SQLException {
+        StringBuilder stm = new StringBuilder("SELECT * FROM products");
         List<ProductBean> products = new ArrayList<>();
 
-        if(parameterName.length != values.length){
-            throw new IllegalArgumentException("Number of parameters does not match number of values");
+        if(!params.isEmpty()){
+            stm.append(" WHERE ");
         }
 
-        for (int i = 0; i < parameterName.length - 1; i++) {
-            stm.append(parameterName[i]).append("=?").append(" AND ");
+        boolean first = true;
+        for (String key : params.keySet()) {
+            if(!first){
+                stm.append(" AND ");
+            }
+            first = false;
+            if(key.equals("minprice")){
+                stm.append("price").append(">=?");
+            } else if(key.equals("maxprice")){
+                stm.append("price").append("<=?");
+            } else {
+                stm.append(key).append("=?");
+            }
         }
-        stm.append(parameterName[parameterName.length - 1]).append("=?");
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
                     con.prepareStatement(stm.toString());
-            for (int i = 0; i < values.length; i++) {
-                ps.setObject(i + 1, values[i]);
+            int i = 1;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                ps.setObject(i++, entry.getValue());
             }
 
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 ProductBean p = populateProduct(rs);
                 //Set Categories for All Products in list
