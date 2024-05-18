@@ -5,8 +5,8 @@ Array.from(filterTitles).forEach(title => {
         
         //Get filter-list element 
         const element = this.parentNode.children[2];
-        
-        if(element.style.display == 'none'){
+        console.log(element.style.display);
+        if(element.style.display.length === 0|| element.style.display === 'none'){
             title.children[1].children[0].style.transform = "rotate(-90deg)";
             element.style.display = 'flex';
             element.style.visibility = ' hidden';
@@ -39,7 +39,7 @@ inputRanges[0].oninput = function(){
         this.value = max - 1;
     }
 
-    if(this.value != 0){
+    if(this.value !== 0){
         let reset = document.getElementById('remove-filter');
         reset.style.display = 'block';
     }
@@ -56,7 +56,7 @@ inputRanges[1].oninput = function(){
         this.value = min + 1;
     }
 
-    if(this.value != this.max){
+    if(this.value !== this.max){
         /*let reset = document.getElementById('remove-filter');
         reset.style.display = 'block';*/
         displayRemoveFilter();
@@ -160,3 +160,65 @@ document.getElementById('hide-filter').addEventListener('click', () =>{
     document.getElementsByClassName('filter-bar')[0].classList.remove('filter-bar-showdown');
     document.getElementsByClassName('overlay')[0].setAttribute('class', 'overlay');
 });
+
+
+
+/* ===================== APPLY BUTTON ================================== */
+
+/* ------------ XML-HTTP-REQUEST WHEN APPLY FILTER BUTTON IS CLICKED --------------- */
+document.getElementById('apply-filter').addEventListener("click", () => {
+
+    //Set Query Object with parameter data
+    let queryObj = {platform: '', dev: '', minprice: '', maxprice: ''};
+    queryObj.platform = document.querySelector('.platform-filter input[type=radio]:checked');
+    queryObj.dev = document.querySelector('.dev-filter input[type=radio]:checked');
+    queryObj.minprice = document.getElementsByClassName('price-range')[0];
+    queryObj.maxprice = document.getElementsByClassName('price-range')[1];
+    let categories = document.querySelectorAll('.category-filter input[type=checkbox]:checked');
+
+    let query = '';
+
+    // Set Parameters on GET Request as a Query String
+    let filterNum = 0;
+    for (const [key, htmlElement] of Object.entries(queryObj)) {
+        if (htmlElement == null || htmlElement.value == null) continue; //If Object or its value is null, jump to next
+        if (key === 'minprice' && htmlElement.value === '0') continue; //If min price is 0 ignore parameter
+        if (key === 'maxprice' && htmlElement.value === queryObj.maxprice.max) continue; //If max price is equal to max ignore parameter
+        if (htmlElement.value.length > 0) { //Set parameters if present
+            query = query + key + '=' + htmlElement.value + '&';
+            filterNum++;
+        }
+    }
+
+    //For Categories, set all Applied
+    Array.from(categories).forEach( input =>{
+        console.log(input);
+        query = query + 'category=' + input.value + '&';
+        filterNum++;
+    });
+
+    //IF query has length > 0 (some filter is applied) send AJAX
+    if (query.length > 0) {
+        let xhr = new XMLHttpRequest(); // Creare una richiesta XML HTTP
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) { //if no error from server: set new DATA
+                document.getElementsByClassName('main_home')[0].innerHTML = xhr.responseText;
+                document.getElementById("filter-number").innerHTML = 'Filtri(' + filterNum.toString() + ')';
+            }
+        };
+        //Send Request
+        xhr.open("GET", "store?" + query, true); // Open new GET Request
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send(); // Send Request
+    }
+});
+
+
+/*
+* let responseJson = JSON.parse(xhr.responseText); // Analizzare la risposta JSON
+                for (let key in responseJson) {
+                    if (Object.hasOwn(responseJson, key)) {
+                        alert(key + ":" + responseJson[key]);
+                    }
+                }
+* */

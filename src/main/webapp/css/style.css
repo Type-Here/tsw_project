@@ -1187,14 +1187,14 @@ aside.filter-bar{
         height: 100%;
         user-select: none;
         pointer-events: none;
-        transform: rotate(-90deg);
+        transform: rotate(90deg);
         transition: all 0.5s ease-out;
     }
 }
 
 /* Div for filter selection elements */
 .filter-list{
-    display: flex;
+    display: none; /*JS: flex when visible*/
     flex-flow: column wrap;
     gap: 15px 20px;
     padding: 10px 0 0 20px;
