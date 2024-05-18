@@ -171,6 +171,40 @@ public class ProductDAO {
         return values;
     }
 
+
+    public List<ProductBean> doRetrieveByParameters(String[] parameterName, String[] values) throws SQLException {
+        StringBuilder stm = new StringBuilder("SELECT * FROM products WHERE ");
+        List<ProductBean> products = new ArrayList<>();
+
+        if(parameterName.length != values.length){
+            throw new IllegalArgumentException("Number of parameters does not match number of values");
+        }
+
+        for (int i = 0; i < parameterName.length - 1; i++) {
+            stm.append(parameterName[i]).append("=?").append(" AND ");
+        }
+        stm.append(parameterName[parameterName.length - 1]).append("=?");
+
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps =
+                    con.prepareStatement(stm.toString());
+            for (int i = 0; i < values.length; i++) {
+                ps.setObject(i + 1, values[i]);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProductBean p = populateProduct(rs);
+                //Set Categories for All Products in list
+                setCategoryList(p);
+                products.add(p);
+            }
+            return products;
+        }
+    }
+
+
+
     /* ----------------------- PRIVATE METHODS ------------------- */
 
 

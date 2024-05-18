@@ -37,11 +37,11 @@
             <label><input type="radio" name="platform" value="n64"/>N64</label>
             <label><input type="radio" name="platform" value="ps2"/>PS2</label>
             <label><input type="radio" name="platform" value="pc"/>PC</label>
-            <label><input type="radio" name="platform" value="atari-2600"/>Atari 2600</label>
+            <label><input type="radio" name="platform" value="atari2600"/>Atari 2600</label>
             <label><input type="radio" name="platform" value="c64"/>C64</label>
             <label><input type="radio" name="platform" value="gameboy"/>Gameboy</label>
             <label><input type="radio" name="platform" value="gamecube"/>GameCube</label>
-            <label><input type="radio" name="platform" value="sega"/>Sega MD</label>
+            <label><input type="radio" name="platform" value="segamegadrive"/>Sega MD</label>
         </div>
     </div>
     <div class="drop-down-filter">
