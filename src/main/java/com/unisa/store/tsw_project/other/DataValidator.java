@@ -1,5 +1,6 @@
 package com.unisa.store.tsw_project.other;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -16,7 +17,8 @@ public class DataValidator {
      * @see DataValidator#validatePattern(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType){
-        return validatePattern(data, patternType,null, null);
+        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException();
+        return true;
     }
 
     /**
@@ -59,7 +61,7 @@ public class DataValidator {
                 case Generic -> data.matches("^[a-zA-Z0-9_.'&$\"\\- ]+$");
                 case Condition -> data.matches("[XABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
-                case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equals(e.name()));
+                case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equalsIgnoreCase(e.name()));
                 default -> false;
             };
         } catch (NullPointerException|NumberFormatException e){

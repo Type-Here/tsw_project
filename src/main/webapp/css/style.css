@@ -617,7 +617,7 @@ ul.carousel-thumbnails{
     margin-top: 100px;
 
     p{
-        margin: 0%;
+        margin: 0;
     }
     
     img{
@@ -1209,6 +1209,7 @@ aside.filter-bar{
     align-content: center;
     align-items: center;
     max-width: 250px;
+    cursor: pointer;
 }
 
 /* Button to remove filters */
