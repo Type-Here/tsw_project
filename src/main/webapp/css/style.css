@@ -55,6 +55,23 @@ body.body_def{
     flex-flow: column wrap;
     align-content: center;
 }
+
+.space-around-row-flex-container{
+    justify-content: space-around;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+
 /*End Body*/
 
 /* ------- HTML TAG Defaults ------- */
@@ -1229,6 +1246,22 @@ aside.filter-bar{
         visibility: visible;
         transform: rotate(-180deg);
     }
+}
+
+#reset-filter{
+    transition: transform 0.5s ease-in;
+    color: #f0b50f;
+    padding: 5px;
+    cursor: pointer;
+    display: none;
+    text-decoration: underline;
+    &:hover{
+        opacity: 0.9;
+    }
+}
+
+#reset-filter.active{
+    display: inline;
 }
 
 #remove-filter:hover{

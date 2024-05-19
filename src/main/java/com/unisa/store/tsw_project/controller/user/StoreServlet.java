@@ -20,14 +20,15 @@ public class StoreServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestWith = req.getHeader("X-Requested-With");
+        String responseAddress = "/WEB-INF/results/store.jsp";
+
         if (requestWith != null && requestWith.equals("XMLHttpRequest")) {
-            goAjax(req, resp);
-            return;
+            //Set to Print partial HTML to send to JS in AJAX
+            responseAddress = "/WEB-INF/include/tiles-printer.jsp";
         }
 
+        //Set Page number and default maxPage
         Optional<String> pageNum = Optional.ofNullable(req.getParameter("page"));
-
-
         try {
             int prodNumber = (int) getServletContext().getAttribute("prod-number");
             int pages = (prodNumber / 18) + 1;
@@ -42,30 +43,26 @@ public class StoreServlet extends HttpServlet {
             int limit = 18;
             int offset = (page - 1) * 18;
 
-            ProductDAO productDAO = new ProductDAO();
-            List<ProductBean> products = productDAO.doRetrieveAll(limit, null, offset);
+            //Send to doFilter with Limit = 18 elements and Offset
+            List<ProductBean> products = doFilter(req, resp, limit, offset);
+            pages = (products.size() /18) + 1;
 
-            //Retrieve Images for Products from JSON
-            JSONMetaParser parser = new JSONMetaParser();
-            parser.doParseMetaData(products, getServletContext());
 
             //Add product list to request and Send to JSP for View
             req.setAttribute("maxPage", pages);
             req.setAttribute("page", page);
             req.setAttribute("products", products);
-            req.getRequestDispatcher("/WEB-INF/results/store.jsp").forward(req, resp);
+            req.getRequestDispatcher(responseAddress).forward(req, resp);
 
         } catch (NumberFormatException e){
             throw new InvalidParameterException("page");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
 
     }
 
     /* ------------------------ PRIVATE METHOD ---------------------- */
 
-    private void goAjax(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private List<ProductBean> doFilter(HttpServletRequest req, HttpServletResponse resp, Integer limit, Integer offset) throws IOException, ServletException {
         /*resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");*/
         DataValidator validator = new DataValidator();
@@ -106,7 +103,9 @@ public class StoreServlet extends HttpServlet {
 
             //Retrieve Data with applied filters
             ProductDAO productDAO = new ProductDAO();
-            List<ProductBean> products = productDAO.doRetrieveByParameters(params);
+
+            /* Filter By Parameters Map. If no parameters are set a select all is done instead */
+            List<ProductBean> products = productDAO.doRetrieveByParameters(params, limit, offset);
 
             //Category filters are applied here from previous result
             categories.ifPresent(c ->{
@@ -128,12 +127,7 @@ public class StoreServlet extends HttpServlet {
             //Parse Metadata and retrieve Images Path of Product Result
             JSONMetaParser parser = new JSONMetaParser();
             parser.doParseMetaData(products, getServletContext());
-
-            //Set to request Attribute and Send to Dispatcher
-            req.setAttribute("products", products);
-
-            //Tiles Printer JSP: Is an incomplete html only to be included inside a page with AJAX
-            req.getRequestDispatcher("/WEB-INF/include/tiles-printer.jsp").forward(req, resp);
+            return products;
 
         } catch (SQLException e) {
             throw new ServletException(e);

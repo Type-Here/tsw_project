@@ -4,10 +4,10 @@ Array.from(filterTitles).forEach(title => {
     title.addEventListener('click', function() {
         
         //Get filter-list element 
-        const element = this.parentNode.children[2];
-        console.log(element.style.display);
+        const element = this.parentNode.children[2]; //Equals to div.filter-list of this submenu
+
         if(element.style.display.length === 0|| element.style.display === 'none'){
-            title.children[1].children[0].style.transform = "rotate(-90deg)";
+            title.children[1].children[0].style.transform = "rotate(-90deg)"; //Arrow
             element.style.display = 'flex';
             element.style.visibility = ' hidden';
             setTimeout(() => {
@@ -68,7 +68,7 @@ inputRanges[1].oninput = function(){
 
 
 
-/* --- RESET FILTERS BUTTON --- */
+/* --- RESET FILTERS BUTTON: REMOVES ONLY FILTERS IN BAR NO FROM RESULTS (SEE RESET FILTER BELOW) --- */
 
 /* ---- Function to Animate Remove Filters Button Display ----- */
 
@@ -118,7 +118,7 @@ resetButton.addEventListener('click', function(){
     //Disable Apply Button
     const apply = document.getElementById('apply-filter');
     apply.disabled = true;
-    this.removeAttribute('class', 'animation');
+    //this.removeAttribute('class', 'animation');
     setTimeout(() =>{
         this.style.display = 'none';
     }, 500);
@@ -192,27 +192,90 @@ document.getElementById('apply-filter').addEventListener("click", () => {
 
     //For Categories, set all Applied
     Array.from(categories).forEach( input =>{
-        console.log(input);
         query = query + 'category=' + input.value + '&';
         filterNum++;
     });
 
     //IF query has length > 0 (some filter is applied) send AJAX
     if (query.length > 0) {
-        let xhr = new XMLHttpRequest(); // Creare una richiesta XML HTTP
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) { //if no error from server: set new DATA
-                document.getElementsByClassName('main_home')[0].innerHTML = xhr.responseText;
-                document.getElementById("filter-number").innerHTML = 'Filtri(' + filterNum.toString() + ')';
-            }
-        };
-        //Send Request
-        xhr.open("GET", "store?" + query, true); // Open new GET Request
-        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xhr.send(); // Send Request
+        ajaxUpdateCatalog(filterNum, query);
+        //Show Reset Button
+        document.getElementById('reset-filter').setAttribute('class', 'active');
     }
 });
 
+
+
+/* ====== RESET BUTTON: CLEAR ALL FILTERS FROM RESULTS ======= */
+document.getElementById('reset-filter').addEventListener('click' , function(){
+    ajaxUpdateCatalog(0, null);
+    this.classList.remove( 'active');
+    // Remove Filters Visually
+    document.getElementById('remove-filter').click();
+});
+
+
+/* ==================== SET RESET FILTER BUTTON AND FILTER NUMBER AT THE PAGE (RE)LOAD FROM USER ==================== */
+window.addEventListener('load' , function(){
+   //Get all url from '?'
+    let url = window.location.search;
+    //Map of Key=Value in URL
+    const urlParams = new URLSearchParams(url);
+    //Iterating over parameters
+    for(const key of urlParams.keys()){
+        //If there are any filters (other than page) set Reset CLick Active (to remove them)
+        if(key !== 'page') document.getElementById('reset-filter').setAttribute('class','active');
+        //Display the remove button (to deselect them only on filter bar)
+        displayRemoveFilter();
+        //Set the number of filters as the number of paragraph
+        document.getElementById("filter-number").innerHTML = 'Filtri(' + urlParams.size + ')';
+    }
+});
+
+/* ================ AJAX FUNCTION =================== */
+
+//SEND AJAX
+function ajaxUpdateCatalog(filterNum, query){
+    let xhr = new XMLHttpRequest(); // Creare una richiesta XML HTTP
+    let url = 'store'
+    if(query){
+        url = 'store?' + query;
+    }
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) { //if no error from server: set new DATA
+
+            //Update Results
+            document.getElementsByClassName('container')[0].innerHTML = xhr.responseText;
+
+            //Update Filter Number
+            document.getElementById("filter-number").innerHTML = 'Filtri(' + filterNum.toString() + ')';
+
+            //Update URL and history on browser
+            window.history.pushState("data", "Filter", url);
+
+
+            //Update Prev - This - Next Page Buttons
+            const buttons = [];
+            buttons[0] = document.getElementById('prev-page');
+            buttons[1] = document.getElementById('this-page');
+            buttons[2] = document.getElementById('next-page');
+
+            for(let i = 0; i < buttons.length; i++){
+                if(buttons[i] && query){
+                    buttons[i].href +='&' + query;
+                }
+            }
+
+
+        }
+    };
+
+    //Send Request
+    xhr.open("GET", url, true); // Open new GET Request
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.send(); // Send Request
+}
 
 /*
 * let responseJson = JSON.parse(xhr.responseText); // Analizzare la risposta JSON

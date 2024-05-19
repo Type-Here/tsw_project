@@ -173,10 +173,37 @@ public class ProductDAO {
     }
 
 
+    /**
+     * Select Query Filtered By Parameters. (using def: limit 200, offset 0)
+     * @implNote FOR SAFETY REASON: do not use params KEY from user input but manually input it
+     * @param params Map: Key: Parameter name, Value:Parameter Value.
+     * @return List of Product Bean with all parameters true for Filters
+     * @throws SQLException if query fails
+     * @see ProductDAO#doRetrieveByParameters(Map, Integer, Integer)
+     */
     public List<ProductBean> doRetrieveByParameters(Map<String, String> params) throws SQLException {
+        return doRetrieveByParameters(params, null, null);
+    }
+
+    /**
+     * Select Query Filtered By Parameters.
+     * @implNote FOR SAFETY REASON: do not use params KEY from user input but manually input it
+     * @param params Map: Key: Parameter name, Value:Parameter Value.
+     * @param limit number of elements to display in result (if null def: 200)
+     * @param offset offset to start selecting elements (if null def: 0)
+     * @return List of Product Bean with all parameters true for Filters
+     * @throws SQLException if query fails
+     */
+    public List<ProductBean> doRetrieveByParameters(Map<String, String> params, Integer limit, Integer offset) throws SQLException{
+        //If no parameters are set avoid all controls and return doRetrieveAll instead
+        if(params.isEmpty()){
+            return doRetrieveAll(limit, null, offset);
+        }
+
         StringBuilder stm = new StringBuilder("SELECT * FROM products");
         List<ProductBean> products = new ArrayList<>();
 
+        // Set all PARAMETERS KEY IN STRING BUILDER
         if(!params.isEmpty()){
             stm.append(" WHERE ");
         }
@@ -195,7 +222,9 @@ public class ProductDAO {
                 stm.append(key).append("=?");
             }
         }
+        stm.append(" LIMIT ?").append(" OFFSET ?");
 
+        //Prepare the Statement
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
                     con.prepareStatement(stm.toString());
@@ -204,8 +233,12 @@ public class ProductDAO {
                 ps.setObject(i++, entry.getValue());
             }
 
+            ps.setInt(i++, Objects.requireNonNullElse(limit, 200));
+            ps.setInt(i, Objects.requireNonNullElse(offset, 0));
+
             ResultSet rs = ps.executeQuery();
 
+            //Save Result to List
             while (rs.next()) {
                 ProductBean p = populateProduct(rs);
                 //Set Categories for All Products in list
@@ -215,7 +248,6 @@ public class ProductDAO {
             return products;
         }
     }
-
 
 
     /* ----------------------- PRIVATE METHODS ------------------- */
