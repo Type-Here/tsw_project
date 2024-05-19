@@ -37,7 +37,7 @@ public class SearchServlet extends HttpServlet {
             parser.doParseMetaData(products, getServletContext());
 
             req.setAttribute("products", products);
-            req.getRequestDispatcher("/WEB-INF/results/index.jsp").forward(req,resp);
+            req.getRequestDispatcher("/WEB-INF/results/store.jsp").forward(req,resp);
 
         } catch (SQLException e){
             throw new RuntimeException(e);

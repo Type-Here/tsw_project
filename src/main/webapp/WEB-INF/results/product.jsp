@@ -27,7 +27,9 @@
     </div>
 
     <div class="front-view">
-        <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
+        <div class="img-container-front">
+            <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
+        </div>
         <div class="prod-overview">
             <div class="prod-price">
                 <div class="tile-text-bottom-price">

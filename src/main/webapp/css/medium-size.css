@@ -87,6 +87,11 @@
             display: inline-block;
             margin: 10px;
             scroll-snap-align: start;
+            min-width: unset;
+
+            &.active-slide{
+                width: unset;
+            }
         }
 
         ul.carousel-thumbnails {
