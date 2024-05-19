@@ -2,22 +2,27 @@ package com.unisa.store.tsw_project.model.DAO;
 
 import com.unisa.store.tsw_project.model.beans.UserBean;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Random;
 
 public class UserDAO {
 
     // LocalDate to Date da verificare funzionamento
 
     public UserBean getUserByEmail(String email) throws SQLException {
-        try (Connection con = ConPool.getConnection()){
+        try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE email =?");
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 UserBean u = new UserBean();
                 u.setId(rs.getInt(1));
                 u.setFirstname(rs.getString(2));
@@ -37,11 +42,11 @@ public class UserDAO {
     }
 
     public UserBean getUserById(int id_client) throws SQLException {
-        try (Connection con = ConPool.getConnection()){
+        try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id_client = ?");
             ps.setInt(1, id_client);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 UserBean u = new UserBean();
                 u.setId(rs.getInt(1));
                 u.setFirstname(rs.getString(2));
@@ -102,11 +107,11 @@ public class UserDAO {
     }
 
     public String[] doRetrieveHashAndSaltByUserId(int id_cred) throws SQLException {
-        try (Connection con = ConPool.getConnection()){
+        try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT pass_hash, pass_salt FROM credentials WHERE id_cred = ?");
             ps.setInt(1, id_cred);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 String[] result = new String[2];
                 result[0] = rs.getString(1);
                 result[1] = rs.getString(2);
@@ -116,14 +121,28 @@ public class UserDAO {
         }
     }
 
-    public int doSaveCredentials(String hash, String salt) throws SQLException {
-        try (Connection con = ConPool.getConnection()){
+    public void doUpdatePassword(String password, int id_cred) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE credentials SET pass_hash = SHA2(?, 256), pass_salt = ? WHERE id_cred = ?");
+            String salt = generateSalt();
+            ps.setString(1, password + salt);
+            ps.setString(2, salt);
+            ps.setInt(3, id_cred);
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException("INSERT error.");
+            }
+        }
+    }
+
+    public int doSaveCredentials(String hash) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO credentials (pass_hash, pass_salt, creation_date) VALUES (SHA2(?, 256), ?, ?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, hash+salt);
+            String salt = generateSalt();
+            ps.setString(1, hash + salt);
             ps.setString(2, salt);
             ps.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
-            if (ps.executeUpdate() != 1){
+            if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
             ResultSet rs = ps.getGeneratedKeys();
@@ -133,12 +152,47 @@ public class UserDAO {
     }
 
     public void doDeleteCredentials(int id_cred) throws SQLException {
-        try (Connection con = ConPool.getConnection()){
+        try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("DELETE FROM credentials WHERE id_cred = ?");
             ps.setInt(1, id_cred);
-            if (ps.executeUpdate() != 1){
+            if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("DELETE error.");
             }
         }
     }
+
+    //Funzioni per controllo password
+
+    public boolean checkPassword(String password, int id_cred) throws SQLException {
+        String[] hashSalt = doRetrieveHashAndSaltByUserId(id_cred);
+        password = password + hashSalt[1];
+
+        try {
+            MessageDigest digest =
+                    MessageDigest.getInstance("SHA-256");
+            digest.reset();
+            digest.update(password.getBytes(StandardCharsets.UTF_8));
+            password = String.format("%040x", new BigInteger(1, digest.digest()));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        return password.equals(hashSalt[0]);
+    }
+
+    private String generateSalt() {
+        int length = 6; // Lunghezza della stringa casuale
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; // Caratteri da cui scegliere
+
+        Random rnd = new Random();
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int index = rnd.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
 }

@@ -44,7 +44,7 @@ public class DataValidator {
                     yield date.isBefore(LocalDate.now().minusYears(16));
                 }
                 case CAP -> data.matches("[0-9]{5,6}");
-                case Phone -> data.matches("\\+39 [0-9]{8,10}");
+                case Phone -> data.matches("\\+39[0-9]{8,10}");
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
                 case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
                 case Surname -> data.matches("^[a-zA-Z0-9' ]+$");

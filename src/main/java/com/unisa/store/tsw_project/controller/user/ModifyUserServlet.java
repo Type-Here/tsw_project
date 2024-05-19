@@ -1,6 +1,5 @@
 package com.unisa.store.tsw_project.controller.user;
 
-import com.unisa.store.tsw_project.model.DAO.ShippingAddressesDAO;
 import com.unisa.store.tsw_project.model.DAO.UserDAO;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
@@ -9,24 +8,39 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Random;
 
-@WebServlet(name = "RegisterUser", urlPatterns = "/user-register")
-public class RegisterUserServlet extends HttpServlet {
+@WebServlet(name = "ModifyUser", urlPatterns = "/modify-user")
+public class ModifyUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        if (request.getSession().getAttribute("userlogged") != null){
-            response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
-            return;
+        switch (request.getParameter("section")) {
+            case "one":
+                updateUser(request, response);
+                break;
+            case "two":
+                break;
+            case "three":
+                try {
+                    updatePassword(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "four":
+                break;
+            default:
+                break;
         }
+
+    }
+
+    private void updateUser (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Optional<String> name = Optional.ofNullable(request.getParameter("name"));
         Optional<String> surname = Optional.ofNullable(request.getParameter("surname"));
@@ -40,9 +54,7 @@ public class RegisterUserServlet extends HttpServlet {
         Optional<String> province = Optional.ofNullable(request.getParameter("province"));
         Optional<String> cap = Optional.ofNullable(request.getParameter("cap"));
 
-        Optional<String> password = Optional.ofNullable(request.getParameter("password"));
-
-        if (name.isEmpty() || surname.isEmpty() || phone.isEmpty() || email.isEmpty() || birthdate.isEmpty() || roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty() || password.isEmpty()) {
+        if (name.isEmpty() || surname.isEmpty() || phone.isEmpty() || email.isEmpty() || birthdate.isEmpty() || roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
             request.getRequestDispatcher("user-register.jsp").forward(request, response);
@@ -63,42 +75,55 @@ public class RegisterUserServlet extends HttpServlet {
         validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
         validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
         validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
-        validator.validatePattern(password.get(), DataValidator.PatternType.Password);
 
         UserBean userBean = new UserBean();
         UserDAO userDAO = new UserDAO();
 
-        int id_cred = 0;
         try {
-            id_cred = userDAO.doSaveCredentials(password.get());
-            userBean.setId_cred(id_cred);
+            UserBean user = (UserBean) request.getSession().getAttribute("userlogged");
+            userBean.setId_cred(user.getId_cred());
             userBean.setFirstname(name.get());
             userBean.setLastname(surname.get());
-            userBean.setTelephone("+39" + phone.get());
+            userBean.setTelephone(phone.get());
             userBean.setEmail(email.get());
             userBean.setBirth(LocalDate.parse(birthdate.get()));
             userBean.setAddress(roadType.get() + " " + roadName.get() + " " + roadNumber.get());
             userBean.setCity(city.get());
             userBean.setProv(province.get());
             userBean.setCAP(cap.get());
-            userDAO.doSave(userBean);
+            userBean.setId(user.getId());
+            userDAO.doUpdate(userBean);
+            request.getSession().setAttribute("userlogged", userBean);
+        } catch (SQLException e) {
+            throw new RuntimeException(e); /*TODO*/
+        }
+    }
 
-            ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
-            shippingAddressesDAO.doSaveFirstShippingAddresses(userBean);
+    private void updatePassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        Optional<String> oldpass = Optional.ofNullable(request.getParameter("oldpass"));
+        Optional<String> newpass = Optional.ofNullable(request.getParameter("newpass"));
 
-            HttpSession session = request.getSession();
-
-            session.setAttribute("userlogged", userBean);
-            request.getRequestDispatcher("/index").forward(request, response);
-        } catch (Exception e) {
-            try {
-                userDAO.doDeleteCredentials(id_cred);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            request.getRequestDispatcher("/WEB-INF/errors/error.jsp").forward(request, response);
+        if (oldpass.isEmpty() || newpass.isEmpty()) {
+            request.getSession().invalidate();
+            request.setAttribute("invalidUser", true);
+            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            return;
         }
 
+        DataValidator validator = new DataValidator();
+        validator.validatePattern(oldpass.get(), DataValidator.PatternType.Password);
+        validator.validatePattern(newpass.get(), DataValidator.PatternType.Password);
+
+        UserDAO userDAO = new UserDAO();
+        UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
+
+        if(userDAO.checkPassword(oldpass.get(), userBean.getId_cred())){
+            userDAO.doUpdatePassword(newpass.get(), userBean.getId_cred());
+        } else {
+            request.getRequestDispatcher("/index").forward(request, response);
+            return;
+        }
     }
+
+
 }

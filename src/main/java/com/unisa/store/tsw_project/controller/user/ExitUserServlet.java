@@ -13,15 +13,15 @@ import java.util.Optional;
 public class ExitUserServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Optional<Object> userAtt = Optional.ofNullable(req.getSession().getAttribute("user-logged"));
+        Optional<Object> userAtt = Optional.ofNullable(request.getSession().getAttribute("userlogged"));
 
         //User already logged or else Redirect to Home Page
         if(userAtt.isPresent()) {
-            req.getSession().invalidate();
+            request.getSession().invalidate();
         }
 
-        resp.sendRedirect("/index");
+        response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
     }
 }

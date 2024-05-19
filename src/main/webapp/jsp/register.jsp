@@ -38,7 +38,7 @@
                 <label class="form-row" for="surname"><span>Cognome</span>
                     <input id="surname" type="text" name="surname" placeholder="Cognome" required pattern="^[a-zA-Z']{3,}$" />
                 </label>
-                <label class="form-row" for="birth"><span>Numero di Telefono</span>
+                <label class="form-row" for="phone"><span>Numero di Telefono</span>
                     <input id="phone" type="tel" name="phone" placeholder="Numero di Telefono: 01234567" required pattern="[0-9]{10}"/>
                 </label>
                 <label class="form-row" for="birth"><span>Data di Nascita</span>

@@ -29,7 +29,7 @@ public class LoginUserServlet extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getSession().getAttribute("user-logged") != null){
+        if (request.getSession().getAttribute("userlogged") != null){
             response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
             return;
         }
@@ -63,7 +63,7 @@ public class LoginUserServlet extends HttpServlet{
             String[] hashSalt = userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred());
             if(checkPassword(password.get(), hashSalt[0], hashSalt[1])){
                 HttpSession session = request.getSession();
-                session.setAttribute("user-logged", userBean);
+                session.setAttribute("userlogged", userBean);
                 request.getRequestDispatcher("/index").forward(request, response);
                 return;
             } else {
