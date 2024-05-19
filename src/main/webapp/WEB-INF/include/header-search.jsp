@@ -14,13 +14,19 @@
         <li><a href="${pageContext.request.contextPath}/store">Catalogo</a></li>
         <li><a href="${pageContext.request.contextPath}/jsp/aboutus.jsp">Chi Siamo</a></li>
         <li><a href="${pageContext.request.contextPath}/jsp/assistance.jsp">Assistenza</a></li>
-        <li><a href="#">Newsletter</a></li>
+        <li><a href="${pageContext.request.contextPath}/jsp/newsletter.jsp">Newsletter</a></li>
     </ul>
 
     <%@include file="/WEB-INF/include/search-bar.jsp"%>
 
     <div class="upper-bar-right">
-        <span><img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon"></span>
-        <a href="${pageContext.request.contextPath}/jsp/login.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>
+        <c:choose>
+            <c:when test="${not empty userlogged}">
+                <a href="${pageContext.request.contextPath}/jsp/user-profile.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Area Utente" class="general_icon"></span></a>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/jsp/login.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
