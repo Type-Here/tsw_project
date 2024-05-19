@@ -92,4 +92,28 @@ public class JSONMetaParser {
         return highlightsIds;
     }
 
+    public List<Integer> doParseNewsletter(String path, ServletContext application) throws IOException {
+        List<Integer> newsletterIds = new ArrayList<>();
+        String pathCorrected;
+
+        //MacOS Parsing of getResource gives problems with WhiteSpaces: replace %20 with a whitespace
+        if(System.getProperty("os.name").contains("mac") || System.getProperty("os.name").contains("Mac")){
+            pathCorrected = application.getResource(path).getFile().replaceAll("%20", " ");
+        } else {
+            pathCorrected = application.getResource(path).getFile();
+        }
+
+        try( BufferedReader bufferedReader = new BufferedReader(
+                new FileReader(pathCorrected)) ){
+            Gson gson = new Gson();
+            JsonObject obj = gson.fromJson(bufferedReader, JsonElement.class).getAsJsonObject();
+            for(int i = 1; i <= 6; i++){
+                newsletterIds.add(obj.get(String.valueOf(i)).getAsInt());
+            }
+        }
+
+        return newsletterIds;
+
+    }
+
 }
