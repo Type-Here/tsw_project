@@ -1,6 +1,6 @@
 <div class="footer">
     <div class="ft-social">
-        <img src="${pageContext.request.contextPath}/img/icons/facebook.svg" alt="Facebook Share" class="general_icon" />
+        <a href="https://it-it.facebook.com" target="_blank"><img src="${pageContext.request.contextPath}/img/icons/facebook.svg" alt="Facebook Share" class="general_icon" /></a>
         <img src="${pageContext.request.contextPath}/img/icons/share.svg" alt="Share Button" class="general_icon" />
     </div>
     <div class="ft-links">
