@@ -11,6 +11,7 @@ import jakarta.servlet.ServletContext;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class JSONMetaParser {
@@ -19,14 +20,23 @@ public class JSONMetaParser {
 
     }
 
+    /**
+     * Parse of a Single ProductBean
+     * @see JSONMetaParser#doParseMetaData(Collection, ServletContext)
+     */
     public void doParseMetaData(ProductBean product, ServletContext application) throws IOException {
         List<ProductBean> p = new ArrayList<>();
         p.add(product);
         doParseMetaData(p, application);
     }
 
-
-    public void doParseMetaData(List<ProductBean> products, ServletContext application) throws IOException {
+    /**
+     * Parse JSON MetaData of a LIst /Se (subclasses fo Collection
+     * @param products Collection of products to be parsed
+     * @param application ServletContext to retrieve Path From
+     * @throws IOException if Reader from file fails
+     */
+    public void doParseMetaData(Collection<ProductBean> products, ServletContext application) throws IOException {
         // For Each Product in list
         for( ProductBean prod : products) {
             String meta = prod.getMetadataPath();
