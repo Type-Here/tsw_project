@@ -217,18 +217,30 @@ document.getElementById('reset-filter').addEventListener('click' , function(){
 
 /* ==================== SET RESET FILTER BUTTON AND FILTER NUMBER AT THE PAGE (RE)LOAD FROM USER ==================== */
 window.addEventListener('load' , function(){
-   //Get all url from '?'
+    //Get all url from '?'
     let url = window.location.search;
     //Map of Key=Value in URL
     const urlParams = new URLSearchParams(url);
+
+    let filterNum = urlParams.size;
+
     //Iterating over parameters
-    for(const key of urlParams.keys()){
+    if(urlParams.get('page')){
+        filterNum--;
+    }
+
+    //Remove page parameter from url if present
+    let query = url.replaceAll(/\?page=\d+&?/g,'');
+
+    if(filterNum > 0){
         //If there are any filters (other than page) set Reset CLick Active (to remove them)
-        if(key !== 'page') document.getElementById('reset-filter').setAttribute('class','active');
+        document.getElementById('reset-filter').setAttribute('class','active');
         //Display the remove button (to deselect them only on filter bar)
         displayRemoveFilter();
         //Set the number of filters as the number of paragraph
-        document.getElementById("filter-number").innerHTML = 'Filtri(' + urlParams.size + ')';
+        document.getElementById("filter-number").innerHTML = 'Filtri(' + filterNum + ')';
+        //Update Prev - This - Next Page Buttons
+        updatePagePrevNextButtons(query);
     }
 });
 
@@ -254,20 +266,8 @@ function ajaxUpdateCatalog(filterNum, query){
             //Update URL and history on browser
             window.history.pushState("data", "Filter", url);
 
-
             //Update Prev - This - Next Page Buttons
-            const buttons = [];
-            buttons[0] = document.getElementById('prev-page');
-            buttons[1] = document.getElementById('this-page');
-            buttons[2] = document.getElementById('next-page');
-
-            for(let i = 0; i < buttons.length; i++){
-                if(buttons[i] && query){
-                    buttons[i].href +='&' + query;
-                }
-            }
-
-
+            updatePagePrevNextButtons(query);
         }
     };
 
@@ -276,6 +276,30 @@ function ajaxUpdateCatalog(filterNum, query){
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.send(); // Send Request
 }
+
+//Update Prev - This - Next Page Buttons
+function updatePagePrevNextButtons(query){
+
+    let prodNum = document.getElementsByClassName('tile').length;
+
+    const buttons = [];
+    buttons[0] = document.getElementById('prev-page');
+    buttons[1] = document.getElementById('this-page');
+    buttons[2] = document.getElementById('next-page');
+
+    for(let i = 0; i < buttons.length; i++){
+        if(buttons[i] && query){
+            buttons[i].href +='&' + query;
+        }
+    }
+
+    if(prodNum < 18){
+        buttons[2].style.display = 'none';
+    }
+}
+
+
+
 
 /*
 * let responseJson = JSON.parse(xhr.responseText); // Analizzare la risposta JSON
