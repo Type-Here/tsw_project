@@ -1,6 +1,7 @@
 package com.unisa.store.tsw_project.model.beans;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductBean {
     private int id_prod;
@@ -181,5 +182,18 @@ public class ProductBean {
                 ", discount=" + discount +
                 ", metaData=" + metaData +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductBean that = (ProductBean) o;
+        return getId_prod() == that.getId_prod();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId_prod();
     }
 }
