@@ -6,10 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ProductDAO {
     /**
@@ -179,7 +176,7 @@ public class ProductDAO {
      * @param params Map: Key: Parameter name, Value:Parameter Value.
      * @return List of Product Bean with all parameters true for Filters
      * @throws SQLException if query fails
-     * @see ProductDAO#doRetrieveByParameters(Map, Integer, Integer)
+     * @see ProductDAO#doRetrieveByParameters(Map, Integer, Integer, List)
      */
     public List<ProductBean> doRetrieveByParameters(Map<String, String> params) throws SQLException {
         return doRetrieveByParameters(params, null, null);
@@ -193,27 +190,41 @@ public class ProductDAO {
      * @param offset offset to start selecting elements (if null def: 0)
      * @return List of Product Bean with all parameters true for Filters
      * @throws SQLException if query fails
+     * @see ProductDAO#doRetrieveByParameters(Map, Integer, Integer, List)
      */
-    public List<ProductBean> doRetrieveByParameters(Map<String, String> params, Integer limit, Integer offset) throws SQLException{
-        //If no parameters are set avoid all controls and return doRetrieveAll instead
-        if(params.isEmpty()){
-            return doRetrieveAll(limit, null, offset);
+    public List<ProductBean> doRetrieveByParameters(Map<String, String> params,
+                                                    Integer limit, Integer offset) throws SQLException{
+        return doRetrieveByParameters(params, limit, offset, null);
+    }
+
+    /**
+     * Select Query Filtered By Parameters. (Return a SET)
+     * @implNote FOR SAFETY REASON: do not use params KEY from user input but manually input it
+     * @param params Map: Key: Parameter name, Value:Parameter Value.
+     * @param limit number of elements to display in result (if null def: 200)
+     * @param offset offset to start selecting elements (if null def: 0)
+     * @param categories Array of Categories ID to filter from (Join needed)
+     * @return List of Product Bean with all parameters true for Filters
+     * @throws SQLException if query fails
+     */
+    public List<ProductBean> doRetrieveByParameters(Map<String, String> params, Integer limit,
+                                                    Integer offset, List<Integer> categories) throws SQLException{
+        int catNumber = 0;
+        StringBuilder stm = new StringBuilder("SELECT DISTINCT * FROM products");
+        if(categories != null && !categories.isEmpty()){
+            stm.append(" NATURAL JOIN prod_categories");
+            catNumber = categories.size();
         }
 
-        StringBuilder stm = new StringBuilder("SELECT * FROM products");
         List<ProductBean> products = new ArrayList<>();
 
         // Set all PARAMETERS KEY IN STRING BUILDER
-        if(!params.isEmpty()){
-            stm.append(" WHERE ");
-        }
 
-        boolean first = true;
+        stm.append(" WHERE 1"); // THIS return always true but SIMPLIFY CONTROLS ON STRING Append (if param ... append 'AND' ecc)
+
+        //Set Params in MAP (for min and max price append >= or <=, other =
         for (String key : params.keySet()) {
-            if(!first){
-                stm.append(" AND ");
-            }
-            first = false;
+            stm.append(" AND ");
             if(key.equals("minprice")){
                 stm.append("price").append(">=?");
             } else if(key.equals("maxprice")){
@@ -222,6 +233,17 @@ public class ProductDAO {
                 stm.append(key).append("=?");
             }
         }
+
+        //For Categories: add 'and id_cat IN (?,?,?...,?) more efficient and clean
+        //NB: GROUP BY id_prod: Needed to remove DUPLICATES!
+        if(catNumber > 0) {
+            stm.append(" AND ").append("id_cat").append(" IN( ?");
+            stm.append(",?".repeat(catNumber - 1));
+            stm.append(" )");
+            stm.append(" GROUP BY id_prod");
+        }
+
+        //Set LIMIT and OFFSET
         stm.append(" LIMIT ?").append(" OFFSET ?");
 
         //Prepare the Statement
@@ -231,6 +253,10 @@ public class ProductDAO {
             int i = 1;
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 ps.setObject(i++, entry.getValue());
+            }
+
+            for(int j = 0; j < catNumber; j++){
+                ps.setInt(i++, categories.get(j));
             }
 
             ps.setInt(i++, Objects.requireNonNullElse(limit, 200));
@@ -248,6 +274,7 @@ public class ProductDAO {
             return products;
         }
     }
+
 
 
     /* ----------------------- PRIVATE METHODS ------------------- */

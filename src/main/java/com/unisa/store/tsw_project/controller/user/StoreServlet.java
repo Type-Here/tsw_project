@@ -17,10 +17,13 @@ import java.util.*;
 
 @WebServlet(name = "StoreServlet", urlPatterns = "/store")
 public class StoreServlet extends HttpServlet {
+    private DataValidator validator;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestWith = req.getHeader("X-Requested-With");
         String responseAddress = "/WEB-INF/results/store.jsp";
+        this.validator = new DataValidator();
 
         if (requestWith != null && requestWith.equals("XMLHttpRequest")) {
             //Set to Print partial HTML to send to JS in AJAX
@@ -44,9 +47,8 @@ public class StoreServlet extends HttpServlet {
             int offset = (page - 1) * 18;
 
             //Send to doFilter with Limit = 18 elements and Offset
-            List<ProductBean> products = doFilter(req, resp, limit, offset);
-            pages = (products.size() /18) + 1;
-
+            List<ProductBean> products = doFilter(req, limit, offset);
+            //pages = (products.size() /18) + 1;
 
             //Add product list to request and Send to JSP for View
             req.setAttribute("maxPage", pages);
@@ -62,19 +64,19 @@ public class StoreServlet extends HttpServlet {
 
     /* ------------------------ PRIVATE METHOD ---------------------- */
 
-    private List<ProductBean> doFilter(HttpServletRequest req, HttpServletResponse resp, Integer limit, Integer offset) throws IOException, ServletException {
+    private List<ProductBean> doFilter(HttpServletRequest req, Integer limit, Integer offset) throws IOException, ServletException {
         /*resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");*/
-        DataValidator validator = new DataValidator();
+        //Get Parameters
+        Optional<String> platform = Optional.ofNullable(req.getParameter("platform"));
+        Optional<String> dev = Optional.ofNullable(req.getParameter("dev"));
+        Optional<String[]> categories = Optional.ofNullable(req.getParameterValues("category"));
+        Optional<String> minPrice = Optional.ofNullable(req.getParameter("minprice"));
+        Optional<String> maxPrice = Optional.ofNullable(req.getParameter("maxprice"));
+
         try {
             //Params: Key=Column Name of DB, Value=Value from User
             Map<String, String> params = new LinkedHashMap<>();
-            //Get Parameters
-            Optional<String> platform = Optional.ofNullable(req.getParameter("platform"));
-            Optional<String> dev = Optional.ofNullable(req.getParameter("dev"));
-            Optional<String[]> categories = Optional.ofNullable(req.getParameterValues("category"));
-            Optional<String> minPrice = Optional.ofNullable(req.getParameter("minprice"));
-            Optional<String> maxPrice = Optional.ofNullable(req.getParameter("maxprice"));
 
             //Validate Parameters and Add them to params Map
             platform.ifPresent(s -> {
@@ -101,28 +103,19 @@ public class StoreServlet extends HttpServlet {
                 params.put("maxprice", s);
             });
 
+            List<Integer> catIds = new ArrayList<>();
+            categories.ifPresent(c -> {
+                //Validate All possible Category Parameters (multiple checkbox)
+                for (String categoryParam : c) {
+                    validator.validatePattern(categoryParam, DataValidator.PatternType.Int);
+                    catIds.add(Integer.parseInt(categoryParam));
+                }
+            });
+
             //Retrieve Data with applied filters
             ProductDAO productDAO = new ProductDAO();
-
             /* Filter By Parameters Map. If no parameters are set a select all is done instead */
-            List<ProductBean> products = productDAO.doRetrieveByParameters(params, limit, offset);
-
-            //Category filters are applied here from previous result
-            categories.ifPresent(c ->{
-                //Validate Parameters
-                for(String categoryParam : c){
-                    validator.validatePattern(categoryParam, DataValidator.PatternType.Int);
-                }
-                //Remove product from list if its categories are not in ones chosen by user
-                products.removeIf(productBean -> productBean.getCategoryBeanList().stream()
-                        .noneMatch(prodCat -> {
-                            for (String categoryParam : categories.get()) {
-                                if (prodCat.getId_cat() == Integer.parseInt(categoryParam)) return true;
-                            }
-                            return false;
-                        })
-                );
-            });
+            List<ProductBean> products = productDAO.doRetrieveByParameters(params, limit, offset, catIds);
 
             //Parse Metadata and retrieve Images Path of Product Result
             JSONMetaParser parser = new JSONMetaParser();
@@ -138,5 +131,30 @@ public class StoreServlet extends HttpServlet {
         String json = new Gson().toJson(a);
         resp.getWriter().write(json); */
     }
+
+    /* UNUSED FOR NOW */
+    @SuppressWarnings({"unused"})
+    private void filterByCategory(HttpServletRequest req, List<ProductBean> products, Optional<String[]> categories) {
+
+        //Category filters are applied here from previous result
+        categories.ifPresent(c ->{
+            //Validate Parameters
+            for(String categoryParam : c){
+                validator.validatePattern(categoryParam, DataValidator.PatternType.Int);
+            }
+            //Remove product from list if its categories are not in ones chosen by user
+            products.removeIf(productBean -> productBean.getCategoryBeanList().stream()
+                    .noneMatch(prodCat -> {
+                        for (String categoryParam : categories.get()) {
+                            if (prodCat.getId_cat() == Integer.parseInt(categoryParam)) return true;
+                        }
+                        return false;
+                    })
+            );
+        });
+    }
+
+
+
 
 }
