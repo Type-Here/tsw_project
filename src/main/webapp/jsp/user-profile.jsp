@@ -21,19 +21,19 @@
 <div class="main_home">
 
     <div class="utente-container">
-        <div class="utente-header"><hr><h1 id="username">Nome Utente</h1><hr></div>
+        <div class="utente-header"><hr><h1 id="username">Bentornato ${userlogged.firstname}</h1><hr></div>
         <div class="utente-content-wrapper">
             <div class="utente-sidebar">
-                <ul>
-                    <li><a href="#" onclick="showContent('section1');">Profilo</a></li>
-                    <li><a href="#" onclick="showContent('section2')">I Miei Ordini</a></li>
-                    <li><a href="#" onclick="showContent('section3')">Sicurezza</a></li>
-                    <li><a href="#" onclick="showContent('section4')">Indirizzi Di Spedizione</a></li>
-                    <li><a href="#" onclick="document.getElementById('myForm').submit();" >Log Out</a></li>
+                <ul class="utente-nav">
+                    <li onclick="showContent('section1')">Dati Personali</li>
+                    <li onclick="showContent('section2')">I Miei Ordini</li>
+                    <li onclick="showContent('section3')">Sicurezza</li>
+                    <li onclick="showContent('section4')">Indirizzi Di Spedizione</li>
+                    <li onclick="document.getElementById('logout').submit();">Log Out</li>
                 </ul>
             </div>
 
-            <form id="myForm" action="${pageContext.request.contextPath}/exit-user" method="post" style="display: none;"></form>
+            <form id="logout" action="${pageContext.request.contextPath}/exit-user" method="post" style="display: none;"></form>
 
             <div class="utente-main-content">
                 <div id="section1" class="utente-content-section">

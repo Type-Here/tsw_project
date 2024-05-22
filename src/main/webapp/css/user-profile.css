@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 50px;
+    align-items: flex-start;
 }
 
 .utente-container a:hover {
@@ -17,24 +17,104 @@
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
+    order: 1;
 }
 
 .utente-content-wrapper {
     display: flex;
     width: 100%;
+    order: 2;
 }
 
 .utente-sidebar {
     padding: 8px;
-    width: 20%;
-    border: 1px solid #5a5a5a;
+    min-width: 158px;
+    width: 12%;
     margin-right: 16px;
-    border-radius: 10px;
 }
 
 .utente-main-content {
-    width: calc(80% - 16px);
+    width: calc(88% - 16px);
     border: 1px solid #5a5a5a;
     border-radius: 10px;
     padding: 10px;
+}
+
+.utente-sidebar ul.utente-nav {
+    list-style-type: none; /* Rimuove i punti degli elementi li */
+    padding: 0;
+    margin: 0;
+    display: flex; /* Allinea gli elementi li in una riga */
+    flex-direction: column; /* Allinea gli elementi li in una colonna */
+    justify-content: space-around; /* Distribuisce gli elementi li uniformemente nello spazio disponibile */
+    border: 1px solid #5a5a5a; /* Imposta il bordo del rettangolo */
+    border-radius: 10px;
+}
+
+
+.utente-sidebar ul.utente-nav li {
+    border: none; /* Rimuove il bordo del bottone */
+    color: #f5f5f5; /* Imposta il colore del testo del bottone */
+    padding: 15px 32px; /* Imposta il padding del bottone */
+    text-align: center; /* Centra il testo del bottone */
+    display: inline-block;
+    border-radius: 10px; /* Aggiunge i bordi arrotondati al bottone */
+    font-size: 1rem;
+    margin: 4px 2px;
+    cursor: pointer; /* Cambia il cursore in un puntatore quando si passa sopra il bottone */
+}
+
+.utente-sidebar ul.utente-nav li:hover {
+    background-color: #5a5a5a; /* Cambia il colore di sfondo del bottone quando si passa sopra */
+    color: #0a78f5;
+}
+
+.utente-sidebar ul.utente-nav li:active {
+    background-color: #5a5a5a; /* Imposta il colore di sfondo del bottone in grigio quando viene premuto */
+}
+
+.utente-main-content .log_form {
+    width: 100%;
+    border: none;
+}
+
+@media (max-width: 700px) {
+    .utente-sidebar ul.utente-nav {
+        flex-direction: row;
+    }
+
+    .utente-container {
+        flex-direction: column;
+    }
+
+    .utente-content-wrapper {
+        flex-direction: column;
+    }
+
+    .utente-sidebar{
+        width: 100%;
+        margin-bottom: 16px;
+        order: 1;
+        overflow-x: scroll;
+    }
+
+    .utente-main-content {
+        width: 100%;
+        order: 2;
+    }
+
+    .utente-sidebar ul.utente-nav {
+        justify-content: flex-start;
+        text-align: center;
+    }
+
+    .utente-sidebar ul.utente-nav li {
+        font-size: 1rem;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .utente-sidebar ul.utente-nav {
+        min-width: fit-content;
+    }
 }

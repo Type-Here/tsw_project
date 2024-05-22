@@ -25,3 +25,19 @@ function splitAddress() {
     document.getElementById('road-name').value = addressParts[1];
     document.getElementById('road-number').value = addressParts[2];
 }
+
+// Seleziona tutti gli elementi 'li' con la classe 'utente-nav'
+var listItems = document.querySelectorAll('.utente-sidebar ul.utente-nav li');
+
+// Aggiungi un gestore di eventi 'click' a ciascun elemento 'li'
+listItems.forEach(function(listItem) {
+    listItem.addEventListener('click', function() {
+        // Prima di tutto, rendi tutti gli elementi 'li' trasparenti
+        listItems.forEach(function(otherListItem) {
+            otherListItem.style.backgroundColor = 'transparent';
+        });
+
+        // Poi, cambia il colore di sfondo dell'elemento 'li' cliccato a grigio
+        this.style.backgroundColor = '#808080';
+    });
+});
