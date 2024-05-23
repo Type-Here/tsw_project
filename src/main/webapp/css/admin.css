@@ -74,3 +74,48 @@ section{
     overflow: hidden;
     z-index: 3;
 }
+
+/* =================================== PRODUCT CATALOG ================================= */
+
+/* Override Style from prod-review table to better dispose columns */
+#admin-prod-table{
+    & th:first-child,
+    & td:first-child{
+        width: 10%;
+    }
+
+    & th:nth-child(2),
+    & td:nth-child(2)
+    {
+        width: 20%;
+    }
+
+    & th:nth-child(3),
+    & td:nth-child(3){
+        width: 10%;
+    }
+
+}
+
+div.catalog-buttons{
+    width: 80%;
+    display: flex;
+    align-content: center;
+    margin: 20px auto;
+    justify-content: space-around;
+}
+
+#modify-prod-popup {
+    position: fixed;
+    overflow-y: scroll;
+    z-index: 6;
+    top: 10vh;
+    left: 35vw;
+    min-width: 250px;
+    height: 80vh;
+    background-color: #202020;
+
+    & section{
+        max-width: 100%;
+    }
+}

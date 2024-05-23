@@ -5,7 +5,7 @@ function overlay_menu(){
 
 /* Adapt Last Row of Tiles to Better Alignment */
 function adaptMarginLastTile(){
-    let tiles =document.getElementsByClassName('tile');
+    let tiles = document.getElementsByClassName('tile');
     let container = document.getElementsByClassName('main_home')[0];
     //If elements are mod3 == 2
     //Adapt last element margin to = 3 * marginLeft of first element + 1 tile width

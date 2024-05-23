@@ -14,6 +14,7 @@
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script src="${pageContext.request.contextPath}/js/add-product.js" defer></script>
+    <script src="${pageContext.request.contextPath}/js/prod-catalog.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -42,12 +43,6 @@
     <div class="centerized-flex-container margin-v-10">
         <h1 class="text-center">Admin Console</h1>
     </div>
-    <div class="search_container">
-        <form action="#" method="get" class="search-bar">
-            <span><img src="img/icons/search.svg" alt="Search"/></span>
-            <input type="text" name="search" placeholder="Cerca un prodotto" alt="Cerca" />
-        </form>
-    </div>
 </div>
 
 <div class="main_home">
@@ -58,6 +53,7 @@
         </div>
         <div class="log_form add-prod-info">
             <form id="add-form" action="console" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="addProd" />
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
                 <label class="form-row"><span>Prezzo:</span><input type="number" step="0.01" name="price" required pattern="[0-9]+"/></label>
                 <fieldset class="form-row">
@@ -128,15 +124,53 @@
         </div>
     </section>
 
-    <section id="#catalog_management">
+    <section id="catalog_management" class="prod-reviews">
         <div class="section-header">
             <h2 class="text-center">Gestisci Catalogo</h2>
+        </div>
+        <div class="catalog-buttons">
+            <button id="load-cat-button" class="default alternative">Carica Dati</button>
+            <button id="prev-cat-button" disabled class="default alternative general-display-none margin-h-10">Prev</button>
+            <button id="next-cat-button" class="default general-display-none margin-h-10">Next</button>
+            <div class="search_container">
+                <form id="prod-search" class="search-bar">
+                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <label style="display: none" for="search-input">Search</label><input id="search-input" title="Search By Product Name" type="text" name="search" placeholder="Cerca un prodotto" alt="Cerca" />
+                </form>
+            </div>
+        </div>
+        <div class="prod-table prod-reviews-internal">
+            <table id="admin-prod-table" class="prod-reviews-table">
+                <tr id="admin-prod-table-header">
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th>Tipo</th>
+                    <th>Piattaforma</th>
+                    <th>Sviluppatore</th>
+                    <th>Meta</th>
+                    <th>Sconto</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="table-row-button"><button disabled title="modifica" class="secondary">Modifica</button></td>
+                    <td class="table-row-button"><button disabled title="remove" class="secondary attention">&Cross;</button></td>
+                </tr>
+            </table>
         </div>
     </section>
     <!-- TODO -->
 </div><!-- End Main_Home Div-->
 
 <%@include file="/WEB-INF/include/footer.jsp"%>
-
+<div class="general-display-none" id="modify-prod-popup">
+</div>
 </body>
 </html>

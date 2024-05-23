@@ -16,13 +16,13 @@
 
     <ul class="nav">
         <li class="this-page"><a href="#">Home</a></li>
-        <li><a href="#">Gestione Catalogo</a></li>
         <li><a href="#add_prod">Aggiungi Prodotto</a></li>
+        <li><a href="#catalog_management">Gestione Catalogo</a></li>
         <li><a href="#">Gestione Ordini</a></li>
         <li><a href="#">Gestione Utenti</a></li>
     </ul>
     <div class="upper-bar-right">
         <button class="default" name="action" value="Admin">${user}</button>
-        <button class="default alternative margin-h-10" name="action" onclick="location.href='${pageContext.request.contextPath}/exit_admin;'" value="Exit">Exit</button>
+        <button class="default alternative margin-h-10" name="action" onclick="location.href='${pageContext.request.contextPath}/exit_admin'" value="Exit">Exit</button>
     </div>
 </div>
