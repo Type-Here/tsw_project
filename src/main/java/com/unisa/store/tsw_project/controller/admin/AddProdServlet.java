@@ -29,13 +29,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-@WebServlet(name = "Console", urlPatterns = "/console")
+@WebServlet(name = "Console", urlPatterns = "/WEB-INF/admin/add-prod")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 100, // 100 KB
         maxFileSize = 1024 * 1024 * 10,      // 10 MB
         maxRequestSize = 1024 * 1024 * 20   // 20 MB
 )
-public class ConsoleServlet extends HttpServlet {
+public class AddProdServlet extends HttpServlet {
     private StringBuilder jsonString;
 
     @Override
@@ -47,6 +47,7 @@ public class ConsoleServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Verify User
         this.verifyAdminUser(req);
 
         req.setAttribute("upload", false);
