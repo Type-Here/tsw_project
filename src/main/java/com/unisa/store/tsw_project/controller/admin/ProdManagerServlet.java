@@ -41,6 +41,15 @@ public class ProdManagerServlet extends HttpServlet {
 
         try {
             switch (ask.get()) {
+                case "modifyProd":
+                    Optional<String> id = Optional.ofNullable(req.getParameter("id"));
+                    if(id.isEmpty() || !validator.validatePattern(id.get(), DataValidator.PatternType.Int)) {
+                        throw new InvalidParameterException("id");
+                    }
+
+                    int idNum = Integer.parseInt(id.get());
+                    doSendByID(idNum, resp);
+                    return;
 
                 case "accessProd":
                     int prodNumber = (int) Optional.of(getServletContext().getAttribute("prod-number")).orElse(10);
@@ -78,6 +87,17 @@ public class ProdManagerServlet extends HttpServlet {
 
 
     /* -------- PRIVATE METHODS -------- */
+    private void doSendByID(int id, HttpServletResponse resp) throws IOException, SQLException {
+        ProductDAO dao = new ProductDAO();
+        ProductBean prod = dao.doRetrieveById(id);
+        Gson gson = new Gson();
+        String json = gson.toJson(prod);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(json);
+    }
+
+
 
     private void doRetrievePage(int limit, int pageUSer, HttpServletResponse resp)
             throws IOException, SQLException {
