@@ -1,6 +1,8 @@
 package com.unisa.store.tsw_project.controller.user;
 
+import com.unisa.store.tsw_project.model.DAO.ShippingAddressesDAO;
 import com.unisa.store.tsw_project.model.DAO.UserDAO;
+import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import jakarta.servlet.ServletException;
@@ -19,24 +21,31 @@ public class ModifyUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        switch (request.getParameter("section")) {
-            case "one":
-                updateUser(request, response);
-                break;
-            case "two":
-                break;
-            case "three":
-                try {
+
+        try {
+            switch (request.getParameter("section")) {
+                case "one":
+                    updateUser(request, response);
+                    break;
+                case "two":
+                    //todo
+                    break;
+                case "three":
                     updatePassword(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "four":
-                break;
-            default:
-                break;
+                    break;
+                case "four":
+                    addShippingAddresses(request, response);
+                    break;
+                case "delete":
+                    deleteShippingAddresses(request, response);
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
 
     }
 
@@ -94,6 +103,7 @@ public class ModifyUserServlet extends HttpServlet {
             userBean.setId(user.getId());
             userDAO.doUpdate(userBean);
             request.getSession().setAttribute("userlogged", userBean);
+            request.getRequestDispatcher("/index").forward(request, response);
         } catch (SQLException e) {
             throw new RuntimeException(e); /*TODO*/
         }
@@ -119,11 +129,67 @@ public class ModifyUserServlet extends HttpServlet {
 
         if(userDAO.checkPassword(oldpass.get(), userBean.getId_cred())){
             userDAO.doUpdatePassword(newpass.get(), userBean.getId_cred());
+            request.getRequestDispatcher("/index").forward(request, response);
+            return;
         } else {
+            //TODO password errata
             request.getRequestDispatcher("/index").forward(request, response);
             return;
         }
     }
 
+    private void addShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        Optional<String> roadType = Optional.ofNullable(request.getParameter("road-type2"));
+        Optional<String> roadName = Optional.ofNullable(request.getParameter("road-name2"));
+        Optional<String> roadNumber = Optional.ofNullable(request.getParameter("road-number2"));
+        Optional<String> city = Optional.ofNullable(request.getParameter("city2"));
+        Optional<String> province = Optional.ofNullable(request.getParameter("prov2"));
+        Optional<String> cap = Optional.ofNullable(request.getParameter("cap2"));
+
+        if (roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
+            request.getSession().invalidate();
+            request.setAttribute("invalidUser", true);
+            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            return;
+        }
+
+        DataValidator validator = new DataValidator();
+
+        validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
+        validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
+        validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
+
+        ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
+        UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
+        ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
+
+        shippingAddressesBean.setFirstname(userBean.getFirstname());
+        shippingAddressesBean.setLastname(userBean.getLastname());
+        shippingAddressesBean.setAddress(roadType.get() + " " + roadName.get() + " " + roadNumber.get());
+        shippingAddressesBean.setCity(city.get());
+        shippingAddressesBean.setProv(province.get());
+        shippingAddressesBean.setCAP(cap.get());
+        shippingAddressesBean.setId_client(userBean.getId());
+        shippingAddressesDAO.doSave(shippingAddressesBean);
+        request.getRequestDispatcher("/jsp/user-profile.jsp").forward(request, response);
+    }
+
+    private void deleteShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+
+        Optional<String> id = Optional.ofNullable(request.getParameter("id_add"));
+
+        if (id.isEmpty()) {
+            request.getSession().invalidate();
+            request.setAttribute("invalidUser", true);
+            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            return;
+        }
+
+        ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
+        shippingAddressesDAO.doDelete(Integer.parseInt(id.get()));
+    }
 
 }

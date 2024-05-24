@@ -55,7 +55,7 @@ public class ShippingAddressesDAO {
             }
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            shippingAddress.setId_add(rs.getInt(2)); // Da controllare
+            shippingAddress.setId_add(rs.getInt(1));
         }
     }
 
@@ -92,6 +92,16 @@ public class ShippingAddressesDAO {
             ps.setInt(7, shippingAddress.getId_add());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
+            }
+        }
+    }
+
+    public void doDelete(int id_add) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM shipping_addresses WHERE id_add=?");
+            ps.setInt(1, id_add);
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException("DELETE error.");
             }
         }
     }

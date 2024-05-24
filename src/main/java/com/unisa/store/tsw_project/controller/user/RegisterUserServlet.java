@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Random;
 
 @WebServlet(name = "RegisterUser", urlPatterns = "/user-register")
 public class RegisterUserServlet extends HttpServlet {

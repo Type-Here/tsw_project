@@ -61,7 +61,7 @@ public class LoginUserServlet extends HttpServlet{
                 return;
             }
             String[] hashSalt = userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred());
-            if(checkPassword(password.get(), hashSalt[0], hashSalt[1])){
+            if(userDAO.checkPassword(password.get(), userBean.getId_cred())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userlogged", userBean);
                 request.getRequestDispatcher("/index").forward(request, response);
@@ -76,21 +76,5 @@ public class LoginUserServlet extends HttpServlet{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private boolean checkPassword(String password, String hash, String salt){
-        password = password + salt;
-
-        try {
-            MessageDigest digest =
-                    MessageDigest.getInstance("SHA-256");
-            digest.reset();
-            digest.update(password.getBytes(StandardCharsets.UTF_8));
-            password = String.format("%040x", new BigInteger(1, digest.digest()));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-
-        return password.equals(hash);
     }
 }
