@@ -37,12 +37,13 @@
 
             <div class="utente-main-content">
                 <div id="section1" class="utente-content-section">
+                    <h2>Dati Personali</h2>
                     <div class="log_form reg_form">
-                        <form action="${pageContext.request.contextPath}/modify-user" method="post">
+                        <form id="form1" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input type="hidden" name="section" value="one">
                             <fieldset class="registry-data">
                                 <label class="form-row" for="name"><span>Nome</span>
-                                    <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-Z']{3,}$" />
+                                    <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-Z']{3,}$" disabled/>
                                 </label>
                                 <label class="form-row" for="surname"><span>Cognome</span>
                                     <input id="surname" name="surname" type="text" value="${userlogged.lastname}"  required pattern="^[a-zA-Z']{3,}$" />
@@ -77,7 +78,8 @@
                                 </div>
                             </fieldset>
                             <fieldset class="form-row">
-                                <input class="default" type="submit" value="Applica Modifica">
+                                <input class="default" type="submit" value="Applica Modifica" disabled>
+                                <button class="default" type="button" onclick="enableUserModify('form1', this)">Abilita Modifica</button>
                             </fieldset>
                         </form>
                     </div>
@@ -108,7 +110,7 @@
                                     <input id="pass-old" name="oldpass" type="password" placeholder="Password Vecchia" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[&%$£\/\\\(\)=€?\^!]).{8,}$" maxlength="30"/>
                                 </label>
                                 <label class="form-row" for="pass-new"><span>Password</span>
-                                    <input id="pass-new" name="newpass" type="password" placeholder="Password Nuova" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[&%$£\/\\\(\)=€?\^!]).{8,}$" maxlength="30"/>
+                                    <input id="pass-new" name="newpass" type="password" placeholder="Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
                             </fieldset>
                             <fieldset class="form-row">
@@ -119,26 +121,58 @@
                 </div>
                 <div id="section4" class="utente-content-section" style="display: none;">
                     <h2>Indirizzi Di Spedizione</h2>
+                    <div class="prod-table prod-reviews-internal">
+                        <table id="addresses-table" class="prod-reviews-table">
+                            <tr id="addresses-table-header">
+                                <th>Nome</th>
+                                <th>Cognome</th>
+                                <th>Indirizzo</th>
+                                <th>Citta&grave;</th>
+                                <th>Provincia</th>
+                                <th>Cap</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="table-row-button"><button onclick="" value="" title="remove" class="secondary attention">&Cross;</button></td>
+                            </tr>
+                        </table>
+                    </div>
+
                     <div class="log_form reg_form">
-                        <form action="${pageContext.request.contextPath}/modify-user">
-                            <input type="hidden" name="section" value="four">
+                        <form action="${pageContext.request.contextPath}/modify-user" method="post">
+                            <input id="form2" type="hidden" name="section" value="four">
                             <fieldset class="address-data">
                                 <label class="" for="road-type"><span>Indirizzo</span>
-                                    <input class="free-size" id="road-type2" type="text" size="5" placeholder="Via" required pattern="^{3,}$" />
-                                    <input id="road-name2" type="text" placeholder="Giovanni Paolo" required pattern="^[a-zA-Z'\s\-]{3,}$" />
-                                    <input class="free-size" id="road-number2" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[\w]+$" />
+                                    <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
+                                           required
+                                           pattern="^{3,}$"/>
+                                    <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
+                                           pattern="^[a-zA-Z'\s\-]{3,}$"/>
+                                    <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
+                                           placeholder="1" step="1" required pattern="^[\w]+$"/>
                                 </label>
-                                <label class="form-row" for="city"><span>Citt&agrave;</span>
-                                    <input id="city2" type="text" placeholder="Città" required pattern="^[a-zA-Z'\s\-]{3,}$" />
+                                <label class="form-row" for="city2"><span>Citt&agrave;</span>
+                                    <input id="city2" name="city2" type="text" placeholder="Città" required
+                                           pattern="^[a-zA-Z'\s\-]{3,}$"/>
                                 </label>
                                 <div class="form-row centerized-row">
                                     <label class="" for="cap"><span>CAP</span>
-                                        <input class="free-size" size="5" id="cap2" type="text" maxlength="5" placeholder="CAP" required pattern="^[0-9]{5}$" />
+                                        <input class="free-size" size="5" id="cap2" name="cap2" type="text" maxlength="5"
+                                               placeholder="CAP" required pattern="^[0-9]{5}$"/>
                                     </label>
                                     <label class="" for="prov"><span>Prov</span>
-                                        <input class="free-size" size="2" id="prov2" type="text" maxlength="2" placeholder="RM" required pattern="^[a-zA-Z]{2}$" />
+                                        <input class="free-size" size="2" id="prov2" name="prov2" type="text" maxlength="2"
+                                               placeholder="RM" required pattern="^[a-zA-Z]{2}$"/>
                                     </label>
                                 </div>
+                            </fieldset>
+                            <fieldset class="form-row">
+                                <input class="default" type="submit" value="Applica Modifica">
                             </fieldset>
                         </form>
                     </div>
