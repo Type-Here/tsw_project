@@ -47,8 +47,8 @@ public class DataValidator {
                 case Phone -> data.matches("\\+39[0-9]{8,10}");
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
                 case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
-                case Surname -> data.matches("^[a-zA-Z0-9' ]+$");
-                case Password -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
+                case Surname -> data.matches("^[a-zA-Z0-9À-ÿ' ]+$");
+                case Password -> data.matches("^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
                 case Int -> {
                     int val = Integer.parseInt(data);
                     yield (max == null || !(val > max)) && (min == null || !(val < min));
