@@ -65,14 +65,14 @@
                     <label class="margin-h-10"><span>Piattaforma: </span>
                         <select name="platform" required>
                             <option value="ps1">PS1</option>
-                            <option value="n64">N64</option>
+                            <option value="N64">N64</option>
                             <option value="ps2">PS2</option>
-                            <option value="pc">PC</option>
-                            <option value="atari-2600">Atari 2600</option>
-                            <option value="c64">C64</option>
-                            <option value="gameboy">Gameboy</option>
-                            <option value="gamecube">GameCube</option>
-                            <option value="sega">Sega MD</option>
+                            <option value="PC">PC</option>
+                            <option value="Atari2600">Atari 2600</option>
+                            <option value="C64">C64</option>
+                            <option value="GameBoy">GameBoy</option>
+                            <option value="GameCube">GameCube</option>
+                            <option value="SegaMegaDrive">Sega MD</option>
                         </select>
                     </label>
                 </fieldset>
