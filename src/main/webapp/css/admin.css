@@ -105,17 +105,34 @@ div.catalog-buttons{
     justify-content: space-around;
 }
 
+/* Product Management Section Popup (Used for Modify and Remove Product (see also JS) */
 #modify-prod-popup {
     position: fixed;
     overflow-y: scroll;
     z-index: 6;
     top: 10vh;
-    left: 35vw;
+    left: 25vw;
     min-width: 250px;
+    width: 50%;
     height: 80vh;
     background-color: #202020;
 
     & section{
         max-width: 100%;
     }
+
+    /* Only if remove prod is opened by JS */
+    &:has(#remove-prod-popup){
+        width: 400px;
+        height: 300px;
+    }
+}
+
+/* Div inside the popup when remove product is selected */
+#remove-prod-popup{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding: 50px 0;
+    line-height: 1.5rem;
 }
