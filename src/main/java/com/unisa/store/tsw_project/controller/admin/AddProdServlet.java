@@ -8,6 +8,7 @@ import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import com.unisa.store.tsw_project.other.exceptions.InvalidUserException;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-@WebServlet(name = "Console", urlPatterns = "/WEB-INF/admin/add-prod")
+@WebServlet(name = "Console", urlPatterns = "/admin/add-prod")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 100, // 100 KB
         maxFileSize = 1024 * 1024 * 10,      // 10 MB
@@ -57,7 +58,7 @@ public class AddProdServlet extends HttpServlet {
         Map<String, String[]> parameters = req.getParameterMap();
 
         /* Each validate throws Error if Values are not valid */
-        validateCategoriesAndSet(p, req.getParameterValues("category"));
+        validateCategoriesAndSet(p, req.getParameterValues("category"), req.getServletContext());
         validateConditionsAndSet(p, req.getParameterValues("condition"), req.getParameterValues("quantity"));
         validateParametersAndSetProd(p, parameters);
 
@@ -188,8 +189,8 @@ public class AddProdServlet extends HttpServlet {
      * @param categories Arrays of category parameters (from request)
      * @throws InvalidParameterException if Category is not valid
      */
-    private void validateCategoriesAndSet(ProductBean p, String[] categories) {
-        List<CategoryBean> categoriesList = (List<CategoryBean>) getServletContext().getAttribute("category");
+    static void validateCategoriesAndSet(ProductBean p, String[] categories, ServletContext application) {
+        List<CategoryBean> categoriesList = (List<CategoryBean>) application.getAttribute("category");
         List<CategoryBean> newCat = new ArrayList<>();
         DataValidator validator = new DataValidator();
 
@@ -218,7 +219,7 @@ public class AddProdServlet extends HttpServlet {
      * @param quantities Arrays of Quantities one for each condition (from request)
      * @throws InvalidParameterException if Category is not valid
      */
-    private void validateConditionsAndSet(ProductBean p, String[] conditions, String[] quantities) {
+    static void validateConditionsAndSet(ProductBean p, String[] conditions, String[] quantities) {
 
         //If product is Digital no need for Quantity
         if(conditions[0].equals(Data.Condition.X.toString())){
@@ -252,13 +253,17 @@ public class AddProdServlet extends HttpServlet {
      * @param parameters Map of Key:String[] values to Validate and Set
      * @throws InvalidParameterException if some required value is not valid
      */
-    private void validateParametersAndSetProd(ProductBean p, Map<String, String[]> parameters) {
+    static void validateParametersAndSetProd(ProductBean p, Map<String, String[]> parameters) {
         DataValidator validator = new DataValidator();
         for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String[] value = entry.getValue();
 
             switch (key) {
+                case "id_prod":
+                    validator.validatePattern(value[0], DataValidator.PatternType.Int);
+                    break;
+
                 case "name":
                     validateAndSet(p::setName,
                             validator.validatePattern(value[0], DataValidator.PatternType.Generic), value[0], key);
@@ -313,6 +318,8 @@ public class AddProdServlet extends HttpServlet {
 
                 case "condition":
                 case "category":
+                case "action": //Ignore action and ask params used for req handle
+                case "ask":
                     // Validated in other methods
                     break;
 
@@ -330,7 +337,7 @@ public class AddProdServlet extends HttpServlet {
      * @param key key of the parameter to return in exception if not valid
      * @throws InvalidParameterException if isValid == false
      */
-    private <T> void validateAndSet(Consumer<T> setter, boolean isValid, T value, String key) {
+    private static <T> void validateAndSet(Consumer<T> setter, boolean isValid, T value, String key) {
         if (!isValid) {
             throw new InvalidParameterException(key + "=" + value);
         }

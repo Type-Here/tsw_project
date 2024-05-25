@@ -52,7 +52,7 @@
             <h2 class="text-center">Aggiungi Prodotto</h2>
         </div>
         <div class="log_form add-prod-info">
-            <form id="add-form" action="console" method="post" enctype="multipart/form-data">
+            <form id="add-form" action="admin/add-prod" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="addProd" />
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
                 <label class="form-row"><span>Prezzo:</span><input type="number" step="0.01" name="price" required pattern="[0-9]+"/></label>
@@ -79,7 +79,7 @@
                 <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" name="description" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
                 <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required /></label>
                 <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required /></label>
-                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\-]{2,}" required /> </label>
+                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\- ]{2,}" required /> </label>
                 <label class="form-row"><span>Key:</span><input type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
                 <fieldset class="form-row category-form"><span class="title-row">Categorie:*</span>
                     <c:forEach var="cat" items="${category}">
