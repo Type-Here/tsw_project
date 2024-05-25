@@ -276,6 +276,27 @@ public class ProductDAO {
     }
 
 
+    /**
+     * Remove product di ID.
+     * From the DAO it is not possible to retrieve json and images files, so they need to be removed before this call.
+     * @param product to delete
+     * @throws SQLException if query fails
+     */
+    public void doRemoveById(ProductBean product) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement psCat = con.prepareStatement("DELETE FROM prod_categories WHERE id_prod=?");
+            PreparedStatement ps = con.prepareStatement("DELETE FROM products WHERE id_prod=?");
+            psCat.setInt(1, product.getId_prod());
+            ps.setInt(1, product.getId_prod());
+            if(psCat.executeUpdate() == 0){
+                throw new RuntimeException("DELETE error Categories of the Product");
+            }
+            if(ps.executeUpdate() == 0){
+                throw new RuntimeException("DELETE error Product");
+            }
+        }
+    }
+
 
     /* ----------------------- PRIVATE METHODS ------------------- */
 
@@ -347,8 +368,6 @@ public class ProductDAO {
             setCategoryList(p);
         }
     }
-
-
 
 
 }
