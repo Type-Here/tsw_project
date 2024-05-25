@@ -99,6 +99,14 @@ public class ProdManagerServlet extends HttpServlet {
 
 
     /* -------- PRIVATE METHODS -------- */
+
+    /**
+     * AJAX: Send a Single Product Data JSON.
+     * @param id of the product to retrieve
+     * @param resp to write json to
+     * @throws IOException if error in response writing
+     * @throws SQLException if error from the database
+     */
     private void doSendByID(int id, HttpServletResponse resp) throws IOException, SQLException {
         ProductDAO dao = new ProductDAO();
         ProductBean prod = dao.doRetrieveById(id);
@@ -110,7 +118,14 @@ public class ProdManagerServlet extends HttpServlet {
     }
 
 
-
+    /**
+     * Send a List of products base on the page and limit per page
+     * @param limit number of product per page
+     * @param pageUSer page of the view of product table.
+     * @param resp to send answer
+     * @throws IOException if response writer fails
+     * @throws SQLException if bd retrieve fails
+     */
     private void doRetrievePage(int limit, int pageUSer, HttpServletResponse resp)
             throws IOException, SQLException {
 
@@ -120,7 +135,13 @@ public class ProdManagerServlet extends HttpServlet {
         doSendResponse(products, resp);
     }
 
-
+    /**
+     * AJAX: Send a Single Product Data JSON.
+     * @param name of the product to retrieve (LIKE) //For search prod
+     * @param resp to write json to
+     * @throws IOException if error in response writing
+     * @throws SQLException if error from the database
+     */
     private void doRetrieveByName(String name, HttpServletResponse resp)
             throws IOException, SQLException {
         ProductDAO productDAO = new ProductDAO();
@@ -128,7 +149,12 @@ public class ProdManagerServlet extends HttpServlet {
         doSendResponse(products, resp);
     }
 
-
+    /**
+     * Send JSON type of Answer
+     * @param products List of product to transform data in JSON
+     * @param resp to write json to
+     * @throws IOException if response write fails
+     */
     private void doSendResponse(List<ProductBean> products, HttpServletResponse resp) throws IOException {
         Type listType = new TypeToken<ArrayList<ProductBean>>() {}.getType();
         Gson gson = new Gson();
@@ -140,6 +166,12 @@ public class ProdManagerServlet extends HttpServlet {
         //resp.getWriter().flush();
     }
 
+    /**
+     * Send number of pages of product table in JSON format
+     * @param pages number of total pages of the product table
+     * @param resp to write data
+     * @throws IOException if response write fails
+     */
     private void sendPageNumber(Integer pages, HttpServletResponse resp) throws IOException {
         Gson gson = new Gson();
         String json = gson.toJson(pages);
@@ -150,7 +182,15 @@ public class ProdManagerServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * Perform Update of the Product. <br/>
+     * Validate Data from User. <br />
+     * Retrieve old data -> Update Bean -> Send to DAO
+     * @param req to retrieve parameters and new values
+     * @param resp to send status + success/failed message
+     * @throws IOException if Metadata Parsing fails, if response send fails
+     * @throws SQLException if db update fails
+     */
     private void doUpdateProd(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         DataValidator validator = new DataValidator();
         ProductDAO productDAO = new ProductDAO();
@@ -179,6 +219,18 @@ public class ProdManagerServlet extends HttpServlet {
         }
     }
 
+
+    /**
+     * Perform Delete of the Product. <br/>
+     * NB. It tries to delete also images and metadata info in JSON <br />
+     * If metadata delete fails, the product removal in databases still continues. <br/>
+     * @implNote NB. It is possible to delete a product only if no reference is present in other table except for prod_categories
+     * //prod_quantities TODO
+     * @param request to retrieve parameters and new values
+     * @param resp to send status + success/failed message
+     * @throws IOException if Metadata Parsing and deletion fails exception is caught. Not if response send fails
+     * @throws SQLException if db update fails
+     */
     private void doDeleteProd(HttpServletRequest request, HttpServletResponse resp) throws IOException, SQLException {
         Optional<String> id = Optional.ofNullable(request.getParameter("id"));
         DataValidator validator = new DataValidator();
@@ -197,7 +249,7 @@ public class ProdManagerServlet extends HttpServlet {
             message = " Unable to delete metadata json;";
         }
 
-        if(deleteMetaData(p)) message += " Unable to delete metadata";
+        if(deleteMetaData(p)) message += " Unable to delete metadata"; //Call to deleteMetaData method below
         try {
             productDAO.doRemoveById(p);
         } catch (SQLException e){
@@ -210,6 +262,13 @@ public class ProdManagerServlet extends HttpServlet {
         resp.sendError(HttpServletResponse.SC_OK, message);
     }
 
+
+    /**
+     * It tries to delete metadata images of a product (front + gallery). <br />
+     * Errors are caught and false is returned to the first error
+     * @param prod to delete metadata from
+     * @return false to the first error in deletion, true if all metadata is deleted.
+     */
     private boolean deleteMetaData(ProductBean prod) {
         if(prod == null) return false;
         try {
