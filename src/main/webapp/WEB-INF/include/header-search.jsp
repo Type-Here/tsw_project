@@ -20,6 +20,7 @@
     <%@include file="/WEB-INF/include/search-bar.jsp"%>
 
     <div class="upper-bar-right">
+        <span><img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon"></span>
         <c:choose>
             <c:when test="${not empty userlogged}">
                 <a href="${pageContext.request.contextPath}/jsp/user-profile.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Area Utente" class="general_icon"></span></a>

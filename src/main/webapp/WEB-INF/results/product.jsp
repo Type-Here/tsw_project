@@ -1,20 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ page import="com.unisa.store.tsw_project.other.Data.Condition" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Catalogo - Retrogamer</title>
-    <link type="text/css" rel="stylesheet" href="css/style.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="css/medium-size.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
-    <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="css/small.css" />
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-    <script src="js/carousel.js"></script>
-    <script src="js/overlay.js"></script>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="${pageContext.request.contextPath}/css/medium-size.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="${pageContext.request.contextPath}/css/widescreen.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
+    <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
 </head>
 <body class="body_def">
 
@@ -31,6 +30,16 @@
             <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
         </div>
         <div class="prod-overview">
+            <c:if test="${product.type == false}">
+                <div class="centerized-flex-container condition-select">
+                    <label class="text-center" for="select-option">Condizione:</label>
+                    <select class="text-center" id="select-option">
+                        <c:forEach items="${product.conditions}" var="cond">
+                            <option name="condition" value="${cond.id_cond}">${cond.condition.description}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </c:if>
             <div class="prod-price">
                 <div class="tile-text-bottom-price">
                     <c:choose>
@@ -60,8 +69,8 @@
                 </table>
             </div>
             <div class="social-overview">
-                <img src="img/icons/facebook.svg" alt="Facebook Share" class="general_icon" />
-                <img src="img/icons/share.svg" alt="Share Button" class="general_icon" />
+                <img src="${pageContext.request.contextPath}/img/icons/facebook.svg" alt="Facebook Share" class="general_icon" />
+                <img src="${pageContext.request.contextPath}/img/icons/share.svg" alt="Share Button" class="general_icon" />
             </div>
         </div>
     </div>
@@ -98,7 +107,7 @@
         <div class="prod-reviews-internal">
             <div class="prod-review-first-row">
                 <h3>Recensioni</h3>
-                <span class="review-average">Media Voti: 3/5</span>
+                <span class="review-average">Media Voti: <fmt:formatNumber type="number" minFractionDigits="0" maxFractionDigits="1" value="${averageVote}"/>/5</span>
             </div>
             <table class="prod-reviews-table">
                 <tr>
@@ -107,18 +116,14 @@
                     <th>Commento</th>
                     <th>Data</th>
                 </tr>
-                <tr>
-                    <td>Domenico</td>
-                    <td><span class="star-on"></span><span class="star-on"></span><span class="star-on"></span><span class="star-on"></span><span class="star-off"></span></td>
-                    <td>Meraviglioso.</td>
-                    <td>2024-03-12</td>
-                </tr>
-                <tr>
-                    <td>Amorello</td>
-                    <td><span class="star-on"></span><span class="star-on"></span><span class="star-off"></span><span class="star-off"></span><span class="star-off"></span></td>
-                    <td>C'è poco da dire.</td>
-                    <td>2024-03-11</td>
-                </tr>
+                <c:forEach items="${reviews}" var="review">
+                    <td>${review.firstname}</td>
+                    <td>
+                        <c:forEach begin="1" end="${review.vote}"><span class="star-on"></span></c:forEach><c:forEach begin="${review.vote + 1}" end="5"><span class="star-off"></span></c:forEach>
+                    </td>
+                    <td>${review.comment}</td>
+                    <td>${review.review_date}</td>
+                </c:forEach>
             </table>
         </div>
     </section>
