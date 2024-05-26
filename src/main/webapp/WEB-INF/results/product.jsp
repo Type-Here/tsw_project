@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Catalogo - Retrogamer</title>
+    <title>${product.name} - Retrogamer</title>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="${pageContext.request.contextPath}/css/medium-size.css" />
     <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="${pageContext.request.contextPath}/css/widescreen.css" />
@@ -29,14 +29,21 @@
             <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
         </div>
         <div class="prod-overview">
-            <c:if test="${product.type == false}">
+            <c:if test="${product.type == false}"> <!--Digital-->
                 <div class="centerized-flex-container condition-select">
-                    <label class="text-center" for="select-option">Condizione:</label>
-                    <select class="text-center" id="select-option">
+                    <h2 class="text-center">Condizione:</h2>
+                    <div class="prod-condition-div">
                         <c:forEach items="${product.conditions}" var="cond">
-                            <option name="condition" value="${cond.id_cond}">${cond.condition.description}</option>
+                            <c:choose>
+                                <c:when test="${cond.condition eq 'A'}"> <!--<img src="img/top.png" alt="top quality"/>-->
+                                    <button class="prod-condition-button active-button top-quality" value="${cond.id_cond}">${cond.condition}</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button class="prod-condition-button" value="${cond.id_cond}">${cond.condition}</button>
+                                </c:otherwise>
+                            </c:choose>
                         </c:forEach>
-                    </select>
+                    </div>
                 </div>
             </c:if>
             <div class="prod-price">
@@ -79,7 +86,7 @@
 <div class="main_home">
     <section class="prod-description">
         <div class="prod-desc-internal">
-            <h2>${product.name}</h2>
+            <h1>${product.name}</h1>
             <h3>Categorie</h3>
             <ul>
                 <c:forEach var="cat" items="${product.categoryBeanList}">

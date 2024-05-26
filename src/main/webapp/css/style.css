@@ -1060,6 +1060,50 @@ input#pass{
 }
 
 /* ------ Lateral Overview ------ */
+
+/* Div containing prod-condition-buttons */
+.prod-condition-div{
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;%
+    flex-flow: row wrap;
+    gap: 10px 10px;
+    align-content: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Button to Choose Condition */
+.prod-condition-button{
+    width: 65px;
+    height: 35px;
+    border-radius: 3px;
+    background-color: #c0c0c0;
+    border: none;
+    color: #202020;
+    font-weight: bold;
+    box-shadow: 0 0 2px 2px rgba(0,0,0,0.5);
+
+    &.top-quality{
+        background: #c0c0c0 url("../img/top.png") no-repeat 120% 50%; /*center right*/
+        background-size: contain;
+    }
+
+    &.active-button{
+        outline: 2px solid #0a78f5;
+    }
+
+    & img{
+        object-fit: fill;
+    }
+
+    &:hover{
+        box-shadow: 0 0 1px 1px rgba(197, 197, 197, 0.68);
+        background-color: #CCCCCC;
+        transition: transform 0.5s ease-in-out;
+    }
+}
+
 .prod-overview{
     width: 20%;
     min-width: 300px;
@@ -1068,6 +1112,12 @@ input#pass{
     background-color: #5a5a5a;
     border-radius: 5px;
     align-self: center;
+
+    & .actual-price{
+        font-weight: bold;
+        font-size: large;
+        filter: drop-shadow(0 1px 0 rgba(0,0,0,0.8));
+    }
 
     & .prod-price{
         background-color: #c0c0c0;
@@ -1141,6 +1191,12 @@ input#pass{
         padding: 30px 5px;
         width: 90%;
         margin: auto;
+
+        & h1{
+            text-align: center;
+            filter: drop-shadow(0 0px 2px rgba(20, 20, 20, 0.8));
+        }
+
     }
 
     .req-table{
