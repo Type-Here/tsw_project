@@ -1,9 +1,12 @@
 package com.unisa.store.tsw_project.model.beans;
 
+import com.unisa.store.tsw_project.other.Data;
+
 public class ConditionBean {
     private int id_prod;
     private int id_cond;
     private int quantity;
+    private Data.Condition condition;
 
 
     /* GETTERS */
@@ -20,6 +23,8 @@ public class ConditionBean {
         return quantity;
     }
 
+    public Data.Condition getCondition() {return condition;}
+
     /* SETTERS */
 
     public void setId_prod(int id_prod) {
@@ -33,4 +38,6 @@ public class ConditionBean {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void setCondition(Data.Condition condition) {this.condition = condition;}
 }

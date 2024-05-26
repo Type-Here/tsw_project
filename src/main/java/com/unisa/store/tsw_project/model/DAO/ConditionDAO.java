@@ -2,6 +2,7 @@ package com.unisa.store.tsw_project.model.DAO;
 
 import com.unisa.store.tsw_project.model.beans.ConditionBean;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
+import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 
 import java.sql.Connection;
@@ -30,6 +31,7 @@ public class ConditionDAO {
                 ConditionBean c = new ConditionBean();
                 c.setId_cond(rs.getInt(1));
                 c.setQuantity(rs.getInt(1));
+                c.setCondition(Data.Condition.getEnum(c.getId_cond()));
                 conditionBeans.add(c);
             }
             return conditionBeans;
