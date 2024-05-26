@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="com.unisa.store.tsw_project.other.Data.Condition" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -116,14 +115,23 @@
                     <th>Commento</th>
                     <th>Data</th>
                 </tr>
-                <c:forEach items="${reviews}" var="review">
-                    <td>${review.firstname}</td>
-                    <td>
-                        <c:forEach begin="1" end="${review.vote}"><span class="star-on"></span></c:forEach><c:forEach begin="${review.vote + 1}" end="5"><span class="star-off"></span></c:forEach>
-                    </td>
-                    <td>${review.comment}</td>
-                    <td>${review.review_date}</td>
-                </c:forEach>
+                <c:choose>
+                    <c:when test="${empty reviews}">
+                        <tr><td></td><td></td><td><b>Non ci sono ancora recensioni. Sii il primo! </b></td><td></td></tr>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach items="${reviews}" var="review">
+                            <tr>
+                                <td>${review.firstname}</td>
+                                <td>
+                                    <c:forEach begin="1" end="${review.vote}"><span class="star-on"></span></c:forEach><c:forEach begin="${review.vote + 1}" end="5"><span class="star-off"></span></c:forEach>
+                                </td>
+                                <td>${review.comment}</td>
+                                <td>${review.review_date}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </table>
         </div>
     </section>
