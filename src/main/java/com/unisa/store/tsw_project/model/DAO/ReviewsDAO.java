@@ -15,14 +15,19 @@ public class ReviewsDAO {
         ps.setInt(1, id_prod);
         ResultSet rs = ps.executeQuery();
         List<ReviewsBean> reviews = new ArrayList<>();
+
         while (rs.next()) {
             ReviewsBean r = new ReviewsBean();
             r.setId_review(rs.getInt(1));
-            r.setVoto(rs.getInt(2));
-            r.setCommento(rs.getString(3));
+            r.setVote(rs.getInt(2));
+            r.setComment(rs.getString(3));
             r.setReview_date(rs.getDate(4).toLocalDate());
             r.setId_prod(rs.getInt(5));
             r.setId_client(rs.getInt(6));
+            //Add User FirstName
+            retrieveUserFirstName(r);
+
+            //Add result to list
             reviews.add(r);
         }
         return reviews; //Anche se non ci sono recensioni, restituisco una lista vuota
@@ -45,8 +50,8 @@ public class ReviewsDAO {
     public void doSave(ReviewsBean review) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO reviews (voto, commento, review_date, id_prod, id_client) VALUES(?, ?, ?, ?, ?)");
-            ps.setInt(1, review.getVoto());
-            ps.setString(2, review.getCommento());
+            ps.setInt(1, review.getVote());
+            ps.setString(2, review.getComment());
             ps.setDate(3, java.sql.Date.valueOf(review.getReview_date()));
             ps.setInt(4, review.getId_prod());
             ps.setInt(5, review.getId_client());
@@ -60,4 +65,24 @@ public class ReviewsDAO {
             */
         }
     }
+
+    /* ------------- PRIVATE METHODS ---------------- */
+
+    /**
+     * Add FirstName of User who wrote the review to the ReviewBean
+     * @param review to retrieve author from
+     * @throws SQLException if query fails (i.e. id_client not valid)
+     */
+    private void retrieveUserFirstName(ReviewsBean review) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT firstname FROM users WHERE id_client = ?");
+            ps.setInt(1, review.getId_client());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                review.setFirstname(rs.getString(1));
+            }
+        }
+    }
+
+
 }

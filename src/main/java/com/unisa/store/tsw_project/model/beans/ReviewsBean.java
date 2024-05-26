@@ -4,19 +4,20 @@ import java.time.LocalDate;
 
 public class ReviewsBean {
     private int id_review;
-    private int voto;
-    private String commento;
+    private int vote;
+    private String comment;
     private LocalDate review_date;
     private int id_prod;
     private int id_client;
+    private String firstname;
 
     public ReviewsBean() {
     }
 
-    public ReviewsBean(int id_review, int voto, String commento, LocalDate review_date, int id_prod, int id_client) {
+    public ReviewsBean(int id_review, int vote, String comment, LocalDate review_date, int id_prod, int id_client) {
         this.id_review = id_review;
-        this.voto = voto;
-        this.commento = commento;
+        this.vote = vote;
+        this.comment = comment;
         this.review_date = review_date;
         this.id_prod = id_prod;
         this.id_client = id_client;
@@ -28,12 +29,12 @@ public class ReviewsBean {
         return id_review;
     }
 
-    public int getVoto() {
-        return voto;
+    public int getVote() {
+        return vote;
     }
 
-    public String getCommento() {
-        return commento;
+    public String getComment() {
+        return comment;
     }
 
     public LocalDate getReview_date() {
@@ -48,18 +49,22 @@ public class ReviewsBean {
         return id_client;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
     /* - SETTERS - */
 
     public void setId_review(int id_review) {
         this.id_review = id_review;
     }
 
-    public void setVoto(int voto) {
-        this.voto = voto;
+    public void setVote(int vote) {
+        this.vote = vote;
     }
 
-    public void setCommento(String commento) {
-        this.commento = commento;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void setReview_date(LocalDate review_date) {
@@ -72,5 +77,9 @@ public class ReviewsBean {
 
     public void setId_client(int id_client) {
         this.id_client = id_client;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 }
