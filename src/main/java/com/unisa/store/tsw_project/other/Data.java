@@ -1,7 +1,7 @@
 package com.unisa.store.tsw_project.other;
 
 public interface Data {
-    enum Type{
+    public enum Type{
         PHYSICAL(false), DIGITAL(true);
         public final boolean val;
         Type(boolean val){
@@ -9,24 +9,41 @@ public interface Data {
         }
     }
 
-    enum Condition{
-        X(0, "Digitale"),
-        A(1, "Nuovo"),
-        B(2, "Quasi Nuovo"),
-        C(3, "Buono"),
-        D(4, "Sufficiente"),
-        E(5, "Danneggiato");
+    public enum Condition{
+        X(0, "Digitale", 0),
+        A(1, "Nuovo", 0),
+        B(2, "Quasi Nuovo", 5),
+        C(3, "Buono", 8),
+        D(4, "Sufficiente", 12),
+        E(5, "Danneggiato",20);
 
         public final String description;
         public final int dbValue;
+        public final int discount;
 
-        Condition(int dbValue, String description){
+        Condition(int dbValue, String description, int discount){
             this.dbValue = dbValue;
             this.description=description;
+            this.discount=discount;
+        }
+
+        public static Condition getEnum(int dbValue){
+            for(Condition c : Condition.values()){
+                if (c.dbValue==dbValue){return c;}
+            }
+            return null;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public int getDiscount() {
+            return discount;
         }
     }
 
-    enum OrderStatus{
+    public enum OrderStatus{
         INPROCESS("in process"),
         SHIPPED("shipped"),
         delivering("delivering"),
@@ -41,7 +58,7 @@ public interface Data {
     }
 
 
-    enum Platform{
+    public enum Platform{
         Atari2600, C64, GameBoy, GameCube, N64, PC, ps1, ps2, SegaMegaDrive
     }
 }
