@@ -181,12 +181,12 @@
     /* ======================= FILTER BAR ===================== */
 
     /* Re-adapt MAIN DIV to filter bar */
-    .filter-bar ~ .main_home{
+    .filter-bar ~ .container .main_home{
         margin-left: auto;
     }
 
     /* Re-adapt UPPER BODY DIV to filter bar */
-    .filter-bar ~.upper_body{
+    .filter-bar ~ .upper_body{
         margin-left: 0;
     }
 

@@ -45,7 +45,7 @@ body.body_def{
     flex-direction: column;
 }
 
-.main{
+.main_home{
     flex: 1;
 }
 
@@ -526,8 +526,24 @@ div.upper_bar li {
     flex-wrap: nowrap;
     margin: auto 2% auto auto;
     padding-right: 1%;
+
+    & > span{
+        position: relative;
+    }
 }
 
+#cart-counter{
+    position: absolute;
+    bottom: -5px;
+    left: -5px;
+    border-radius: 50%;
+    background: #F0B50F;
+    padding: 0 5px;
+    color: #202020;
+    font-weight: bold;
+    font-size: 12px;
+    box-shadow: 0 0 1px 1px rgba(0,0,0,0.3);
+}
 
 /* ==================== MAIN PAGE CAROUSEL ================== */
 
@@ -1109,7 +1125,7 @@ input#pass{
     min-width: 300px;
     margin: 20px 50px;
     padding: 50px 10px;
-    background-color: #5a5a5a;
+    background-color: #202020;
     border-radius: 5px;
     align-self: center;
 
