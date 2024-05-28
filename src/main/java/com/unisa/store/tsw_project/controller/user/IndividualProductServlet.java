@@ -1,7 +1,9 @@
 package com.unisa.store.tsw_project.controller.user;
 
+import com.google.gson.Gson;
 import com.unisa.store.tsw_project.model.DAO.ProductDAO;
 import com.unisa.store.tsw_project.model.DAO.ReviewsDAO;
+import com.unisa.store.tsw_project.model.beans.ConditionBean;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.model.beans.ReviewsBean;
 import com.unisa.store.tsw_project.other.DataValidator;
@@ -52,4 +54,65 @@ public class IndividualProductServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Optional<String> ajax = Optional.ofNullable(req.getHeader("X-Requested-With"));
+        if(ajax.isPresent() && ajax.get().equals("XMLHttpRequest")) {
+            try {
+                resolveAjax(req, resp);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "XmlHttpRequest Needed");
+        }
+    }
+
+
+    /* ------- PRIVATE METHOD ------- */
+
+    /**
+     * Resolve Ajax request and send answer. <br/>
+     * options: <br />
+     * - fetchPrice: retrieve price of a specified condition of a product (requires id product and id condition)
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws IOException is response writing fails
+     */
+    private void resolveAjax(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+
+        DataValidator validator = new DataValidator();
+
+        Optional<String> option = Optional.ofNullable(req.getParameter("opt"));
+
+        if(option.isPresent() && option.get().equals("fetchPrice")) {
+           Optional<String> id = Optional.ofNullable(req.getParameter("id_prod"));
+           Optional<String> condition = Optional.ofNullable(req.getParameter("condition"));
+
+           if(id.isEmpty() || condition.isEmpty()) {
+               resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid id or condition");
+               return;
+           }
+           validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
+           validator.validatePattern(id.get(), DataValidator.PatternType.Int, 0, 5);
+
+           ProductDAO dao = new ProductDAO();
+           ProductBean p = dao.doRetrieveById(Integer.parseInt(id.get()));
+
+           ConditionBean cond = p.getConditions().stream().filter(c -> c.getId_cond() == Integer.parseInt(condition.get())).findFirst().orElseThrow(() -> new InvalidParameterException("condition"));
+           String price = String.format("%.2f", p.getPrice() * ( 1 - (double) cond.getCondition().discount /100));
+
+           Gson gson = new Gson();
+           String json = gson.toJson(price);
+           resp.setContentType("application/json");
+           System.out.println(json);
+           System.out.println(price);
+           resp.getWriter().write(json);
+
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No valid option");
+        }
+    }
+
 }

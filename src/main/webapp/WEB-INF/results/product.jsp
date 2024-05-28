@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/prod-page.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -36,10 +37,10 @@
                         <c:forEach items="${product.conditions}" var="cond">
                             <c:choose>
                                 <c:when test="${cond.condition eq 'A'}"> <!--<img src="img/top.png" alt="top quality"/>-->
-                                    <button class="prod-condition-button active-button top-quality" value="${cond.id_cond}">${cond.condition}</button>
+                                    <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if> top-quality" value="${cond.id_cond}">${cond.condition}</button>
                                 </c:when>
                                 <c:otherwise>
-                                    <button class="prod-condition-button" value="${cond.id_cond}">${cond.condition}</button>
+                                    <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if>" value="${cond.id_cond}">${cond.condition}</button>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
@@ -50,15 +51,16 @@
                 <div class="tile-text-bottom-price">
                     <c:choose>
                         <c:when test="${empty product.discount or product.discount == 0}">
-                            <span class="actual-price">
+                            <span id="prod-price" class="actual-price">
                                     <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price}"/>&euro;
                             </span>
                         </c:when>
                         <c:otherwise>
                             <span class="discount">${product.discount}</span>
                             <span class="original-rem-price">${product.price}</span>
-                            <span class="actual-price">
-                                <c:out value="${product.price - product.price*product.discount/100}"/>
+                            <span id="prod-price" class="actual-price">
+                                <c:set var="price" scope="page" value="${product.price - product.price*product.discount/100}"/>
+                                 <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${price}"/>&euro;
                             </span>
                         </c:otherwise>
                     </c:choose>
