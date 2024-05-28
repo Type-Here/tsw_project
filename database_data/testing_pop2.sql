@@ -4,7 +4,7 @@ use retrogamer;
 
 /* Insert of admin */
 insert into admin values
-('retro', SHA2('gamer', 256));
+('retro', SHA2('gamerTSW4ever', 256), 'TSW4ever');
 
 /* Insert of categories types */
 insert into categories values

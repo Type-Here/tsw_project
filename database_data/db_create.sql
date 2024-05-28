@@ -6,7 +6,7 @@ use retrogamer;
 create table products (
     id_prod int not null auto_increment,
     name varchar(255) not null,
-    price double not null, 
+    price decimal(6,2) not null,
     type boolean not null, -- 0 Fisico - 1 Digitale
     platform varchar(255) not null,
     developer varchar(255) not null,
@@ -88,7 +88,7 @@ create table shipping_addresses(
 -- Tabella Carrello
 create table cart(
     id_cart int not null auto_increment,
-    total double not null,
+    total decimal(6,2) not null,
     id_client int not null,
     discount_code varchar(15),
     foreign key (id_client) references users(id_client),
@@ -101,7 +101,7 @@ create table cart_items (
     id_prod int not null,
     id_cart int not null,
     quantity int not null,
-    real_price double not null,
+    real_price decimal(6,2) not null,
     foreign key (id_cart) references cart(id_cart),
     primary key (id_prod, id_cart)
 );
@@ -122,19 +122,20 @@ create table orders (
 
 -- Tabella Recensioni /*TODO Add to Database */
 create table reviews(
-    id_review int not null auto_increment, 
-    voto int not null, 
-    commento varchar(2047), 
-    review_date date not null, 
-    id_prod int not null, 
+    id_review int not null auto_increment,
+    voto int not null,
+    commento varchar(2047),
+    review_date date not null,
+    id_prod int not null,
     id_client int not null,
     foreign key(id_prod) references products(id_prod),
     foreign key(id_client) references users(id_client),
-    primary key(id_review) 
+    primary key(id_review)
 );
 
 -- Tabella Admin
 create table admin(
     user varchar(255) primary key,
-    hash varchar(255) not null
+    hash varchar(255) not null,
+    salt varchar(255) not null
 );
