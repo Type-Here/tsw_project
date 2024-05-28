@@ -75,7 +75,7 @@ public class IndividualProductServlet extends HttpServlet {
     /**
      * Resolve Ajax request and send answer. <br/>
      * options: <br />
-     * - fetchPrice: retrieve price of a specified condition of a product (requires id product and id condition)
+     * - fetchPrice: retrieve price of a specified condition of a product (requires id product and id condition in request)
      * @param req HttpServletRequest
      * @param resp HttpServletResponse
      * @throws IOException is response writing fails

@@ -3,12 +3,13 @@
 
         /* --- USE OF PROMISE --- */
 /**
- * Condition button listeners
+ * Condition Button Listeners
+ * AJAX call (use Promises) to retrieve price of a specified condition.
  */
 Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (button, index, array) =>{
     button.addEventListener('click', function (){
 
-        const id_cond = button.value;
+        //button.value has the id_cond
         for(let but of array){
             but.classList.remove('active-button');
         }
