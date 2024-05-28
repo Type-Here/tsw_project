@@ -2,6 +2,8 @@ package com.unisa.store.tsw_project.controller.admin;
 
 import com.unisa.store.tsw_project.model.DAO.AdminDAO;
 import com.unisa.store.tsw_project.model.beans.AdminBean;
+import com.unisa.store.tsw_project.other.DataValidator;
+import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,18 +21,11 @@ public class LoginAdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<String> action = Optional.ofNullable(req.getParameter("action"));
         Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
         Optional<Object> validAtt = Optional.ofNullable(req.getSession().getAttribute("valid"));
 
-        //Admin already logged - Check for Exit Action or else Redirect to Admin Page
+        //Admin already logged - Redirect to Admin Page
         if(adminAtt.isPresent() && validAtt.isPresent()){
-            if(action.isPresent() && action.get().equals("exit")){
-                req.getSession().invalidate();
-                resp.sendRedirect("/");
-                return;
-            }
-
             resp.sendRedirect(req.getContextPath() + "/console");
             return;
         }
@@ -41,30 +36,48 @@ public class LoginAdminServlet extends HttpServlet {
         AdminDAO adminDAO = new AdminDAO();
 
         if(pass.isEmpty() || user.isEmpty()) {
-            req.getSession().invalidate(); //To be sure, to be sure
-            req.setAttribute("invalidUser", true);
-            req.getRequestDispatcher("admin-login.jsp").forward(req, resp);
+            respondInvalidUser(req, resp);
             return;
         }
 
         try{
-            admin = new AdminBean(user.get(), pass.get());
-            if(adminDAO.doRetrieveByCredentials(admin)){
-                HttpSession session = req.getSession();
-                session.setAttribute("user", admin.getUser());
-                session.setAttribute("admin", true);
-                session.setAttribute("valid", true);
-                req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
+            DataValidator validator = new DataValidator();
+            validator.validatePattern(user.get(), DataValidator.PatternType.GenericAlphaNumeric);
+            validator.validatePattern(pass.get(), DataValidator.PatternType.Generic);
+
+            Optional<String[]> data = Optional.ofNullable(adminDAO.doRetrieveSaltAndHash(user.get()));
+
+            if(data.isEmpty()){
+                respondInvalidUser(req, resp);
+                return;
             }
+
+            admin = new AdminBean(user.get(), pass.get() + data.get()[0]);
+
+            if(!admin.getPass().equals(data.get()[1])) {
+                respondInvalidUser(req, resp);
+                return;
+            }
+
+            HttpSession session = req.getSession();
+            session.setAttribute("user", admin.getUser());
+            session.setAttribute("admin", true);
+            session.setAttribute("valid", true);
+            req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
 
         } catch (SQLException e) {
             req.getRequestDispatcher("/WEB-INF/errors/error.jsp").forward(req, resp);
+        } catch (InvalidParameterException e){
+            respondInvalidUser(req, resp);
         }
 
     }
 
-    @Override
-    public void destroy() {
-
+    private void respondInvalidUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getSession().invalidate(); //To be sure, to be sure
+        req.setAttribute("invalidUser", true);
+        req.getRequestDispatcher("admin-login.jsp").forward(req, resp);
     }
+
+
 }
