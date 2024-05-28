@@ -67,8 +67,8 @@
                 </div>
             </div>
             <div class="prod-add-to-cart">
-                <button class="default">Aggiungi al Carrello</button>
-                <button class="default yellow">1-Click</button>
+                <button id="add-to-cart" class="default">Aggiungi al Carrello</button>
+                <button id="one-click" class="default yellow">1-Click</button>
             </div>
             <div class="prod-meta-table">
                 <table>

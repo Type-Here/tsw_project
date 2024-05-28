@@ -32,3 +32,18 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
 
     }.bind(array));
 });
+
+
+/* ---- ADD TO CART ---- */
+
+/**
+ * Add to Cart
+ */
+
+document.getElementById('add-to-cart').addEventListener('click', ()=>{
+    const counter = document.getElementById('cart-counter');
+    let val = counter.innerHTML;
+    counter.innerHTML = (parseInt(val) + 1).toString();
+    counter.classList.remove('general-display-none');
+
+});
