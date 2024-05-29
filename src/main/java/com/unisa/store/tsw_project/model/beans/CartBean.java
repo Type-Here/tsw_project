@@ -1,32 +1,37 @@
 package com.unisa.store.tsw_project.model.beans;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 public class CartBean {
-    private int id_cart;
-    private double total;
-    private int id_client;
+    private Integer id_cart;
+    private BigDecimal total;
+    private Integer id_client;
     private String discount_code;
+    private Map<Integer,CartItemsBean> cartItems;
 
     public CartBean() {
     }
 
-    public CartBean(int id_cart, double total, int id_client, String discount_code) {
+    public CartBean(int id_cart, BigDecimal total, int id_client, String discount_code, Map<Integer,CartItemsBean> cartItems) {
         this.id_cart = id_cart;
         this.total = total;
         this.id_client = id_client;
         this.discount_code = discount_code;
+        this.cartItems = cartItems;
     }
 
     /* - GETTERS - */
 
-    public int getId_cart() {
+    public Integer getId_cart() {
         return id_cart;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public int getId_client() {
+    public Integer getId_client() {
         return id_client;
     }
 
@@ -34,21 +39,43 @@ public class CartBean {
         return discount_code;
     }
 
+    public Map<Integer,CartItemsBean> getCartItems() {return cartItems;}
+
     /* - SETTERS - */
 
-    public void setId_cart(int id_cart) {
+    public void setId_cart(Integer id_cart) {
         this.id_cart = id_cart;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public void setId_client(int id_client) {
+    public void setId_client(Integer id_client) {
         this.id_client = id_client;
     }
 
     public void setDiscount_code(String discount_code) {
         this.discount_code = discount_code;
+    }
+
+    public void setCartItems(Map<Integer,CartItemsBean> cartItems) {this.cartItems = cartItems;}
+
+    /* - OTHER - */
+    public void addCartItem(CartItemsBean cartItem) {
+        this.cartItems.put(cartItem.getId_prod(), cartItem);
+    }
+
+
+    /**
+     * Add a CartItemsBean to Map. If Item with same key exists replace it.
+     * @param cartItem to insert
+     */
+    public void setAttribute(CartItemsBean cartItem){
+        if(this.cartItems.get(cartItem.getId_prod())!=null){
+            this.cartItems.replace(cartItem.getId_prod(), cartItem);
+            return;
+        }
+        this.cartItems.put(cartItem.getId_prod(), cartItem);
     }
 }

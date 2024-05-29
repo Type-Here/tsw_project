@@ -21,7 +21,7 @@ public class CartItemsDAO {
                 c.setId_prod(rs.getInt(1));
                 c.setId_cart(rs.getInt(2));
                 c.setQuantity(rs.getInt(3));
-                c.setReal_price(rs.getInt(4));
+                c.setReal_price(rs.getBigDecimal(4));
                 cartItems.add(c);
             }
             if (cartItems.isEmpty()){
@@ -39,7 +39,7 @@ public class CartItemsDAO {
             ps.setInt(1, cartItem.getId_prod());
             ps.setInt(2, cartItem.getId_cart());
             ps.setInt(3, cartItem.getQuantity());
-            ps.setInt(4, cartItem.getReal_price());
+            ps.setBigDecimal(4, cartItem.getReal_price());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -53,7 +53,7 @@ public class CartItemsDAO {
             ps.setInt(1, cartItem.getId_prod());
             ps.setInt(2, cartItem.getId_cart());
             ps.setInt(3, cartItem.getQuantity());
-            ps.setInt(4, cartItem.getReal_price());
+            ps.setBigDecimal(4, cartItem.getReal_price());
             ps.setInt(5, cartItem.getId_prod());
             ps.setInt(6, cartItem.getId_cart());
             if (ps.executeUpdate() != 1) {

@@ -1,21 +1,22 @@
 package com.unisa.store.tsw_project.model.beans;
 
+import java.math.BigDecimal;
+
 public class CartItemsBean {
     private int id_prod;
     private int id_cart;
     private int quantity;
-    private int real_price;
+    private BigDecimal real_price;
 
     public CartItemsBean() {
     }
 
-    public CartItemsBean(int id_prod, int id_cart, int quantity, int real_price) {
+    public CartItemsBean(int id_prod, int id_cart, int quantity, BigDecimal real_price) {
         this.id_prod = id_prod;
         this.id_cart = id_cart;
         this.quantity = quantity;
         this.real_price = real_price;
     }
-
 
 
     /* - GETTERS - */
@@ -32,7 +33,7 @@ public class CartItemsBean {
         return quantity;
     }
 
-    public int getReal_price() {
+    public BigDecimal getReal_price() {
         return real_price;
     }
 
@@ -50,7 +51,10 @@ public class CartItemsBean {
         this.quantity = quantity;
     }
 
-    public void setReal_price(int real_price) {
+    public void setReal_price(BigDecimal real_price) {
         this.real_price = real_price;
     }
+
+    /* - OTHER - */
+    public void addQuantity(){this.quantity++;}
 }
