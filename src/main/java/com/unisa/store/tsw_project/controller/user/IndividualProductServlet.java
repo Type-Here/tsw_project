@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +102,7 @@ public class IndividualProductServlet extends HttpServlet {
            ProductBean p = dao.doRetrieveById(Integer.parseInt(id.get()));
 
            ConditionBean cond = p.getConditions().stream().filter(c -> c.getId_cond() == Integer.parseInt(condition.get())).findFirst().orElseThrow(() -> new InvalidParameterException("condition"));
-           String price = String.format("%.2f", p.getPrice() * ( 1 - (double) cond.getCondition().discount /100));
+           String price = String.format("%.2f", p.getPrice().multiply(BigDecimal.valueOf(( 1 - (double) cond.getCondition().discount /100))));
 
            Gson gson = new Gson();
            String json = gson.toJson(price);

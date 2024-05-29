@@ -324,7 +324,7 @@ public class ProductDAO {
         ProductBean p = new ProductBean();
         p.setId_prod(rs.getInt(1));
         p.setName(rs.getString(2));
-        p.setPrice(rs.getDouble(3));
+        p.setPrice(rs.getBigDecimal(3));
         p.setType(rs.getBoolean(4));
         p.setPlatform(rs.getString(5));
         p.setDeveloper(rs.getString(6));
@@ -347,7 +347,7 @@ public class ProductDAO {
      */
     private void setPSAllCampProductBean(ProductBean product, PreparedStatement ps) throws SQLException {
         ps.setString(1, product.getName());
-        ps.setDouble(2, product.getPrice());
+        ps.setBigDecimal(2, product.getPrice());
         ps.setBoolean(3, product.getType());
         ps.setString(4, product.getPlatform());
         ps.setString(5, product.getDeveloper());

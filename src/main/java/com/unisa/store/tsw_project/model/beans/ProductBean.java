@@ -1,4 +1,5 @@
 package com.unisa.store.tsw_project.model.beans;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -6,7 +7,7 @@ import java.util.Objects;
 public class ProductBean {
     private int id_prod;
     private String name;
-    private Double price;
+    private BigDecimal price;
     private Boolean type;
     private String platform;
     private String developer;
@@ -23,7 +24,7 @@ public class ProductBean {
     public ProductBean() {
     }
 
-    public ProductBean(int id_prod, String name, double price, boolean type,
+    public ProductBean(int id_prod, String name, BigDecimal price, boolean type,
                        String platform, String developer, String description, String metadata,
                        String key, List<ConditionBean> conditions, double discount, List<CategoryBean> categoryBeanList) {
         this.id_prod = id_prod;
@@ -52,7 +53,7 @@ public class ProductBean {
         return name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -110,7 +111,7 @@ public class ProductBean {
         this.name = name;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

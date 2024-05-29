@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -272,7 +273,7 @@ public class AddProdServlet extends HttpServlet {
                 case "price":
                     validateAndSet(p::setPrice,
                             validator.validatePattern(value[0], DataValidator.PatternType.Double, 0, null),
-                            Double.parseDouble(value[0]), key);
+                            new BigDecimal(value[0]), key);
                     break;
 
                 case "type":
