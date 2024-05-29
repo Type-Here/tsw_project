@@ -2,6 +2,7 @@ package com.unisa.store.tsw_project.controller.user;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,14 @@ public class ExitUserServlet extends HttpServlet {
         //User already logged or else Redirect to Home Page
         if(userAtt.isPresent()) {
             request.getSession().invalidate();
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userID")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
         }
 
         response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
