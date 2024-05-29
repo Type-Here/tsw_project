@@ -1,5 +1,3 @@
--- noinspection SqlDialectInspectionForFile
-
 use retrogamer;
 
 /* Insert of admin */
