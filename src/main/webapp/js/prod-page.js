@@ -1,5 +1,9 @@
 /* ===== DOCUMENT FOR PRODUCT PAGE ===== */
 
+function getIdProdFromURL(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id_prod');
+}
 
         /* --- USE OF PROMISE --- */
 /**
@@ -14,8 +18,9 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
             but.classList.remove('active-button');
         }
         button.classList.add('active-button');
-        const params = new URLSearchParams(window.location.search);
-        const id_prod = params.get('id_prod');
+
+        const id_prod = getIdProdFromURL();
+
         //Promise
         fetch('desc',{
             headers:{
@@ -37,13 +42,44 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
 /* ---- ADD TO CART ---- */
 
 /**
- * Add to Cart
+ * Add to Cart Button Listener
  */
 
 document.getElementById('add-to-cart').addEventListener('click', ()=>{
     const counter = document.getElementById('cart-counter');
     let val = counter.innerHTML;
-    counter.innerHTML = (parseInt(val) + 1).toString();
-    counter.classList.remove('general-display-none');
 
+    const id_prod = getIdProdFromURL();
+    const id_condition = document.querySelector('.prod-condition-button.active-button').value;
+    addToCart(id_prod, id_condition)
+        .then(r => {
+        if(r.status === 200){
+            counter.innerHTML = (parseInt(val) + 1).toString();
+            counter.classList.remove('general-display-none');
+        } else {
+            alert("Impossibile aggiungere al carrello: Code " + r.status);
+        }
+    }).catch(r => console.log(r));
 });
+
+
+/**
+ * Add to Cart Async Function
+ * @param prod id of the product
+ * @param condition id cf the condition
+ * @returns {Promise<Response>}
+ */
+async function addToCart(prod, condition){
+    if(!prod || !condition){
+        console.error("No Enough Data to Add");
+        return null;
+    }
+    return fetch('cart', {
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded",
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        method: 'POST',
+        body: 'option=addToCart&condition=' + condition + '&id_prod=' + prod
+    });
+}

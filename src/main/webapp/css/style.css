@@ -45,7 +45,7 @@ body.body_def{
     flex-direction: column;
 }
 
-.main_home{
+.main_home, .main{
     flex: 1;
 }
 
