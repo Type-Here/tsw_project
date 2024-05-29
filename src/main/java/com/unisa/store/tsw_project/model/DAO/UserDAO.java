@@ -172,12 +172,11 @@ public class UserDAO {
                     MessageDigest.getInstance("SHA-256");
             digest.reset();
             digest.update(password.getBytes(StandardCharsets.UTF_8));
-            password = String.format("%040x", new BigInteger(1, digest.digest()));
+            password = String.format("%064x", new BigInteger(1, digest.digest()));
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
-        return password.equals(hashSalt[0]);
+        return hashSalt[0].equals(password);
     }
 
     private String generateSalt() {
