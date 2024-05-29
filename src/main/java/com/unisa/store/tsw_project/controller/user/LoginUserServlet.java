@@ -1,26 +1,28 @@
 package com.unisa.store.tsw_project.controller.user;
 
-import com.unisa.store.tsw_project.model.DAO.OrdersDAO;
-import com.unisa.store.tsw_project.model.DAO.ShippingAddressesDAO;
 import com.unisa.store.tsw_project.model.DAO.UserDAO;
-import com.unisa.store.tsw_project.model.beans.OrdersBean;
-import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Base64;
 import java.util.Optional;
 
 @WebServlet(name = "LoginUser", urlPatterns = "/user-login")
@@ -33,6 +35,8 @@ public class LoginUserServlet extends HttpServlet{
             response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
             return;
         }
+
+
 
         Optional<String> email = Optional.ofNullable(request.getParameter("email"));
         Optional<String> password = Optional.ofNullable(request.getParameter("password"));
@@ -60,10 +64,36 @@ public class LoginUserServlet extends HttpServlet{
                 request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
                 return;
             }
-            String[] hashSalt = userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred());
             if(userDAO.checkPassword(password.get(), userBean.getId_cred())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userlogged", userBean);
+                //Cookie
+                try {
+                    Cookie userIDCookie = new Cookie("userID", encrypt(userBean.getEmail()));
+                    Cookie userPasswordCookie = new Cookie("userPassword", encrypt(userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred())[0]));
+
+                    //Set cookie to expire at midnight
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime midnight = LocalDateTime.of(now.toLocalDate().plusDays(1), LocalTime.MIDNIGHT);
+
+
+                    // Set the cookie to expire at midnight
+                    userIDCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
+                    userPasswordCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
+
+                    // Add the cookie to the response
+                    userIDCookie.setHttpOnly(true);
+                    userPasswordCookie.setHttpOnly(true);
+                    //userIDCookie.setSecure(true); // solo se il sito è in HTTPS
+                    //userPasswordCookie.setSecure(true); // solo se il sito è in HTTPS
+                    response.addCookie(userPasswordCookie);
+                    response.addCookie(userIDCookie);
+
+                } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
+                         BadPaddingException | InvalidKeyException e) {
+                    throw new RuntimeException(e);
+                }
+
                 request.getRequestDispatcher("/index").forward(request, response);
                 return;
             } else {
@@ -74,6 +104,41 @@ public class LoginUserServlet extends HttpServlet{
             }
 
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String ALGORITHM = "AES";
+    //private static final byte[] KEY = "8pipp8pipp8pipp8".getBytes(); //Key for cipher 16, 24 or 32 byte
+
+    private static String encrypt(String username) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Key key = new SecretKeySpec(keyGeneratedByDate(), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        byte[] encryptedByteValue = cipher.doFinal(username.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encryptedByteValue);
+    }
+
+    public static String decrypt(String encryptedUsername) throws Exception {
+        Key key = new SecretKeySpec(keyGeneratedByDate(), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, key);
+
+        byte[] decryptedValue64 = Base64.getDecoder().decode(encryptedUsername);
+        byte[] decryptedByteValue = cipher.doFinal(decryptedValue64);
+        return new String(decryptedByteValue, StandardCharsets.UTF_8);
+    }
+
+    private static byte[] keyGeneratedByDate() {
+        String key = java.time.LocalDate.now()+"pipp8";
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(key.getBytes(StandardCharsets.UTF_8));
+            byte[] KEY = new byte[32];
+            System.arraycopy(hash, 0, KEY, 0, 32);
+            return KEY;
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
