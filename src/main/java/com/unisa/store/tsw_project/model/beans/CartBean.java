@@ -8,12 +8,12 @@ public class CartBean {
     private BigDecimal total;
     private Integer id_client;
     private String discount_code;
-    private Map<Integer,CartItemsBean> cartItems;
+    private Map<String,CartItemsBean> cartItems;
 
     public CartBean() {
     }
 
-    public CartBean(int id_cart, BigDecimal total, int id_client, String discount_code, Map<Integer,CartItemsBean> cartItems) {
+    public CartBean(int id_cart, BigDecimal total, int id_client, String discount_code, Map<String, CartItemsBean> cartItems) {
         this.id_cart = id_cart;
         this.total = total;
         this.id_client = id_client;
@@ -39,7 +39,7 @@ public class CartBean {
         return discount_code;
     }
 
-    public Map<Integer,CartItemsBean> getCartItems() {return cartItems;}
+    public Map<String,CartItemsBean> getCartItems() {return cartItems;}
 
     /* - SETTERS - */
 
@@ -59,11 +59,11 @@ public class CartBean {
         this.discount_code = discount_code;
     }
 
-    public void setCartItems(Map<Integer,CartItemsBean> cartItems) {this.cartItems = cartItems;}
+    public void setCartItems(Map<String,CartItemsBean> cartItems) {this.cartItems = cartItems;}
 
     /* - OTHER - */
     public void addCartItem(CartItemsBean cartItem) {
-        this.cartItems.put(cartItem.getId_prod(), cartItem);
+        this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
     }
 
 
@@ -72,10 +72,10 @@ public class CartBean {
      * @param cartItem to insert
      */
     public void setAttribute(CartItemsBean cartItem){
-        if(this.cartItems.get(cartItem.getId_prod())!=null){
-            this.cartItems.replace(cartItem.getId_prod(), cartItem);
+        if(this.cartItems.get(cartItem.getId_prod() + cartItem.getCondition().toString())!=null){
+            this.cartItems.replace(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
             return;
         }
-        this.cartItems.put(cartItem.getId_prod(), cartItem);
+        this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
     }
 }

@@ -51,7 +51,7 @@
                                 </div>
                                 <ul class="item-data">
                                     <li>Piattaforma: X</li>
-                                    <li>Condizione: A</li>
+                                    <li>Condizione: ${item.value.condition}</li>
                                 </ul>
                             </div>
                             <div class="cart-item-operations">

@@ -7,6 +7,7 @@ import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
+import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -64,11 +65,10 @@ public class TheCartServlet extends HttpServlet {
      * @param req to get parameters required
      * @param resp to set answer / error code or messages
      * @throws SQLException if data query fails
-     * @throws ServletException if response fails
      * @throws IOException if IO fails (i.e. sendError)
      * @throws com.unisa.store.tsw_project.other.exceptions.InvalidParameterException if some required parameter is not valid
      */
-    private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ServletException, IOException {
+    private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         Optional<String> option = Optional.ofNullable(req.getParameter("option"));
         if(option.isEmpty()){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No option set");
@@ -79,7 +79,6 @@ public class TheCartServlet extends HttpServlet {
             switch (option.get()){
                 case "addToCart":
                     addToCart(req, resp);
-                    System.out.println("Qui addCart");
                     break;
                 case "removeFromCart":
                     break;
@@ -96,7 +95,7 @@ public class TheCartServlet extends HttpServlet {
      * @throws IOException if IO fails (i.e. sendError)
      * @throws SQLException if query to retrieve product data fails
      */
-    private void addToCart(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+    synchronized private void addToCart(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         HttpSession session = req.getSession();
         DataValidator validator = new DataValidator();
         ProductDAO productDAO = new ProductDAO();
@@ -112,11 +111,25 @@ public class TheCartServlet extends HttpServlet {
             validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
             validator.validatePattern(id_condition.get(), DataValidator.PatternType.Int, 0, 5);
 
-            //Check if product exists and retrieve it
-            ProductBean p = productDAO.doRetrieveById(Integer.parseInt(id.get()));
-            if (p == null) {
+            Data.Condition condition_requested = Data.Condition.getEnum(Integer.parseInt(id_condition.get()));
+            if(condition_requested == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Condition");
+                return;
+            }
+
+            // VALIDATION: Check if product exists and retrieve it
+            ProductBean productBean = productDAO.doRetrieveById(Integer.parseInt(id.get()));
+            if (productBean == null) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product not found");
                 return;
+            }
+
+            //VALIDATION: Check if product Condition exists and retrieve it: if  <= 0 NO products are left: return error
+            int quantityConditionLeft = productBean.getConditions().stream()
+                    .filter(condBean -> condBean.getCondition().equals(condition_requested)).findFirst()
+                    .orElseThrow( () -> new InvalidParameterException("Invalid Condition")).getQuantity();
+            if(quantityConditionLeft <= 0) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This specific product is unavailable");
             }
 
             //Check if user is logged: Set id_client to user id if logged, null if not
@@ -141,19 +154,15 @@ public class TheCartServlet extends HttpServlet {
             CartBean cart = (CartBean) session.getAttribute("cart");
 
             // Get CartItem from Cart or Create a New One
-            CartItemsBean item = Optional.ofNullable(cart.getCartItems().get(p.getId_prod())).orElse(new CartItemsBean());
+            CartItemsBean item = Optional.ofNullable(cart.getCartItems().get(productBean.getId_prod() + condition_requested.toString() )).orElse(new CartItemsBean());
 
             //Set ItemAttributes
-            item.setId_prod(p.getId_prod());
+            item.setId_prod(productBean.getId_prod());
             item.addQuantity();
-            Data.Condition c = Data.Condition.getEnum(Integer.parseInt(id_condition.get()));
+            item.setCondition(condition_requested);
 
-            if(c == null) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Condition");
-                return;
-            }
 
-            BigDecimal originalPrice = p.getPrice().multiply(BigDecimal.valueOf(1 - (double) c.discount / 100));
+            BigDecimal originalPrice = productBean.getPrice().multiply(BigDecimal.valueOf(1 - (double) condition_requested.discount / 100));
             item.setReal_price(originalPrice);
 
             //Set CartItem to Cart
@@ -162,8 +171,14 @@ public class TheCartServlet extends HttpServlet {
             //Send Answer OK
             resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
 
-        } catch (NumberFormatException | NullPointerException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 1");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 2");
+        } catch (InvalidParameterException e){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
 
     }

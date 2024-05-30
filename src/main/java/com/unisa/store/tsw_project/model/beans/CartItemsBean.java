@@ -1,5 +1,7 @@
 package com.unisa.store.tsw_project.model.beans;
 
+import com.unisa.store.tsw_project.other.Data;
+
 import java.math.BigDecimal;
 
 public class CartItemsBean {
@@ -7,15 +9,17 @@ public class CartItemsBean {
     private int id_cart;
     private int quantity;
     private BigDecimal real_price;
+    private Data.Condition condition; //NB NOT SAVED IN DATABASE! Used for Session Data Only!
 
     public CartItemsBean() {
     }
 
-    public CartItemsBean(int id_prod, int id_cart, int quantity, BigDecimal real_price) {
+    public CartItemsBean(int id_prod, int id_cart, int quantity, BigDecimal real_price, Data.Condition condition) {
         this.id_prod = id_prod;
         this.id_cart = id_cart;
         this.quantity = quantity;
         this.real_price = real_price;
+        this.condition = condition;
     }
 
 
@@ -37,6 +41,8 @@ public class CartItemsBean {
         return real_price;
     }
 
+    public Data.Condition getCondition() {return condition;}
+
     /* - SETTERS - */
 
     public void setId_prod(int id_prod) {
@@ -54,6 +60,8 @@ public class CartItemsBean {
     public void setReal_price(BigDecimal real_price) {
         this.real_price = real_price;
     }
+
+    public void setCondition(Data.Condition condition) {this.condition = condition;}
 
     /* - OTHER - */
     public void addQuantity(){this.quantity++;}
