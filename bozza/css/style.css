@@ -27,6 +27,15 @@
     100% { opacity: 0; }
 }
 
+@keyframes ShakyShaky {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(1px, 1px) rotate(5deg); }
+    50% { transform: translate(0, 0) rotate(0eg); }
+    75% { transform: translate(-1px, 1px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+
 /* ===================== GENERAL ELEMENTS ========================= */
 
 html{
@@ -306,6 +315,7 @@ div.upper_bar{
     position: sticky;
     top: 0;
     z-index: 2; 
+    box-shadow: 0 0 5px 1px rgba(10,10,10,0.4);
 
     & .upper-logo-name{
         display: flex;
@@ -1225,3 +1235,243 @@ aside.filter-bar{
         border-radius: 3px;
     }
 }
+
+/* ================================ CART PAGE ================================= */
+
+/* Unused */
+.grid-container{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: auto;
+}
+
+
+/* Reduce margin and use 90% instead of standard 80 in cart page */
+.main_home:has(.cart_container){
+    margin-top: 20px;
+    width: 90%;
+}
+
+
+
+
+/* ======= Container inside home with all cart overview and prod ======= */
+.cart_container{
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap-reverse;
+    gap: 0 10px;
+    align-items: flex-end; /*Seem reversed flex-end keeps on top */
+
+    .cart-prod-list{
+        flex-grow: 3;
+        background-color: #202020;
+        border-radius: 3px;
+    }
+
+    .side-cart-view{
+        flex-grow: 0;
+    }
+}
+
+
+
+/* ============ Left Section ========== */
+
+section.cart-prod-list{
+    padding: 30px 50px;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 30px 0;
+    align-items: center;
+
+    & > h2{
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .cart-item{
+        color: #121212;
+        background-color: #C0C0C0;
+        padding: 5px 15px;
+        border-radius: 3px;
+        width: 90%;
+        max-width: 800px;
+        box-shadow: 1px 1px 5px 3px rgba(0,0,0,0.5);
+    }
+
+
+    .cart-item-upper{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        border-bottom: 1px solid #121212;
+        margin: 5px 0;
+
+        span{
+            font-size: 1.04rem;
+            font-weight: 500;
+        }
+    }
+
+
+    .cart-item-sumup{
+        display: flex;
+        margin: 10px;
+
+
+        & .item-img{
+            width: 100px;
+            height: 80xp;
+    
+            img{
+                object-fit: cover;
+            }
+        }
+    }
+
+
+    .cart-item-operations{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    
+
+    button.remove-item{
+        border: none;
+        background: none;
+        text-align: center;
+        display: flex;
+        align-items: center;
+
+        & img{
+            width: 16px;
+            margin: 0 5px;
+        }
+
+        &:hover{
+            cursor: pointer;
+
+            span{
+                color: #202020;
+                filter: drop-shadow(1px 1px 2px #ad212e);
+            }
+
+            img{
+                animation: ShakyShaky 0.3s 5;
+            }
+        }
+    }
+
+
+}
+
+    
+
+
+
+
+
+/* =========== Container for Aside Overview ========= */
+aside.side-cart-view{
+    background-color: #C0C0C0;
+    display: flex;
+    border-radius: 7px;
+    flex-basis: 25%;
+    position: sticky;
+    top: 100px;
+}
+
+
+/* --- Right Side (widescreen) Overview inside Cart Page --- */
+.cart-overview{
+    width: 100%;
+    min-width: 300px;
+    margin: 2px 2px;
+    padding: 0 2px 20px 2px;
+    background-color: #202020c5;
+    border-radius: 5px;
+    align-self: center;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    gap: 30px 10px;
+    font-size: 1.04rem;
+
+    .subtotal, .total{
+        margin: 0 10px 20px 10px;
+    }
+    
+    & .cart-overview-title{
+        margin: -10px;
+        align-self: flex-start;
+        background-color: #121212;
+        padding: 0 10px 10px 10px;
+        border-bottom-right-radius: 40%;
+        overflow: hidden;
+
+        & span{
+            margin: 0;
+            color: #f5f5f5;
+            font-size: 1.1rem;
+            font-weight: bold;
+            filter: drop-shadow(0 0 1px rgba(0,0,0,0.4));
+        }
+    }
+
+    .discount-code{
+        text-align: center;
+
+        h3{
+            margin: 5px 0;
+        }
+
+        input{
+            margin: 5px;
+        }
+
+        button{
+            border-radius: 20px;
+        }
+    }
+
+    .cart-overview-price{
+        width: 80%;
+        text-align: center;
+
+        div{
+            padding-top: 10px;
+            border-top: 1px solid #121212;
+        }
+    }
+
+    .subtotal, .total{
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .total span{
+        font-size: 1.3rem;
+    }
+}
+
+/* Div with conitnue shopping button */
+.continue-shopping{
+    margin: 25px 10%;
+    
+    /* Simple fix for a color text inside continue shopping button */
+    a{
+        color: inherit;
+        &:hover{
+            color: inherit;
+        }
+    }
+}
+

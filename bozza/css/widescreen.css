@@ -55,3 +55,19 @@
        width: fit-content;
     }
 }
+
+
+
+/* =========== For Cart Page =============*/
+@media only screen and (max-width: 800px) {
+    
+    .cart_container{
+        justify-content: center;
+        gap: 20px 0;
+    }
+
+    aside.side-cart-view{
+        flex-basis: 60%;
+        position: static;
+    }    
+}
