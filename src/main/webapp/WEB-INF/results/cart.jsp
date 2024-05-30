@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -28,70 +30,60 @@
         <section class="cart-prod-list">
             <h2>Ecco la tua lista:</h2>
 
-            <div class="cart-item">
-                <div class="cart-item-upper">
-                    <h3>Crash Bandicoot</h3>
-                    <span>1.00&euro;</span>
-                </div>
-                <div class="cart-item-sumup">
-                    <div class="item-img">
-                        <img src="${pageContext.request.contextPath}/img/placeholder2.svg" alt="prod-mini image"/>
-                    </div>
-                    <ul class="item-data">
-                        <li>Piattaforma: ps1</li>
-                        <li>Condizione: A</li>
-                    </ul>
-                </div>
-                <div class="cart-item-operations">
-                    <label>Quantità:
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
-                    </label>
-                    <button class="remove-item">
-                        <img src="${pageContext.request.contextPath}/img/icons/trash-can-solid.svg" alt="trash-can">
-                        <span>Rimuovi</span>
-                    </button>
-
-                </div>
-
-            </div>
-            <div class="cart-item">
-                <div class="cart-item-upper">
-                    <h3>Crash Bandicoot</h3>
-                    <span>1.00&euro;</span>
-                </div>
-                <div class="cart-item-sumup">
-                    <div class="item-img">
-                        <img src="${pageContext.request.contextPath}/img/placeholder2.svg" alt="prod-mini image"/>
-                    </div>
-                    <ul class="item-data">
-                        <li>Piattaforma: ps1</li>
-                        <li>Condizione: A</li>
-                    </ul>
-                </div>
-                <div class="cart-item-operations">
-                    <label>Quantità:
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
-                    </label>
-                    <button class="remove-item">
-                        <img src="${pageContext.request.contextPath}/img/icons/trash-can-solid.svg" alt="trash-can">
-                        <span>Rimuovi</span>
-                    </button>
-
-                </div>
-
-            </div>
+            <% //NB Remember: cartItems is an HashMap, use item.value to get the bean! %>
+            <c:choose>
+                <c:when test="${empty cart or cart.cartItems.size == 0}">
+                 <div class="cart-item">
+                    <h2>Non hai alcun prodotto in Carrello!</h2>
+                    <span>Continua gli acquisti e rivisita la pagina per continuare l'ordine</span>
+                 </div>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="item" items="${cart.cartItems}">
+                        <div class="cart-item">
+                            <div class="cart-item-upper">
+                                <h3>${item.value.id_prod}</h3>
+                                <span><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${item.value.real_price}"/>&euro;</span>
+                            </div>
+                            <div class="cart-item-sumup">
+                                <div class="item-img">
+                                    <img src="${pageContext.request.contextPath}/img/placeholder2.svg" alt="prod-mini image"/>
+                                </div>
+                                <ul class="item-data">
+                                    <li>Piattaforma: X</li>
+                                    <li>Condizione: A</li>
+                                </ul>
+                            </div>
+                            <div class="cart-item-operations">
+                                <label>Quantità:
+                                    <select>
+                                        <c:forEach var="i" begin="1" end="${item.value.quantity}">
+                                            <option <c:if test="${i == item.value.quantity}">selected</c:if> >${i}</option>
+                                        </c:forEach>
+                                    </select>
+                                </label>
+                                <button class="remove-item">
+                                    <img src="${pageContext.request.contextPath}/img/icons/trash-can-solid.svg" alt="trash-can">
+                                    <span>Rimuovi</span>
+                                </button>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </section>
 
         <aside class="side-cart-view">
             <div class="cart-overview">
                 <div class="cart-overview-title">
-                    <span>100 Prodotti in Carrello</span>
+                    <c:choose>
+                        <c:when test="${empty cart}">
+                            <span>Nessun Prodotto in Carrello</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span>Prodotti in Carrello: ${cart.cartItems.size()}</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="discount-code">
                     <h3>Hai un codice sconto?</h3>
@@ -103,11 +95,24 @@
                 <div class="cart-overview-price">
                     <div class="subtotal">
                         <h3>Subtotale</h3>
-                        <span>99,99&euro;</span>
+                        <c:set var="subtotal" value="0"/>
+                        <c:forEach var="item" items="${cart.cartItems}">
+                            <c:set var="subtotal" value="${subtotal + item.value.real_price * item.value.quantity}"/>
+                        </c:forEach>
+                        <span><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${subtotal}"/>&euro;</span>
                     </div>
                     <div class="total">
                         <h2><b>Totale</b></h2>
-                        <span><b>99.99&euro;</b></span>
+                        <span><b>
+                            <c:choose>
+                                <c:when test="${subtotal == 0 or subtotal >= 100}">
+                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${subtotal}"/>&euro;
+                                </c:when>
+                                <c:otherwise>
+                                    <fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${subtotal + 15.00}"/>&euro;
+                                </c:otherwise>
+                            </c:choose>
+                            </b></span>
                     </div>
                 </div>
 
