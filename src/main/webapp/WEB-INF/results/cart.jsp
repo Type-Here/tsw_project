@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/cart.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -32,13 +33,17 @@
 
             <% //NB Remember: cartItems is an HashMap, use item.value to get the bean! %>
             <c:choose>
-                <c:when test="${empty cart or cart.cartItems.size == 0}">
-                 <div class="cart-item">
+                <c:when test="${empty cart or cart.cartItems.size() == 0}">
+                 <div id="void-cart-item" class="cart-item">
                     <h2>Non hai alcun prodotto in Carrello!</h2>
                     <span>Continua gli acquisti e rivisita la pagina per continuare l'ordine</span>
                  </div>
                 </c:when>
                 <c:otherwise>
+                    <div id="void-cart-item" class="cart-item general-display-none">
+                        <h2>Non hai alcun prodotto in Carrello!</h2>
+                        <span>Continua gli acquisti e rivisita la pagina per continuare l'ordine</span>
+                    </div>
                     <c:forEach var="item" items="${cart.cartItems}">
                         <div class="cart-item">
                             <div class="cart-item-upper">
@@ -62,7 +67,7 @@
                                         </c:forEach>
                                     </select>
                                 </label>
-                                <button class="remove-item">
+                                <button class="remove-item" value="${item.key}">
                                     <img src="${pageContext.request.contextPath}/img/icons/trash-can-solid.svg" alt="trash-can">
                                     <span>Rimuovi</span>
                                 </button>

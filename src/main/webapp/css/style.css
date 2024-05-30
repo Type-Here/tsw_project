@@ -35,6 +35,11 @@
     100% { transform: translate(0, 0) rotate(0deg); }
 }
 
+@keyframes LeftToRightOver {
+    0% {transform: translate3d(-100%, 0 , 0);}
+    100% {transform: translate3d(0, 0 , 0);}
+}
+
 /* ===================== GENERAL ELEMENTS ========================= */
 
 html{
@@ -165,6 +170,7 @@ hr{
 
 /* -------- SOME GENERAL USE CLASSES ----- */
 
+/* Dark Overlay: multiple uses, first as overlay behind menu bar in mobile devices */
 .overlay{
     box-sizing: border-box;
     height: 100vh;
@@ -175,6 +181,19 @@ hr{
     overflow: hidden;
     z-index: 3; 
     display: none;  
+}
+
+/* Animation: I.E. Used in Cart page when element is removed
+ * from catalog as a loading bar before disappear */
+.overlay-bar{
+    width: 100%;
+    height: 100%;
+    min-height: 10px;
+    background: #20202040;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: LeftToRightOver 5s ease-in-out;
 }
 
 .general_icon{

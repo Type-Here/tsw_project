@@ -1,5 +1,6 @@
 package com.unisa.store.tsw_project.controller.user;
 
+import com.google.gson.Gson;
 import com.unisa.store.tsw_project.model.DAO.ProductDAO;
 import com.unisa.store.tsw_project.model.beans.CartBean;
 import com.unisa.store.tsw_project.model.beans.CartItemsBean;
@@ -49,6 +50,7 @@ public class TheCartServlet extends HttpServlet {
         }
     }
 
+
     /* --- PRIVATE METHODS --- */
 
     private void doPostCart(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -77,13 +79,10 @@ public class TheCartServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
 
             switch (option.get()){
-                case "addToCart":
-                    addToCart(req, resp);
-                    break;
-                case "removeFromCart":
-                    break;
-                default:
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid option");
+                case "addToCart" -> addToCart(req, resp);
+                case "removeFromCart" -> removeFromCart(req,resp);
+                case "requestNewPrice" -> sendNewPrice(req,resp);
+                default -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid option");
             }
         }
     }
@@ -172,10 +171,8 @@ public class TheCartServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
 
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 1");
         } catch (NullPointerException e) {
-            e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 2");
         } catch (InvalidParameterException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -183,5 +180,62 @@ public class TheCartServlet extends HttpServlet {
 
     }
 
+
+    /**
+     * Remove an Item in Session Cart with his (String) key = id_prod + condition
+     * @param req to get key from
+     * @param resp to send response status / message
+     * @throws IOException if response writing fails
+     */
+    private void removeFromCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Optional<String> key = Optional.ofNullable(req.getParameter("key"));
+        DataValidator validator = new DataValidator();
+
+        if(key.isEmpty()){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No key prod set");
+            return;
+        }
+        validator.validatePattern(key.get(), DataValidator.PatternType.GenericAlphaNumeric);
+
+        CartBean cart = (CartBean) req.getSession().getAttribute("cart");
+        if(cart == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cart is Empty");
+            return;
+        }
+
+        CartItemsBean item = cart.getCartItems().remove(key.get());
+        if(item == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Item not found in Cart");
+            return;
+        }
+
+        resp.setContentType("text/plain");
+        resp.getWriter().write("Prodotto rimosso correttamente dal carrello...");
+        //resp.sendError(HttpServletResponse.SC_OK, "OK");
+    }
+
+
+    private void sendNewPrice(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        CartBean cart = (CartBean) req.getSession().getAttribute("cart");
+        BigDecimal[] prices = new BigDecimal[]{BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.0)};
+        BigDecimal value = new BigDecimal("0.00");
+        if(cart != null && !cart.getCartItems().isEmpty()) {
+            for(CartItemsBean cartItem : cart.getCartItems().values()) {
+                value = value.add(cartItem.getReal_price().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            }
+
+            prices[0] = value;
+            if(prices[0].compareTo(new BigDecimal(100)) < 0) {
+                prices[1] = value.add(new BigDecimal("15.00"));
+            } else prices[1] = value;
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(prices);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(json);
+    }
 
 }
