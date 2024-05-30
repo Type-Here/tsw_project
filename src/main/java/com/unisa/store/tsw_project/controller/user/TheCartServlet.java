@@ -23,6 +23,11 @@ import java.util.*;
 public class TheCartServlet extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPostCart(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<String> requestType = Optional.ofNullable(req.getHeader("X-Requested-With"));
         //No AJAX request: respond with normal post

@@ -40,6 +40,7 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
 
 
 /* ---- ADD TO CART ---- */
+/* --- USE OF ASYNC/AWAIT --- */
 
 /**
  * Add to Cart Button Listener
