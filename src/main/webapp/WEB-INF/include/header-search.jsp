@@ -20,7 +20,18 @@
     <%@include file="/WEB-INF/include/search-bar.jsp"%>
 
     <div class="upper-bar-right">
-        <span><a href="cart"><img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon"><span id="cart-counter" class="general-display-none">0</span></a></span>
+        <span><a href="cart">
+            <img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon">
+            <c:choose>
+                <c:when test="${empty cart or cart.cartItems.size() == 0}">
+                    <span id="cart-counter" class="general-display-none">0</span>
+                </c:when>
+                <c:otherwise>
+                    <span id="cart-counter" class="">${cart.cartItems.size()}</span>
+                </c:otherwise>
+            </c:choose>
+            </a>
+        </span>
         <c:choose>
             <c:when test="${not empty userlogged}">
                 <a href="${pageContext.request.contextPath}/jsp/user-profile.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Area Utente" class="general_icon"></span></a>
