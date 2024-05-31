@@ -96,6 +96,26 @@
     text-align: center; /* Allinea il testo al centro nelle celle della tabella */
 }
 
+#section2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+}
+
+#section2 #orders-table {
+    width: 100%; /* la tabella occupa tutto lo spazio disponibile */
+    text-align: center; /* Allinea il testo al centro */
+    border-collapse: collapse; /* Unisce i bordi delle celle della tabella */
+}
+
+#section2 #orders-table th,
+#section2 #orders-table td {
+    padding: 8px; /* Aggiunge spazio tra il testo e il bordo della cella */
+    border: 1px solid #5a5a5a; /* Aggiunge il bordo alle celle della tabella */
+    text-align: center; /* Allinea il testo al centro nelle celle della tabella */
+}
 
 @media (max-width: 700px) {
     .utente-sidebar ul.utente-nav {

@@ -84,21 +84,20 @@
                         </form>
                     </div>
                 </div>
-                <div id="section2" class="utente-content-section" style="display: none;">
+                <div id="section2" class="utente-content-section" style="display: none">
                     <h2>I Miei Ordini</h2>
-                    <div class="log_form reg_form">
-                        <form action="${pageContext.request.contextPath}/modify-user">
-                            <input type="hidden" name="section" value="two">
-                            <fieldset class="access-data">
-                                <label class="form-row" for="order-id"><span>Ordine</span>
-                                    <input id="order-id" type="text" placeholder="ID Ordine" required pattern="^[\w]+$" />
-                                </label>
-                            </fieldset>
-                            <fieldset class="form-row">
-                                <input class="default" type="submit" value="Cerca">
-                            </fieldset>
-                        </form>
-                    </div>
+                    <label id="labelID" for="order-id">Cerca Ordine per ID</label>
+                    <br>
+                    <input type="text" id="order-id" name="orderID" placeholder="Search by order id" value="">
+                    <table id="orders-table">
+                        <tr>
+                            <th>ID Ordine</th>
+                            <th>Status</th>
+                            <th>Data Ordine</th>
+                            <th>Indirizzo Spedizione</th>
+                            <th>Dettagli Ordine</th>
+                        </tr>
+                    </table>
                 </div>
                 <div id="section3" class="utente-content-section" style="display: none;">
                     <h2>Sicurezza</h2>

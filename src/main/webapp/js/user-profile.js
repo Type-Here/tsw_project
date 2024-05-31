@@ -2,6 +2,9 @@ function showContent(sectionId) {
     if (sectionId === 'section4') {
         loadShippingAddresses();
     }
+    if (sectionId === 'section2') {
+        loadOrders();
+    }
 
     // Nascondi tutte le sezioni
     var sections = document.getElementsByClassName('utente-content-section');
@@ -9,7 +12,11 @@ function showContent(sectionId) {
         sections[i].style.display = 'none';
     }
     // Mostra la sezione selezionata
-    document.getElementById(sectionId).style.display = 'block';
+    if (sectionId === 'section2') {
+        document.getElementById(sectionId).style.display = 'flex';
+    } else {
+        document.getElementById(sectionId).style.display = 'block';
+    }
 }
 
 
@@ -48,17 +55,120 @@ function enableUserModify(formId, button) {
     button.disabled = true;
 }
 
+//Function to control valid order ID
+document.getElementById('order-id').oninput = function () {
+    let orderId = document.getElementById('order-id').value;
+    let regex = /^([0-9]+)?$/;
+    if (!regex.test(orderId)) {
+        orderId = '';
+        document.getElementById('order-id').value = orderId;
+        document.getElementById('labelID').textContent = 'Inserisci un ID valido';
+        document.getElementById('labelID').style.color = 'red';
+    } else {
+        document.getElementById('labelID').textContent = 'Cerca Ordine per ID';
+        document.getElementById('labelID').style.color = '#f5f5f5';
+    }
+    displayFilteredOrders(orderId);
+
+}
+
+// Function to display the orders filtered by order ID
+function displayFilteredOrders(ordersID) {
+    let table = document.getElementById('orders-table');
+    let rows = table.rows;
+    for (let i = 1; i < rows.length; i++) {
+        let orderId = rows[i].cells[0].textContent;
+        if (ordersID === '') {
+            rows[i].style.display = '';
+        } else  if (orderId === ordersID){
+            rows[i].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+        }
+        console.log("Order ID: " + ordersID);
+    }
+
+}
+
+// Function to load orders orderID = '' -> means all orders if no argument is passed
+function loadOrders() {
+    let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
+    let url = base + "loadOrders";
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                console.error('HTTP error', response.status, response.statusText, response.json());
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayOrders(data.orders, data.addresses);
+
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+// Function to display all orders in the table
+function displayOrders(orders, addresses) {
+    let table = document.getElementById('orders-table');
+
+    // Clear the table
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
+
+    if (orders !== null) {
+        // Add each order to the table
+        for (let i = 0; i < orders.length; i++) {
+            let row = table.insertRow();
+
+            // Add cells to the row
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            let cell5 = row.insertCell(4);
+
+            // Set the text of the cells
+            cell1.textContent = orders[i].id_cart;
+            cell2.textContent = orders[i].status;
+            cell3.textContent = orders[i].order_date;
+            cell4.textContent = addresses;
+
+            // Create a button to view the order details
+            let button = document.createElement('button');
+            button.textContent = 'Visualizza';
+            button.onclick = function() {
+                viewOrderDetails(orders[i].id_cart);
+            };
+
+            // Add the button to the cell
+            cell5.appendChild(button);
+        }
+    }
+}
+
+// Function to redirect to the servlet
+function viewOrderDetails(orderId) {
+    let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
+    let url = base + "loadOrderInformation";
+
+    window.location.href = url + "?orderId=" + orderId;
+
+}
 
 //Show Shipping Address
-
-
 function loadShippingAddresses() {
     let xhr = new XMLHttpRequest();
     let base = document.URL.match("(http[s]?://.*?/.*?/)")[0];
     let url = base + "loadShippingAddresses";
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            doPrintTable(xhr.response);
+            doPrintAddressesTable(xhr.response);
         }
     }
 
@@ -70,6 +180,30 @@ function loadShippingAddresses() {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); //Header for Inform Server of an XMLHttpRequest
     xhr.send();
 
+}
+
+function doPrintAddressesTable(response) {
+    let addresses = JSON.parse(response);
+    const table = document.getElementById('addresses-table');
+    const tbody = table.tBodies[0];
+    console.log("Table:" + tbody.children.length);
+    //Reset Table except first row (headers)
+    let rows = tbody.children.length; //Save original value in a variable otherwise for cycle will remove half of the data!
+    for (let i = 1; i < rows; i++) {
+        tbody.children[1].remove(); //Use fixed 1 to remove all data (0 = header) otherwise Error!
+    }
+
+    //For Each Address in address List (from JSON) print a row
+    for (let i = 0; i < addresses.length; i++) {
+        // Insert a row at the end of table
+        let newRow = table.insertRow();
+        doPrintRow(newRow, addresses[i]);
+
+        //If the current address is the first, disable the button
+        if (i === 0 && addresses.length === 1) {
+            newRow.querySelector('.table-row-button button').disabled = true;
+        }
+    }
 }
 
 function doPrintRow(tableRow, address) {
@@ -99,30 +233,6 @@ function doPrintRow(tableRow, address) {
     };
     button.innerHTML ="&Cross;";
     buttonCell.appendChild(button);
-}
-
-function doPrintTable(response) {
-    let addresses = JSON.parse(response);
-    const table = document.getElementById('addresses-table');
-    const tbody = table.tBodies[0];
-    console.log("Table:" + tbody.children.length);
-    //Reset Table except first row (headers)
-    let rows = tbody.children.length; //Save original value in a variable otherwise for cycle will remove half of the data!
-    for (let i = 1; i < rows; i++) {
-        tbody.children[1].remove(); //Use fixed 1 to remove all data (0 = header) otherwise Error!
-    }
-
-    //For Each Product in product List (from JSON) print a row
-    for (let i = 0; i < addresses.length; i++) {
-        // Insert a row at the end of table
-        let newRow = table.insertRow();
-        doPrintRow(newRow, addresses[i]);
-
-        //If the current address is the first, disable the button
-        if (i === 0 && addresses.length === 1) {
-            newRow.querySelector('.table-row-button button').disabled = true;
-        }
-    }
 }
 
 //Delete Shipping Address
