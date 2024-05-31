@@ -38,7 +38,7 @@ build/
 .DS_Store
 .idea/*
 .mvn/*
-
+bozza/*
 bozza/css/test.css
 bozza/chisiamotest.html
 
