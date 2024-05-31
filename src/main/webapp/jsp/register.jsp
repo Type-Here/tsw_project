@@ -13,6 +13,12 @@
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
 </head>
 
+<c:if test="${not empty userlogged}">
+    <script>
+        window.location.href = "${pageContext.request.contextPath}/user-profile";
+    </script>
+</c:if>
+
 <body class="body_def">
 <div class="central-logo-name">
     <a href="${pageContext.request.contextPath}/"><img class="logo-big" src="${pageContext.request.contextPath}/img/logo.png" alt="logo"/></a>

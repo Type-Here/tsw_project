@@ -22,6 +22,11 @@ public class ModifyUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        if (request.getSession().getAttribute("userlogged") == null){
+            response.sendRedirect(request.getContextPath()+"/index"); //Pagina utente
+            return;
+        }
+
         try {
             switch (request.getParameter("section")) {
                 case "one":
