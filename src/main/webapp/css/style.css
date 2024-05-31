@@ -1269,7 +1269,7 @@ input#pass{
     font-size: 0.82rem;
 
     & h3{
-        padding: 0px 10px;
+        padding: 0 10px;
     }
 
     /* Content container */
@@ -1278,6 +1278,11 @@ input#pass{
         width: 90%;
         margin: auto;
         overflow-x:scroll;
+
+        &::-webkit-scrollbar, &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track{
+            display: none;
+            width: 0;
+        }
     }
 
     /* First Row contains Review heading and average vote */
