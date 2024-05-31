@@ -16,10 +16,29 @@ public class UserIDCheckFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Cookie[] cookies = httpRequest.getCookies();
         String userIDFromCookie = null, userPasswordFromCookie = null;
         Cookie userIDCookie = null, userPasswordCookie = null;
+        Boolean userLogged = false;
+
+        if (cookies == null) {
+            chain.doFilter(request, response); // continue with the rest of the filter chain
+            return;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("JSESSIONID")) {
+                userLogged = true;
+            }
+        }
+
+        if (!userLogged) {
+            chain.doFilter(request, response); // continue with the rest of the filter chain
+            return;
+        }
+
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("userID")) {
                 userIDFromCookie = cookie.getValue();
