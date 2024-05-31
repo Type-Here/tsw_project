@@ -52,6 +52,14 @@ public interface Data {
         canceled("canceled");
 
         public final String value;
+
+        public static OrderStatus getEnum(String value){
+            for(OrderStatus os : OrderStatus.values()){
+                if (os.value.equals(value)){return os;}
+            }
+            return null;
+        }
+
         OrderStatus(String value){
             this.value=value;
         }
