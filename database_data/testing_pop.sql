@@ -99,4 +99,5 @@ insert into retrogamer.users(id_client,firstname, lastname, telephone, email, bi
 
 insert into retrogamer.shipping_addresses(id_client, firstname, lastname, address, city, prov, cap) VALUES
 (1,'Domenico','Amorelli','Via Girolamo Savonarola','Sapri','SA','84073'),
+(1,'Domenico','Amorelli','Via Roma','Napoli','NA','80143'),
 (2,'Bianca','Neri','Via Roma Canpi','Roma','RM','00100');

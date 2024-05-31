@@ -102,6 +102,7 @@ create table cart_items (
     id_cart int not null,
     quantity int not null,
     real_price decimal(6,2) not null,
+    refund int,
     foreign key (id_cart) references cart(id_cart),
     primary key (id_prod, id_cart)
 );

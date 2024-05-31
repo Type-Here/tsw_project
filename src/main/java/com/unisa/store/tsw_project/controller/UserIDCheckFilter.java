@@ -60,8 +60,8 @@ public class UserIDCheckFilter implements Filter {
                 String userPasswordDecrypted = LoginUserServlet.decrypt(userPasswordFromCookie);
                 UserDAO userDAO = new UserDAO();
                 UserBean user = userDAO.getUserByEmail(userIDecrypted);
-                System.out.println(userPasswordDecrypted);
-                System.out.println(userDAO.doRetrieveHashAndSaltByUserId(user.getId_cred())[0]);
+                //System.out.println(userPasswordDecrypted);
+                //System.out.println(userDAO.doRetrieveHashAndSaltByUserId(user.getId_cred())[0]);
                 if (userDAO.doRetrieveHashAndSaltByUserId(user.getId_cred())[0].equals(userPasswordDecrypted)){
                     httpRequest.getSession().setAttribute("userlogged", user);
                 } else { // if the user is not found in the database, delete the cookie because it is altered or not correct
