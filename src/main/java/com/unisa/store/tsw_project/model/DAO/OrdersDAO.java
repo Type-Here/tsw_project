@@ -27,11 +27,10 @@ public class OrdersDAO {
 
                 // Manage Optional Value to Avoid Illegal Argument Exception when null
                 if (status != null) {
-                    o.setStatus(Data.OrderStatus.valueOf(status));
+                    o.setStatus(Data.OrderStatus.getEnum(status));
                 } else {
                     o.setStatus(null);
                 }
-
                 o.setOrder_date(rs.getDate(5).toLocalDate());
                 orders.add(o);
             }
@@ -53,7 +52,7 @@ public class OrdersDAO {
 
                 // Manage Optional Value to Avoid Illegal Argument Exception when null
                 if (status != null) {
-                    o.setStatus(Data.OrderStatus.valueOf(status));
+                    o.setStatus(Data.OrderStatus.getEnum(status));
                 } else {
                     o.setStatus(null);
                 }

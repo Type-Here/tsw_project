@@ -9,6 +9,25 @@ import java.sql.SQLException;
 
 public class CartDAO {
 
+    public CartBean doRetrieveById(int id_cart){
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM cart WHERE id_cart = ?");
+            ps.setInt(1, id_cart);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                CartBean c = new CartBean();
+                c.setId_cart(rs.getInt(1));
+                c.setTotal(rs.getBigDecimal(2));
+                c.setId_client(rs.getInt(3));
+                c.setDiscount_code(rs.getString(4));
+                return c;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public CartBean doRetrieveByUserId(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM cart WHERE id_client = ?");

@@ -14,6 +14,7 @@ public class CartItemsDAO {
     public List<CartItemsBean> doRetrieveAllByCartId(int id_cart) throws SQLException {
         try (Connection con = ConPool.getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM cart_items WHERE id_cart = ?");
+            ps.setInt(1, id_cart);
             ResultSet rs = ps.executeQuery();
             List<CartItemsBean> cartItems = new ArrayList<>();
             while (rs.next()) {
