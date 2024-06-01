@@ -96,7 +96,7 @@ public class IndividualProductServlet extends HttpServlet {
                return;
            }
            validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
-           validator.validatePattern(id.get(), DataValidator.PatternType.Int, 0, 5);
+           validator.validatePattern(condition.get(), DataValidator.PatternType.Int, 0, 5);
 
            ProductDAO dao = new ProductDAO();
            ProductBean p = dao.doRetrieveById(Integer.parseInt(id.get()));
@@ -107,9 +107,8 @@ public class IndividualProductServlet extends HttpServlet {
            Gson gson = new Gson();
            String json = gson.toJson(price);
            resp.setContentType("application/json");
-           System.out.println(json);
-           System.out.println(price);
            resp.getWriter().write(json);
+           resp.getWriter().flush();
 
         } else {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No valid option");
