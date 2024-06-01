@@ -137,7 +137,13 @@ function displayOrders(orders, addresses) {
             cell1.textContent = orders[i].id_cart;
             cell2.textContent = orders[i].status;
             cell3.textContent = orders[i].order_date;
-            cell4.textContent = addresses;
+
+            for (let j = 0; j < addresses.length; j++) {
+                if (addresses[j].id_add === orders[i].id_add) {
+                    cell4.textContent = addresses[j].address + ', ' + addresses[j].city + ' ' + addresses[j].prov + ',' + addresses[j].CAP;
+                    break;
+                }
+            }
 
             // Create a button to view the order details
             let button = document.createElement('button');

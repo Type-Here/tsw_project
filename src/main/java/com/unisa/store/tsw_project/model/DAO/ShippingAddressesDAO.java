@@ -12,17 +12,23 @@ import java.util.List;
 
 public class ShippingAddressesDAO {
 
-    public List<String> doRetrieveAddressByOrderID(int id_add) throws SQLException {
+    public List<ShippingAddressesBean> doRetrieveAddressByOrderID(int id_add) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM shipping_addresses WHERE id_add=?");
             ps.setInt(1, id_add);
             ResultSet rs = ps.executeQuery();
-            List<String> address = new ArrayList<>();
+            List<ShippingAddressesBean> address = new ArrayList<>();
             if (rs.next()) {
-                address.add(rs.getString(5));
-                address.add(rs.getString(6));
-                address.add(rs.getString(7));
-                address.add(rs.getString(8));
+                ShippingAddressesBean s = new ShippingAddressesBean();
+                s.setId_client(rs.getInt(1));
+                s.setId_add(rs.getInt(2));
+                s.setFirstname(rs.getString(3));
+                s.setLastname(rs.getString(4));
+                s.setAddress(rs.getString(5));
+                s.setCity(rs.getString(6));
+                s.setProv(rs.getString(7));
+                s.setCAP(rs.getString(8));
+                address.add(s);
             }
             return address;
         }
