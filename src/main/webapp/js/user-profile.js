@@ -192,7 +192,7 @@ function doPrintAddressesTable(response) {
     let addresses = JSON.parse(response);
     const table = document.getElementById('addresses-table');
     const tbody = table.tBodies[0];
-    console.log("Table:" + tbody.children.length);
+
     //Reset Table except first row (headers)
     let rows = tbody.children.length; //Save original value in a variable otherwise for cycle will remove half of the data!
     for (let i = 1; i < rows; i++) {
@@ -205,11 +205,45 @@ function doPrintAddressesTable(response) {
         let newRow = table.insertRow();
         doPrintRow(newRow, addresses[i]);
 
+        let button = newRow.querySelector('.table-row-button button');
+
         //If the current address is the first, disable the button
         if (i === 0 && addresses.length === 1) {
-            newRow.querySelector('.table-row-button button').disabled = true;
+            button.disabled = true;
+        } else {
+            disableDeleteButton(button);
         }
     }
+}
+
+function disableDeleteButton(button){
+    let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
+    let url = base + "modify-user";
+
+    const id = button.value;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: "section=" + "buttonDelete" + "&id_add=" + id
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('HTTP error', response.status, response.statusText, response.json());
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data === true) {
+                button.disabled = true;
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
 }
 
 function doPrintRow(tableRow, address) {
@@ -261,3 +295,47 @@ function deleteAddress(id) {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); //Header for Inform Server of an XMLHttpRequest
     xhr.send("section="+section+"&id_add="+id);
 }
+
+//Function to modify password
+document.getElementById('changePassword').addEventListener('submit', function(event) {
+
+    event.preventDefault();
+
+    let passwordOld = document.getElementById('pass-old').value;
+    let passwordNew = document.getElementById('pass-new').value;
+    let confirmPassword = document.getElementById('pass-new-confirm').value;
+
+    if (passwordOld === '' || confirmPassword === '' || passwordNew === '') {
+        document.getElementById('passwordResults').innerHTML = 'Riempi tutti i campi obbligatori!';
+        document.getElementById('passwordResults').style.color = '#ad212e';
+    } else if (passwordNew !== confirmPassword) {
+        document.getElementById('passwordResults').innerHTML = 'Le password non corrispondono';
+        document.getElementById('passwordResults').style.color = '#ad212e';
+    } else {
+        let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
+        let url = base + "modify-user";
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: "section=updatePassword" + "&passwordOld=" + passwordOld + "&passwordNew=" + passwordNew
+        }).then(async response => {
+            let text = await response.text();
+            if (response.ok) {
+                document.getElementById('passSend').disabled = true;
+                document.getElementById('passwordResults').innerHTML = text + ' Reindirizzamento in corso...'
+                document.getElementById('passwordResults').style.color = '#f5f5f5';
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            } else {
+                document.getElementById('passwordResults').innerHTML = text;
+                document.getElementById('passwordResults').style.color = '#ad212e';
+            }
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    }
+});

@@ -1,8 +1,6 @@
 package com.unisa.store.tsw_project.controller.user;
 
-import com.unisa.store.tsw_project.model.DAO.CartDAO;
 import com.unisa.store.tsw_project.model.DAO.CartItemsDAO;
-import com.unisa.store.tsw_project.model.beans.CartItemsBean;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

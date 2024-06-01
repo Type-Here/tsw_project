@@ -1,19 +1,32 @@
 package com.unisa.store.tsw_project.controller.user;
 
+import com.google.gson.Gson;
+import com.unisa.store.tsw_project.model.DAO.OrdersDAO;
 import com.unisa.store.tsw_project.model.DAO.ShippingAddressesDAO;
 import com.unisa.store.tsw_project.model.DAO.UserDAO;
+import com.unisa.store.tsw_project.model.beans.OrdersBean;
 import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet(name = "ModifyUser", urlPatterns = "/modify-user")
@@ -32,10 +45,10 @@ public class ModifyUserServlet extends HttpServlet {
                 case "one":
                     updateUser(request, response);
                     break;
-                case "two":
-                    //todo
+                case "buttonDelete":
+                    checkDeleteButton(request, response);
                     break;
-                case "three":
+                case "updatePassword":
                     updatePassword(request, response);
                     break;
                 case "four":
@@ -71,7 +84,7 @@ public class ModifyUserServlet extends HttpServlet {
         if (name.isEmpty() || surname.isEmpty() || phone.isEmpty() || email.isEmpty() || birthdate.isEmpty() || roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
             return;
         }
 
@@ -114,14 +127,44 @@ public class ModifyUserServlet extends HttpServlet {
         }
     }
 
-    private void updatePassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        Optional<String> oldpass = Optional.ofNullable(request.getParameter("oldpass"));
-        Optional<String> newpass = Optional.ofNullable(request.getParameter("newpass"));
+    private void checkDeleteButton(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        int id_add = Integer.parseInt(request.getParameter("id_add"));
+        UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
+        OrdersDAO ordersDAO = new OrdersDAO();
+        List<OrdersBean> ordersBeanList = new ArrayList<>();
+
+        try {
+            ordersBeanList = ordersDAO.doRetrieveAllOrdersByUserId(userBean.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Boolean notDelete = false;
+
+        for (OrdersBean ordersBean : ordersBeanList) {
+            if (ordersBean.getId_add() == id_add) {
+                notDelete = true;
+                break;
+            }
+        }
+
+        String json = new Gson().toJson(notDelete);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+
+    }
+
+    private void updatePassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+
+        Optional<String> oldpass = Optional.ofNullable(request.getParameter("passwordOld"));
+        Optional<String> newpass = Optional.ofNullable(request.getParameter("passwordNew"));
 
         if (oldpass.isEmpty() || newpass.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
             return;
         }
 
@@ -133,12 +176,22 @@ public class ModifyUserServlet extends HttpServlet {
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
 
         if(userDAO.checkPassword(oldpass.get(), userBean.getId_cred())){
+            if (oldpass.get().equals(newpass.get())) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Set status code to 500 (Internal Server Error)
+                response.getWriter().write("La nuova password non può essere uguale a quella vecchia");
+                return;
+            }
+
             userDAO.doUpdatePassword(newpass.get(), userBean.getId_cred());
-            request.getRequestDispatcher("/index").forward(request, response);
+            
+            LoginUserServlet.setUserCookies(request, response, userBean);
+
+            response.setStatus(HttpServletResponse.SC_OK);// Write success message set status code to 200 (OK)
+            response.getWriter().write("Password cambiata con successo");
             return;
         } else {
-            //TODO password errata
-            request.getRequestDispatcher("/index").forward(request, response);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Set status code to 500 (Internal Server Error)
+            response.getWriter().write("Password corrente errata riprovare");
             return;
         }
     }
@@ -154,7 +207,7 @@ public class ModifyUserServlet extends HttpServlet {
         if (roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
             return;
         }
 
@@ -179,7 +232,7 @@ public class ModifyUserServlet extends HttpServlet {
         shippingAddressesBean.setCAP(cap.get());
         shippingAddressesBean.setId_client(userBean.getId());
         shippingAddressesDAO.doSave(shippingAddressesBean);
-        request.getRequestDispatcher("/jsp/user-profile.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request,response);
     }
 
     private void deleteShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -189,7 +242,7 @@ public class ModifyUserServlet extends HttpServlet {
         if (id.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("user-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
             return;
         }
 

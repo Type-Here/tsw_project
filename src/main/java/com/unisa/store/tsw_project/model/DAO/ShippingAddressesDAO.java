@@ -12,12 +12,11 @@ import java.util.List;
 
 public class ShippingAddressesDAO {
 
-    public List<ShippingAddressesBean> doRetrieveAddressByOrderID(int id_add) throws SQLException {
+    public ShippingAddressesBean doRetrieveAddressByAddressesID(int id_add) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM shipping_addresses WHERE id_add=?");
             ps.setInt(1, id_add);
             ResultSet rs = ps.executeQuery();
-            List<ShippingAddressesBean> address = new ArrayList<>();
             if (rs.next()) {
                 ShippingAddressesBean s = new ShippingAddressesBean();
                 s.setId_client(rs.getInt(1));
@@ -28,9 +27,9 @@ public class ShippingAddressesDAO {
                 s.setCity(rs.getString(6));
                 s.setProv(rs.getString(7));
                 s.setCAP(rs.getString(8));
-                address.add(s);
+                return s;
             }
-            return address;
+            return null;
         }
     }
 

@@ -42,7 +42,7 @@ public class LoadOrdersServlet extends HttpServlet {
         try {
             orders = ordersDAO.doRetrieveAllOrdersByUserId(userBean.getId());
             for (OrdersBean order : orders) {
-                orderAddresses.addAll(shippingAddressesDAO.doRetrieveAddressByOrderID(order.getId_add()));
+                orderAddresses.add(shippingAddressesDAO.doRetrieveAddressByAddressesID(order.getId_add()));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

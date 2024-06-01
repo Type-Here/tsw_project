@@ -67,35 +67,13 @@ public class LoginUserServlet extends HttpServlet{
             if(userDAO.checkPassword(password.get(), userBean.getId_cred())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userlogged", userBean);
+
                 //Cookie
-                try {
-                    Cookie userIDCookie = new Cookie("userID", encrypt(userBean.getEmail()));
-                    Cookie userPasswordCookie = new Cookie("userPassword", encrypt(userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred())[0]));
-
-                    //Set cookie to expire at midnight
-                    LocalDateTime now = LocalDateTime.now();
-                    LocalDateTime midnight = LocalDateTime.of(now.toLocalDate().plusDays(1), LocalTime.MIDNIGHT);
-
-
-                    // Set the cookie to expire at midnight
-                    userIDCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
-                    userPasswordCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
-
-                    // Add the cookie to the response
-                    userIDCookie.setHttpOnly(true);
-                    userPasswordCookie.setHttpOnly(true);
-                    //userIDCookie.setSecure(true); // solo se il sito è in HTTPS
-                    //userPasswordCookie.setSecure(true); // solo se il sito è in HTTPS
-                    response.addCookie(userPasswordCookie);
-                    response.addCookie(userIDCookie);
-
-                } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
-                         BadPaddingException | InvalidKeyException e) {
-                    throw new RuntimeException(e);
-                }
+                setUserCookies(request, response, userBean);
 
                 request.getRequestDispatcher("/index").forward(request, response);
                 return;
+
             } else {
                 request.getSession().invalidate();
                 request.setAttribute("invalidUser", true);
@@ -111,7 +89,7 @@ public class LoginUserServlet extends HttpServlet{
     private static final String ALGORITHM = "AES";
     //private static final byte[] KEY = "8pipp8pipp8pipp8".getBytes(); //Key for cipher 16, 24 or 32 byte
 
-    private static String encrypt(String username) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public static String encrypt(String username) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Key key = new SecretKeySpec(keyGeneratedByDate(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -141,5 +119,36 @@ public class LoginUserServlet extends HttpServlet{
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void setUserCookies(HttpServletRequest request, HttpServletResponse response, UserBean userBean) throws ServletException, IOException {
+        //Cookie
+        UserDAO userDAO = new UserDAO();
+        try {
+            Cookie userIDCookie = new Cookie("userID", encrypt(userBean.getEmail()));
+            Cookie userPasswordCookie = new Cookie("userPassword", encrypt(userDAO.doRetrieveHashAndSaltByUserId(userBean.getId_cred())[0]));
+
+            //Set cookie to expire at midnight
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime midnight = LocalDateTime.of(now.toLocalDate().plusDays(1), LocalTime.MIDNIGHT);
+
+
+            // Set the cookie to expire at midnight
+            userIDCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
+            userPasswordCookie.setMaxAge((int) Duration.between(now, midnight).getSeconds());
+
+            // Add the cookie to the response
+            userIDCookie.setHttpOnly(true);
+            userPasswordCookie.setHttpOnly(true);
+            //userIDCookie.setSecure(true); // solo se il sito è in HTTPS
+            //userPasswordCookie.setSecure(true); // solo se il sito è in HTTPS
+            response.addCookie(userPasswordCookie);
+            response.addCookie(userIDCookie);
+
+        } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException |
+                 InvalidKeyException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

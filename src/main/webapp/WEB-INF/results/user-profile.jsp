@@ -102,18 +102,22 @@
                 <div id="section3" class="utente-content-section" style="display: none;">
                     <h2>Sicurezza</h2>
                     <div class="log_form reg_form">
-                        <form action="${pageContext.request.contextPath}/modify-user" method="post">
+                        <form id="changePassword" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input type="hidden" name="section" value="three">
                             <fieldset class="access-data">
-                                <label class="form-row" for="pass-old"><span>Password</span>
+                                <label class="form-row" for="pass-old"><span>Password Vecchia</span>
                                     <input id="pass-old" name="oldpass" type="password" placeholder="Password Vecchia" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[&%$£\/\\\(\)=€?\^!]).{8,}$" maxlength="30"/>
                                 </label>
-                                <label class="form-row" for="pass-new"><span>Password</span>
+                                <label class="form-row" for="pass-new"><span>Password Nuova</span>
                                     <input id="pass-new" name="newpass" type="password" placeholder="Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
+                                </label>
+                                <label class="form-row" for="pass-new-confirm"><span>Conferma Password Nuova</span>
+                                    <input id="pass-new-confirm" name="newpassConfirm" type="password" placeholder="Conferma Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
                             </fieldset>
                             <fieldset class="form-row">
-                                <input class="default" type="submit" value="Applica">
+                                <input id="passSend" class="default" type="submit" value="Applica">
+                                <label id="passwordResults"></label>
                             </fieldset>
                         </form>
                     </div>
