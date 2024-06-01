@@ -26,7 +26,7 @@ window.onload = function() {
 
 function splitAddress() {
     var address = document.getElementById('address').value;
-    var addressParts = address.split(' ');
+    var addressParts = address.split(',');
     document.getElementById('road-type').value = addressParts[0];
     document.getElementById('road-name').value = addressParts[1];
     document.getElementById('road-number').value = addressParts[2];

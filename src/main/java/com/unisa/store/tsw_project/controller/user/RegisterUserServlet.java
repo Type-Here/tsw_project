@@ -76,7 +76,7 @@ public class RegisterUserServlet extends HttpServlet {
             userBean.setTelephone("+39" + phone.get());
             userBean.setEmail(email.get());
             userBean.setBirth(LocalDate.parse(birthdate.get()));
-            userBean.setAddress(roadType.get() + " " + roadName.get() + " " + roadNumber.get());
+            userBean.setAddress(roadType.get() + ", " + roadName.get() + ", " + roadNumber.get());
             userBean.setCity(city.get());
             userBean.setProv(province.get());
             userBean.setCAP(cap.get());
