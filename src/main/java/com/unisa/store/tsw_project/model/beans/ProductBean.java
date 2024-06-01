@@ -1,4 +1,6 @@
 package com.unisa.store.tsw_project.model.beans;
+import com.unisa.store.tsw_project.other.Data;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,7 @@ public class ProductBean {
     private int id_prod;
     private String name;
     private BigDecimal price;
-    private Boolean type;
+    private Boolean type; // False Physical , True Digital
     private String platform;
     private String developer;
     private String description;
@@ -140,6 +142,16 @@ public class ProductBean {
     }
 
     public void setConditions(List<ConditionBean> conditions) {
+        if(this.type){ //Digital Type Has only 1 Condition (0 = Digital)
+            this.conditions = new ArrayList<>();
+            ConditionBean conditionBean = new ConditionBean();
+            conditionBean.setCondition(Data.Condition.X);
+            conditionBean.setId_cond(0);
+            conditionBean.setQuantity(-1);
+            conditionBean.setId_prod(this.getId_prod());
+            this.conditions.add(conditionBean);
+            return;
+        }
         this.conditions = conditions;
     }
 

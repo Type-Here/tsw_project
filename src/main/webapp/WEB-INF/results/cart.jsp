@@ -60,13 +60,20 @@
                                 </ul>
                             </div>
                             <div class="cart-item-operations">
-                                <label>Quantità:
-                                    <select>
-                                        <c:forEach var="i" begin="1" end="${item.value.quantity}">
-                                            <option <c:if test="${i == item.value.quantity}">selected</c:if> >${i}</option>
-                                        </c:forEach>
-                                    </select>
-                                </label>
+                                <c:choose>
+                                    <c:when test="${item.value.condition == 'X'}">
+                                        <label>Digitale</label>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <label>Quantità:
+                                            <select>
+                                                <c:forEach var="i" begin="1" end="${item.value.quantity}">
+                                                    <option <c:if test="${i == item.value.quantity}">selected</c:if> >${i}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </label>
+                                    </c:otherwise>
+                                </c:choose>
                                 <button class="remove-item" value="${item.key}">
                                     <img src="${pageContext.request.contextPath}/img/icons/trash-can-solid.svg" alt="trash-can">
                                     <span>Rimuovi</span>

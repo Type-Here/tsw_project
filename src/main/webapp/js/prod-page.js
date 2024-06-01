@@ -19,6 +19,9 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
         }
         button.classList.add('active-button');
 
+        //Return if Product is Digital!!
+        if(button.value === '0') return;
+
         const id_prod = getIdProdFromURL();
 
         //Promise
@@ -46,21 +49,21 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
  * Add to Cart Button Listener
  */
 
-document.getElementById('add-to-cart').addEventListener('click', ()=>{
+document.getElementById('add-to-cart').addEventListener('click',()=>{
     const counter = document.getElementById('cart-counter');
     let val = counter.innerHTML;
 
     const id_prod = getIdProdFromURL();
     const id_condition = document.querySelector('.prod-condition-button.active-button').value;
     addToCart(id_prod, id_condition)
-        .then(r => {
-        if(r.status === 200){
-            counter.innerHTML = (parseInt(val) + 1).toString();
-            counter.classList.remove('general-display-none');
-        } else {
-            alert("Impossibile aggiungere al carrello: Code " + r.status);
-        }
-    }).catch(r => console.log(r));
+        .then(r => {if(r.ok) return r.text(); else throw new Error(r.status + ' ' + r.statusText)})
+        .then(async data => {
+            let itemNum = await data;
+            if (itemNum && itemNum === '1') {
+                counter.innerHTML = (parseInt(val) + 1).toString();
+                counter.classList.remove('general-display-none');
+            }
+        }).catch(r => console.log(r));
 });
 
 
