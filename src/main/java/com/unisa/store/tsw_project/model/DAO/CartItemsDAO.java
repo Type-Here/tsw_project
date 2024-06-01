@@ -23,6 +23,7 @@ public class CartItemsDAO {
                 c.setId_cart(rs.getInt(2));
                 c.setQuantity(rs.getInt(3));
                 c.setReal_price(rs.getBigDecimal(4));
+                c.setRefund(rs.getInt(5));
                 cartItems.add(c);
             }
             if (cartItems.isEmpty()){
@@ -36,11 +37,12 @@ public class CartItemsDAO {
     public void doSave(CartItemsBean cartItem) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO cart_items " +
-                    "(id_prod, id_cart, quantity, real_price) VALUES(?, ?, ?, ?)");
+                    "(id_prod, id_cart, quantity, real_price, refund) VALUES(?, ?, ?, ?, ?)");
             ps.setInt(1, cartItem.getId_prod());
             ps.setInt(2, cartItem.getId_cart());
             ps.setInt(3, cartItem.getQuantity());
             ps.setBigDecimal(4, cartItem.getReal_price());
+            ps.setInt(5, cartItem.getRefund());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
@@ -50,15 +52,28 @@ public class CartItemsDAO {
     public void doUpdate(CartItemsBean cartItem) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE cart_items " +
-                    "SET id_prod=?, id_cart=?, quantity=?, real_price=? WHERE id_prod=? AND id_cart=?");
+                    "SET id_prod=?, id_cart=?, quantity=?, real_price=?, refund=? WHERE id_prod=? AND id_cart=?");
             ps.setInt(1, cartItem.getId_prod());
             ps.setInt(2, cartItem.getId_cart());
             ps.setInt(3, cartItem.getQuantity());
             ps.setBigDecimal(4, cartItem.getReal_price());
-            ps.setInt(5, cartItem.getId_prod());
-            ps.setInt(6, cartItem.getId_cart());
+            ps.setInt(5, cartItem.getRefund());
+            ps.setInt(6, cartItem.getId_prod());
+            ps.setInt(7, cartItem.getId_cart());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("UPDATE error.");
+            }
+        }
+    }
+
+    public void doRefundByCartItemID(int cartItemID, int cartID) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE cart_items " +
+                    "SET refund = 2 WHERE id_prod = ? AND id_cart = ?");
+            ps.setInt(1, cartItemID);
+            ps.setInt(2, cartID);
+            if (ps.executeUpdate() != 1) {
+                throw new RuntimeException("DELETE error.");
             }
         }
     }
