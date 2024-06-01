@@ -14,7 +14,7 @@ public class DataValidator {
      * @param data to check
      * @param patternType type of pattern to use for check
      * @return true string is valid, false if not
-     * @see DataValidator#validatePattern(String, PatternType, Integer, Integer);
+     * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType){
         if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException();
@@ -28,8 +28,23 @@ public class DataValidator {
      * @param min if patternType is Int or Double return true if value is > of min. If it's a different pattern checks if string length is bigger than min
      * @param max if patternType is Int or Double return true if value is < of max. If it's a different pattern checks if string length is smaller than max
      * @return true if valide, false if not
+     * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType,
+                                                         Integer min, Integer max){
+        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException(data);
+        return true;
+    }
+
+    /**
+     Verify data respect pattern type
+     * @param data to check
+     * @param patternType type of pattern to use for check
+     * @param min if patternType is Int or Double return true if value is > of min. If it's a different pattern checks if string length is bigger than min
+     * @param max if patternType is Int or Double return true if value is < of max. If it's a different pattern checks if string length is smaller than max
+     * @return true if valide, false if not
+     */
+    private boolean validatePatternExecute(String data, PatternType patternType,
                                    Integer min, Integer max){
         try {
             if(data == null) return false;
@@ -54,8 +69,8 @@ public class DataValidator {
                     yield (max == null || !(val > max)) && (min == null || !(val < min));
                 }
                 case Double -> {
-                    double vald = Double.parseDouble(data);
-                    yield (max == null || !(vald > max)) && (min == null || !(vald < min));
+                    double valD = Double.parseDouble(data);
+                    yield (max == null || !(valD > max)) && (min == null || !(valD < min));
                 }
                 case GenericAlphaNumeric -> data.matches("^[a-zA-Z0-9_\\- ]+$");
                 case Generic -> data.matches("^[a-zA-Z0-9_.'&$\"\\- ]+$");
