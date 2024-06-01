@@ -10,6 +10,7 @@ public class CartItemsBean {
     private int quantity;
     private BigDecimal real_price;
     private Data.Condition condition; //NB NOT SAVED IN DATABASE! Used for Session Data Only!
+    private Integer refund;
 
     public CartItemsBean() {
     }
@@ -43,6 +44,9 @@ public class CartItemsBean {
 
     public Data.Condition getCondition() {return condition;}
 
+    public Integer getRefund() {return refund;}
+
+
     /* - SETTERS - */
 
     public void setId_prod(int id_prod) {
@@ -62,6 +66,8 @@ public class CartItemsBean {
     }
 
     public void setCondition(Data.Condition condition) {this.condition = condition;}
+
+    public void setRefund(Integer refund) {this.refund = refund;}
 
     /* - OTHER - */
     public void addQuantity(){this.quantity++;}

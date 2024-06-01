@@ -117,7 +117,6 @@
                                 <li><p class="internolist">Carte di credito (Visa, Mastercard, American Express)</p>
                                 </li>
                                 <li><p class="internolist">PayPal</p></li>
-                                <li><p class="internolist">PayPal</p></li>
                                 <li><p class="internolist">Apple Pay</p></li>
                                 <li><p class="internolist">Google Pay</p></li>
                                 <li><p class="internolist">Contrassegno (solo per l'Italia)</p></li>

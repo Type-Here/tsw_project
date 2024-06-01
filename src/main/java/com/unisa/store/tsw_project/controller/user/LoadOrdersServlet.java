@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.unisa.store.tsw_project.model.DAO.OrdersDAO;
 import com.unisa.store.tsw_project.model.DAO.ShippingAddressesDAO;
 import com.unisa.store.tsw_project.model.beans.OrdersBean;
+import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.LocalDateAdapter;
 import jakarta.servlet.ServletException;
@@ -33,7 +34,7 @@ public class LoadOrdersServlet extends HttpServlet {
         String orderId = request.getParameter("orderId");
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
         List<OrdersBean> orders = new ArrayList<>();
-        List<String> orderAddresses = new ArrayList<>();
+        List<ShippingAddressesBean> orderAddresses = new ArrayList<>();
         OrdersDAO ordersDAO = new OrdersDAO();
         ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
 
