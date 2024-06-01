@@ -82,6 +82,7 @@ public class TheCartServlet extends HttpServlet {
                 case "addToCart" -> addToCart(req, resp);
                 case "removeFromCart" -> removeFromCart(req,resp);
                 case "requestNewPrice" -> sendNewPrice(req,resp);
+                case "retrieveProduct" -> retrieveProduct(req,resp);
                 default -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid option");
             }
         }
@@ -123,13 +124,6 @@ public class TheCartServlet extends HttpServlet {
                 return;
             }
 
-            //VALIDATION: Check if product Condition exists and retrieve it: if  <= 0 NO products are left: return error
-            int quantityConditionLeft = productBean.getConditions().stream()
-                    .filter(condBean -> condBean.getCondition().equals(condition_requested)).findFirst()
-                    .orElseThrow( () -> new InvalidParameterException("Invalid Condition")).getQuantity();
-            if(quantityConditionLeft <= 0) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This specific product is unavailable");
-            }
 
             //Check if user is logged: Set id_client to user id if logged, null if not
             Optional<UserBean> user = Optional.ofNullable((UserBean) session.getAttribute("userlogged"));
@@ -155,6 +149,24 @@ public class TheCartServlet extends HttpServlet {
             // Get CartItem from Cart or Create a New One
             CartItemsBean item = Optional.ofNullable(cart.getCartItems().get(productBean.getId_prod() + condition_requested.toString() )).orElse(new CartItemsBean());
 
+
+            //VALIDATION: Check for Quantity only on Physical Products! getType: false=physical, true=digital
+            if(!productBean.getType()) {
+                //VALIDATION: Check if product Condition exists and retrieve it:
+                // if <= 0 NO products are left: return error
+                // if there are some products but user request more than available return error
+                int quantityConditionLeft = productBean.getConditions().stream()
+                        .filter(condBean -> condBean.getCondition().equals(condition_requested)).findFirst()
+                        .orElseThrow(() -> new InvalidParameterException("Invalid Condition")).getQuantity();
+                if (quantityConditionLeft <= 0) {
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This specific product is unavailable");
+                    return;
+                } else if(quantityConditionLeft < item.getQuantity() + 1){
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to add more quantity to cart");
+                    return;
+                }
+            }
+
             //Set ItemAttributes
             item.setId_prod(productBean.getId_prod());
             item.addQuantity();
@@ -167,8 +179,15 @@ public class TheCartServlet extends HttpServlet {
             //Set CartItem to Cart
             cart.setAttribute(item);
 
-            //Send Answer OK
-            resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
+            //Send Answer the quantity of Item inside the Cart
+            Gson gson = new Gson();
+            String json = gson.toJson(item.getQuantity());
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(json);
+            resp.getWriter().flush();
+
+            //resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
 
         } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 1");
@@ -177,7 +196,6 @@ public class TheCartServlet extends HttpServlet {
         } catch (InvalidParameterException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
-
     }
 
 
@@ -211,6 +229,7 @@ public class TheCartServlet extends HttpServlet {
 
         resp.setContentType("text/plain");
         resp.getWriter().write("Prodotto rimosso correttamente dal carrello...");
+        resp.getWriter().flush();
         //resp.sendError(HttpServletResponse.SC_OK, "OK");
     }
 
@@ -236,6 +255,33 @@ public class TheCartServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(json);
+        resp.getWriter().flush();
     }
 
+
+    private void retrieveProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        Optional<String> id = Optional.ofNullable(req.getParameter("id"));
+        DataValidator validator = new DataValidator();
+
+        if(id.isEmpty()){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No id prod set");
+            return;
+        }
+        validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
+
+        ProductDAO productDAO = new ProductDAO();
+        ProductBean prod = productDAO.doRetrieveById(Integer.parseInt(id.get()));
+        if(prod == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid id prod");
+            return;
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(prod);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(json);
+        resp.getWriter().flush();
+    }
 }
