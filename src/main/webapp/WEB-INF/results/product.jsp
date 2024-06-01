@@ -30,23 +30,28 @@
             <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
         </div>
         <div class="prod-overview">
-            <c:if test="${product.type == false}"> <!--Digital-->
                 <div class="centerized-flex-container condition-select">
                     <h2 class="text-center">Condizione:</h2>
                     <div class="prod-condition-div">
-                        <c:forEach items="${product.conditions}" var="cond">
-                            <c:choose>
-                                <c:when test="${cond.condition eq 'A'}"> <!--<img src="img/top.png" alt="top quality"/>-->
-                                    <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if> top-quality" value="${cond.id_cond}">${cond.condition}</button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if>" value="${cond.id_cond}">${cond.condition}</button>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${product.type == true}">
+                                <button class="prod-condition-button active-button" value="0">Digitale</button>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${product.conditions}" var="cond">
+                                    <c:choose>
+                                        <c:when test="${cond.condition eq 'A'}"> <!--<img src="img/top.png" alt="top quality"/>-->
+                                            <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if> top-quality" value="${cond.id_cond}">${cond.condition}</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if>" value="${cond.id_cond}">${cond.condition}</button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
-            </c:if>
             <div class="prod-price">
                 <div class="tile-text-bottom-price">
                     <c:choose>
