@@ -1,0 +1,71 @@
+.orderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.orderTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #202020;
+    border-radius: 5px;
+    margin: 0.5rem;
+}
+
+.closeModal {
+    color: red;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+
+.closeModal:hover {
+    background-color: red;
+    color: white;
+}
+
+#sendReview {
+    border-radius: 5px;
+    border: 1px solid #202020;
+    background-color: #a5a5a5;
+}
+
+.comment {
+    border-radius: 5px;
+    border: 1px solid #202020;
+    background-color: #a5a5a5;
+}
+
+.orderTable th, .orderTable td {
+    padding: 1rem;
+    border: 1px solid #a5a5a5;
+    text-align: center;
+}
+
+.star{
+    cursor: pointer;
+}
+
+.prodModal {
+    align-items: center;
+    border-radius: 5px;
+    background-color: #c0c0c0;
+}
+
+.span.star-on::before{
+    content: "\2605";
+    color:#ffc30a;
+    font: 1.1em sans-serif;
+}
+
+.span.star-off::before{
+    content: "\2606";
+    color: #f5f5f5;
+    font: 1.1em sans-serif;
+}
+
+#recensione-stelle {
+    user-select: none;
+}
