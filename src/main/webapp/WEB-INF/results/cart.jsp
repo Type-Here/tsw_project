@@ -14,6 +14,7 @@
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script src="${pageContext.request.contextPath}/js/cart.js" defer></script>
+    <script src="${pageContext.request.contextPath}/js/cart-item.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -28,7 +29,7 @@
 <div class="main_home">
     <div class="cart_container">
 
-        <section class="cart-prod-list">
+        <section id="cart" class="cart-prod-list">
             <h2>Ecco la tua lista:</h2>
 
             <% //NB Remember: cartItems is an HashMap, use item.value to get the bean! %>
@@ -129,7 +130,7 @@
                 </div>
 
                 <div class="prod-add-to-cart">
-                    <button id="order-button" class="default yellow">Prosegui l'acquisto</button>
+                    <a href="${pageContext.request.contextPath}/order"><button id="order-button" class="default yellow">Prosegui l'acquisto</button></a>
                 </div>
 
             </div>

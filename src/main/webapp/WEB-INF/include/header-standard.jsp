@@ -18,7 +18,7 @@
         <li><a href="${pageContext.request.contextPath}/newsletter">Newsletter</a></li>
     </ul>
     <div class="upper-bar-right">
-        <span><a href="cart">
+        <span><a href="${pageContext.request.contextPath}/cart">
             <img src="${pageContext.request.contextPath}/img/icons/shopping_cart.svg" alt="Carrello" class="general_icon">
             <c:choose>
                 <c:when test="${empty cart or cart.cartItems.size() == 0}">
