@@ -45,6 +45,12 @@ public class CartDAO {
         }
     }
 
+    /**
+     * Save a Cart in Database. <br />
+     * If save id successful the new id_cart is set inside the Bean.
+     * @param cart to be saved
+     * @throws SQLException if save or query of new key fails
+     */
     public void doSave(CartBean cart) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO cart " +

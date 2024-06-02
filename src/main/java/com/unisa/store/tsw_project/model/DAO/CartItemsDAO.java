@@ -42,7 +42,7 @@ public class CartItemsDAO {
             ps.setInt(2, cartItem.getId_cart());
             ps.setInt(3, cartItem.getQuantity());
             ps.setBigDecimal(4, cartItem.getReal_price());
-            ps.setInt(5, cartItem.getRefund());
+            ps.setObject(5, cartItem.getRefund()); //Can Be Null!
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }

@@ -30,7 +30,7 @@ public class ConditionDAO {
             while (rs.next()) {
                 ConditionBean c = new ConditionBean();
                 c.setId_cond(rs.getInt(1));
-                c.setQuantity(rs.getInt(1));
+                c.setQuantity(rs.getInt(2));
                 c.setCondition(Data.Condition.getEnum(c.getId_cond()));
                 conditionBeans.add(c);
             }
@@ -60,21 +60,37 @@ public class ConditionDAO {
 
     /**
      * Use this method to update the quantity of a sold item by product id
-     * @param conditionBean needs to have SET id_prod before calling this method
+     * @param idProd ID of the Selling Product
+     * @throws SQLException if update fails
+     * @apiNote <b>Bean needs to have SET id_prod before calling this method</p>
+     * @see ConditionDAO#doSell(int, int, int)
+     */
+    synchronized public void doSell(int idProd, int idCond) throws SQLException {
+        doSell(idProd, idCond, 1);
+    }
+
+
+    /**
+     * Use this method to update the quantity of a sold item by product id
+     * @param idProd ID of the Selling Product
+     * @param idCond ID of the Condition
+     * @param quantity Quantity of a Product Sell per Condition
      * @throws SQLException if update fails
      * @apiNote <b>Bean needs to have SET id_prod before calling this method</p>
      */
-    synchronized public void doSell(ConditionBean conditionBean) throws SQLException {
+    synchronized public void doSell(int idProd, int idCond, int quantity) throws SQLException {
 
         //Return Error if id_prod == 0 -> ID NOT SET
-        if(conditionBean.getId_prod() == 0){ throw new InvalidParameterException(); }
+        if(idProd == 0){ throw new InvalidParameterException(); }
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
-                    con.prepareStatement("UPDATE prod_quantity SET quantity = quantity - 1 WHERE id_prod = ?");
-            ps.setInt(1, conditionBean.getId_prod());
+                    con.prepareStatement("UPDATE prod_quantity SET quantity = quantity - ? WHERE id_prod = ? AND id_cond = ?");
+            ps.setInt(1, quantity);
+            ps.setInt(2, idProd);
+            ps.setInt(3, idCond);
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+                throw new RuntimeException("Error in Changing Quantity.");
             }
         }
     }
@@ -91,9 +107,10 @@ public class ConditionDAO {
 
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps =
-                    con.prepareStatement("UPDATE prod_quantity SET quantity = ? WHERE id_prod = ?");
+                    con.prepareStatement("UPDATE prod_quantity SET quantity = ? WHERE id_prod = ? AND id_cond = ?");
             ps.setInt(1, conditionBean.getQuantity());
             ps.setInt(2, conditionBean.getId_prod());
+            ps.setInt(3, conditionBean.getId_cond());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error.");
             }
