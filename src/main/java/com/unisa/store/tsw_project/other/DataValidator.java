@@ -6,7 +6,9 @@ import java.util.Arrays;
 
 public class DataValidator {
     public enum PatternType{
-        Generic, GenericAlphaNumeric, Email, Surname, Phone, Password, CAP, Birthdate, Username, Path, Double, Int, Condition, Bool, Platform, Category;
+        Generic, GenericAlphaNumeric, Email, Surname, Phone, Password, CAP,
+        Birthdate, Username, Path, Double, Int, Condition, Bool, Platform, Category,
+        StringOnlyNumbers, DateFuture;
     }
 
     /**
@@ -58,6 +60,7 @@ public class DataValidator {
                     LocalDate date = LocalDate.parse(data);
                     yield date.isBefore(LocalDate.now().minusYears(16));
                 }
+                case DateFuture -> LocalDate.parse(data).isAfter(LocalDate.now());
                 case CAP -> data.matches("[0-9]{5,6}");
                 case Phone -> data.matches("\\+39[0-9]{8,10}");
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
@@ -74,6 +77,7 @@ public class DataValidator {
                 }
                 case GenericAlphaNumeric -> data.matches("^[a-zA-Z0-9_\\- ]+$");
                 case Generic -> data.matches("^[a-zA-Z0-9_.'&$\"\\- ]+$");
+                case StringOnlyNumbers -> data.matches("^[0-9]+$");
                 case Condition -> data.matches("[XABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
                 case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equalsIgnoreCase(e.name()));
