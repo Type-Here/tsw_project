@@ -12,6 +12,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 700px)" href="${pageContext.request.contextPath}/css/medium-size.css" />
     <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="${pageContext.request.contextPath}/css/widescreen.css" />
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/progressbar.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script src="${pageContext.request.contextPath}/js/cart-item.js" defer></script>
@@ -136,6 +137,19 @@
 
             </div>
         </aside>
+    </div>
+</div>
+
+<div id="popup" class="popup general-display-none">
+    <div  class="popup-content">
+        <div class="popup-header">
+            <h2><b>Grazie per l'acquisto!</b></h2>
+        </div>
+        <div class="popup-body">
+            <p>Il pagamento è in corso...</p>
+            <p>Quando sarà terminato sarai reindirizzato alla home</p>
+        </div>
+        <div class="progress-bar" style=" --width: 0"></div>
     </div>
 </div>
 

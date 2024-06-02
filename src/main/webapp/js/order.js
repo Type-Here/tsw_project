@@ -89,5 +89,34 @@ document.getElementById('order-button').addEventListener('click', async () =>{
     message += 'order=true';
 
     let data = await ajax(message, 'text');
-    alert(data);
+    doPresent(data);
 });
+
+
+function doPresent(data){
+    const progressBar = document.getElementsByClassName('progress-bar')[0]
+    let interval;
+    document.getElementById("popup").classList.remove('general-display-none');
+    document.getElementById("popup").classList.add('general-display-flex');
+
+    // Start the progress bar when the popup is shown
+    interval = setInterval(() => {
+        const computedStyle = getComputedStyle(progressBar)
+        const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0
+        if (width <= 100.00) {
+            progressBar.style.setProperty('--width', width + .1)
+            progressBar.setAttribute('background-position', (100 - width) + '% center')
+        } else {
+            clearInterval(interval)
+            const message = document.createElement('span');
+            message.innerHTML = data;
+            message.classList.add('message-ok');
+
+            document.getElementsByClassName('popup-body')[0].innerHTML = '';
+            document.getElementsByClassName('popup-body')[0].appendChild(message);
+            setTimeout(() => {
+                window.location.href = "index"
+            }, 2000); //1000ms = 1s
+        }
+    }, 7);
+}
