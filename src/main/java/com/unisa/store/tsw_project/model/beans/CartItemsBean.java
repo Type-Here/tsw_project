@@ -71,4 +71,17 @@ public class CartItemsBean {
 
     /* - OTHER - */
     public void addQuantity(){this.quantity++;}
+
+
+    @Override
+    public String toString() {
+        return "CartItemsBean{" +
+                "id_prod=" + id_prod +
+                ", id_cart=" + id_cart +
+                ", quantity=" + quantity +
+                ", real_price=" + real_price +
+                ", condition=" + condition +
+                ", refund=" + refund +
+                '}';
+    }
 }

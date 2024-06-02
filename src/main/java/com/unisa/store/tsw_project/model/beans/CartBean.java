@@ -78,4 +78,15 @@ public class CartBean {
         }
         this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
     }
+
+    @Override
+    public String toString() {
+        return "CartBean{" +
+                "id_cart=" + id_cart +
+                ", total=" + total +
+                ", id_client=" + id_client +
+                ", discount_code='" + discount_code + '\'' +
+                ", cartItems=" + cartItems +
+                '}';
+    }
 }

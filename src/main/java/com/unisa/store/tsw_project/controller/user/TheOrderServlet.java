@@ -158,6 +158,7 @@ public class TheOrderServlet extends HttpServlet {
 
             /* Save Order */
             ordersDAO.doSave(order);
+
             /* Update Quantity if Physical */
             for(CartItemsBean item : cart.getCartItems().values()){
                 if(!item.getCondition().equals(Data.Condition.X)){
@@ -165,6 +166,22 @@ public class TheOrderServlet extends HttpServlet {
                 }
             }
 
+
+            /* Debug */
+            if(getServletContext().getAttribute("debug") != null){
+                System.err.println("----- ORDER DEBUG [INFO]: ---- ");
+                System.out.println("- Cart: " + cart);
+                System.out.println("- Order: " + order);
+                for(CartItemsBean item : cart.getCartItems().values()){
+                    System.out.println(" - Item: " + item);
+                }
+            }
+
+
+            /* Clear Cart from Session */
+            req.getSession().removeAttribute("cart");
+
+            /* Write Message Answer */
             resp.setContentType("text/html");
             resp.getWriter().write("Acquisto Effettuato!");
             resp.getWriter().flush();

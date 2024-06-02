@@ -63,4 +63,16 @@ public class OrdersBean {
     public void setOrder_date(LocalDate order_date) {
         this.order_date = order_date;
     }
+
+
+    @Override
+    public String toString() {
+        return "OrdersBean{" +
+                "id_cart=" + id_cart +
+                ", id_client=" + id_client +
+                ", id_add=" + id_add +
+                ", status=" + status +
+                ", order_date=" + order_date +
+                '}';
+    }
 }
