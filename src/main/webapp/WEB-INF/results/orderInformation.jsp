@@ -44,7 +44,7 @@
                             </c:if>
                         </c:forEach>
                         <tr>
-                            <td><img src="${pageContext.request.contextPath}/metadata/${product.developer}/img/${product.id_prod}/0.jpg" alt="${product.name}" class="orderImage"></td>
+                            <td><img id="prodIMG" style="width: 120px; height: 120px;" src="${product.metaData.path}${product.metaData.front}" alt="${product.name}" class="orderImage"></td>
                             <td>${product.name}</td>
                             <td>${item.real_price}</td>
                             <td>${item.quantity}</td>

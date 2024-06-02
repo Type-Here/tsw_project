@@ -123,3 +123,5 @@ function refundCartItem(cartItemID, button){
     })
 }
 
+//Img loader
+//${pageContext.request.contextPath}/metadata/${product.platform}/img/${product.id_prod}/0.jpeg

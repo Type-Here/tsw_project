@@ -2,6 +2,7 @@ package com.unisa.store.tsw_project.controller.user;
 
 import com.unisa.store.tsw_project.model.DAO.*;
 import com.unisa.store.tsw_project.model.beans.*;
+import com.unisa.store.tsw_project.other.JSONMetaParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -66,6 +67,10 @@ public class LoadOrderInformationServlet extends HttpServlet {
                 }
             }
         }
+
+        //Adding path to product images
+        JSONMetaParser parser = new JSONMetaParser();
+        parser.doParseMetaData(products, getServletContext());
 
         request.setAttribute("reviews", reviews);
         request.setAttribute("cart", cart);
