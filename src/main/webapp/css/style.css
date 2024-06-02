@@ -90,6 +90,11 @@ body.body_def{
 }
 
 
+/*Hide Unorderd List Bulltes*/
+ .hide-bullets{
+    list-style-type: none;
+    padding: 0 5px;
+ }
 
 /*End Body*/
 
@@ -286,6 +291,14 @@ span.star-off::before{
 /* ----- DEFAULT STYLES FOR INPUT ELEMENTS ----- */
 
 /* Default Classes */
+
+.gen-form{
+    & label:has(:required) span::after, 
+    & span:has(+ label.required)::after {
+        content: "*";
+        color: #ad212e;
+    }
+}
 
 input[type="reset"].default, input[type="submit"].default, button.default{
     background-color:#0a78f5;
@@ -1109,7 +1122,7 @@ input#pass{
 .prod-condition-div{
     width: 100%;
     padding: 10px 20px;
-    display: flex;%
+    display: flex;
     flex-flow: row wrap;
     gap: 10px 10px;
     align-content: center;
@@ -1528,7 +1541,7 @@ aside.filter-bar{
 }
 
 
-/* ================================ CART PAGE ================================= */
+/* ================================================== CART PAGE ============================================== */
 
 /* Unused */
 .grid-container{
@@ -1591,7 +1604,12 @@ section.cart-prod-list{
         border-radius: 3px;
         width: 90%;
         max-width: 800px;
+        min-height: 150px;
         box-shadow: 1px 1px 5px 3px rgba(0,0,0,0.5);
+
+        & ul{
+            padding-left: 20px;
+        }
     }
 
 
@@ -1616,7 +1634,8 @@ section.cart-prod-list{
 
         & .item-img{
             width: 100px;
-            height: 80px;
+            height: 100px;
+            overflow: hidden;
 
             img{
                 object-fit: cover;
@@ -1754,7 +1773,7 @@ aside.side-cart-view{
     }
 }
 
-/* Div with conitnue shopping button */
+/* Div with continue shopping button */
 .continue-shopping{
     margin: 25px 10%;
 
@@ -1765,4 +1784,98 @@ aside.side-cart-view{
             color: inherit;
         }
     }
+}
+
+
+/* =================================== ORDER PAGE ================================================= */
+section.section-container{
+    padding: 30px 50px;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 30px 0;
+    flex: 3 1 300px; /*Grow Shrink Basis*/
+    align-items: center;
+    border-radius: 3px;
+    min-width: 300px;
+
+    & .cart-prod-list{
+        width: 100%;
+        padding-top: 20px;
+
+        h2 {
+            font-size: 21px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        & .cart-item{
+            flex-basis: 25%;
+            width: fit-content;
+            max-width: 300px;
+        }
+    }
+
+    .order-section-top{
+        width: 100%;
+    }
+
+    #cart, #address{
+        flex-flow: row wrap;
+        gap: 15px 20px ;
+    }
+    
+    .address-button{
+        cursor: pointer;
+        font-size: 0.95rem;
+        height: 150px;
+    
+        &:hover{
+            transform: scale(1.01);
+            transition: transform 0.2s;
+        }
+    }
+    
+    .cart-item.address-button-selected{
+        background-color: #cccccc;
+        box-shadow: 0 0 0 3px #0a78f5;
+    }
+
+    div:has(>.add-address-button){
+        display: flex;
+        flex-flow: column;
+    }
+
+    .add-address-button{
+        height: 100%;
+        min-height: 50px;
+        display: flex;
+        box-sizing: border-box;
+        align-items: stretch;
+        align-content: center;
+        font-size: 2rem;
+
+        &:hover{
+            color: #0a78f5;
+            font-weight: 500;
+        }
+    }
+
+}
+
+.payment-form{
+    border: none;
+
+    input{
+        background-color: #c0c0c0;
+        color: #121212;
+
+        &::placeholder{
+            color: #121212;
+        }
+    }
+
+    input:focus{
+        outline: 1px solid #0a78f5 !important;
+    }
+
 }
