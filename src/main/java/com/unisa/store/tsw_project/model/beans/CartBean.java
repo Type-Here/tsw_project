@@ -9,16 +9,18 @@ public class CartBean {
     private Integer id_client;
     private String discount_code;
     private Map<String,CartItemsBean> cartItems;
+    private Boolean isActive;
 
     public CartBean() {
     }
 
-    public CartBean(int id_cart, BigDecimal total, int id_client, String discount_code, Map<String, CartItemsBean> cartItems) {
+    public CartBean(int id_cart, BigDecimal total, int id_client, String discount_code, Map<String, CartItemsBean> cartItems, Boolean isActive) {
         this.id_cart = id_cart;
         this.total = total;
         this.id_client = id_client;
         this.discount_code = discount_code;
         this.cartItems = cartItems;
+        this.isActive = isActive;
     }
 
     /* - GETTERS - */
@@ -41,6 +43,8 @@ public class CartBean {
 
     public Map<String,CartItemsBean> getCartItems() {return cartItems;}
 
+    public Boolean getActive() {return isActive;}
+
     /* - SETTERS - */
 
     public void setId_cart(Integer id_cart) {
@@ -61,6 +65,8 @@ public class CartBean {
 
     public void setCartItems(Map<String,CartItemsBean> cartItems) {this.cartItems = cartItems;}
 
+    public void setActive(Boolean active) {isActive = active;}
+
     /* - OTHER - */
     public void addCartItem(CartItemsBean cartItem) {
         this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
@@ -74,6 +80,19 @@ public class CartBean {
     public void setAttribute(CartItemsBean cartItem){
         if(this.cartItems.get(cartItem.getId_prod() + cartItem.getCondition().toString())!=null){
             this.cartItems.replace(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
+            return;
+        }
+        this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
+    }
+
+    /**
+     * Add a CartItemsBean to Map. <br />
+     * If Item with same key exists replace it if replace is True, Otherwise return.
+     * @param cartItem to insert
+     */
+    public void setAttribute(CartItemsBean cartItem, boolean replace){
+        if(this.cartItems.get(cartItem.getId_prod() + cartItem.getCondition().toString())!=null){
+            if(replace) this.cartItems.replace(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
             return;
         }
         this.cartItems.put(cartItem.getId_prod() + cartItem.getCondition().toString(), cartItem);
