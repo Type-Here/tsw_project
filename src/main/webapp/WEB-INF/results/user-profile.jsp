@@ -85,19 +85,23 @@
                     </div>
                 </div>
                 <div id="section2" class="utente-content-section" style="display: none">
-                    <h2>I Miei Ordini</h2>
-                    <label id="labelID" for="order-id">Cerca Ordine per ID</label>
+                    <label id="labelID" for="order-id" style="font-size: 1.5rem">Cerca Ordine per ID</label>
                     <br>
                     <input type="text" id="order-id" name="orderID" placeholder="Search by order id" value="">
-                    <table id="orders-table">
-                        <tr>
-                            <th>ID Ordine</th>
-                            <th>Status</th>
-                            <th>Data Ordine</th>
-                            <th>Indirizzo Spedizione</th>
-                            <th>Dettagli Ordine</th>
-                        </tr>
-                    </table>
+                    <div class="utente-tableContainer">
+                        <table id="orders-table">
+                            <caption>
+                                I Miei Ordini
+                            </caption>
+                            <tr>
+                                <th>ID Ordine</th>
+                                <th>Status</th>
+                                <th>Data Ordine</th>
+                                <th>Indirizzo Spedizione</th>
+                                <th>Dettagli Ordine</th>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div id="section3" class="utente-content-section" style="display: none;">
                     <h2>Sicurezza</h2>
@@ -123,9 +127,11 @@
                     </div>
                 </div>
                 <div id="section4" class="utente-content-section" style="display: none;">
-                    <h2>Indirizzi Di Spedizione</h2>
-                    <div class="prod-table prod-reviews-internal">
+                    <div class="utente-tableContainer">
                         <table id="addresses-table" class="prod-reviews-table">
+                            <caption>
+                                Indirizzi Di Spedizione
+                            </caption>
                             <tr id="addresses-table-header">
                                 <th>Nome</th>
                                 <th>Cognome</th>
@@ -133,6 +139,7 @@
                                 <th>Citta&grave;</th>
                                 <th>Provincia</th>
                                 <th>Cap</th>
+                                <th>Rimuovi</th>
                             </tr>
                             <tr>
                                 <td></td>

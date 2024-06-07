@@ -10,10 +10,47 @@
 .orderTable {
     width: 100%;
     border-collapse: collapse;
-    background-color: #202020;
+    background-color: #323232;
     border-radius: 5px;
-    margin: 0.5rem;
 }
+
+.orderTable-container{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.orderTable caption {
+    background: hsl(0 0% 0%);
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
+.orderTable th {
+    background: hsl(0 0% 0% / 0.5);
+    color: #323232;
+    text-transform: uppercase;
+}
+
+.orderTable tr:nth-of-type(2n) {
+    background: hsl(0 0% 0% / 0.3);
+}
+
+.orderTable th, .orderTable td, .orderTable caption {
+    padding: 1rem;
+    border: 1px solid #a5a5a5;
+    text-align: center;
+}
+
+.orderImage {
+    object-fit: contain;
+    min-width: 68px;
+    min-height: 68px;
+    width: 120px;
+    max-height: 120px;
+}
+
 
 .closeModal {
     color: red;
@@ -36,12 +73,6 @@
     border-radius: 5px;
     border: 1px solid #202020;
     background-color: #a5a5a5;
-}
-
-.orderTable th, .orderTable td {
-    padding: 1rem;
-    border: 1px solid #a5a5a5;
-    text-align: center;
 }
 
 .star{
