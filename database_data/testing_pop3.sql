@@ -8,15 +8,15 @@ insert into cart (total, id_client) values
 (25.90, 1),
 (25.90, 2);
 
-insert into cart_items (id_prod, id_cart, quantity, real_price, refund) VALUES
-(1, 1, 3, 30.00, 1),
-(1, 2, 1, 30, 1),
-(2, 2, 1, 38.00, 1),
-(3, 2, 1, 70.00, 1),
-(5, 3, 1, 17.90, 1),
-(4, 3, 1, 399.00, 1),
-(7, 4, 1, 25.90, 1),
-(6, 5, 1, 25.90, 1);
+insert into cart_items (id_prod, id_cart, quantity, real_price, refund, `condition`) VALUES
+(1, 1, 3, 30.00, 1, 1),
+(1, 2, 1, 30, 1, 1),
+(2, 2, 1, 38.00, 1,1),
+(3, 2, 1, 70.00, 1,1),
+(5, 3, 1, 17.90, 1,1),
+(4, 3, 1, 399.00, 1,1),
+(7, 4, 1, 25.90, 1,1),
+(6, 5, 1, 25.90, 1,1);
 
 insert into orders (id_cart, id_client, id_add, status, order_date) values
 (1, 1, 1, 'in process', '2024-05-20'),

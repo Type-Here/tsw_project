@@ -1,4 +1,12 @@
 -- Testing Elements
+-- Condition Table Elements (Product Conditions: X = Digital)
+insert into conditions(id_cond, letter) values
+(0, 'X'),
+(1, 'A'),
+(2, 'B'),
+(3, 'C'),
+(4, 'D'),
+(5, 'E');
 
 -- 1 Product
 insert into retrogamer.products(name, price, type, platform, developer, description, metadata) values
