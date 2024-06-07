@@ -40,7 +40,7 @@ public class TheCartServlet extends HttpServlet {
         } else if(!requestType.get().equalsIgnoreCase("XMLHttpRequest")) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 
-            //If valid AJAX is sent
+        //If valid AJAX is sent
         } else {
             try {
                 answerToAjax(req, resp);
@@ -139,7 +139,7 @@ public class TheCartServlet extends HttpServlet {
                 cartBean.setId_cart(null); //Null because we don't have a valid ID from the Database Yet.
                 cartBean.setId_client(id_client); //int ID if logged - null if not
                 cartBean.setCartItems(new LinkedHashMap<>()); //Initiate HashMap ( Key: id_prod (Integer), value: CartItem )
-
+                cartBean.setActive(true); //This Flag for Current Active Cart
                 session.setAttribute("cart", cartBean);
             }
 

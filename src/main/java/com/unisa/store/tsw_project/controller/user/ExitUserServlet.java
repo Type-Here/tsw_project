@@ -20,6 +20,7 @@ public class ExitUserServlet extends HttpServlet {
 
         //User already logged or else Redirect to Home Page
         if(userAtt.isPresent()) {
+            request.getSession().removeAttribute("userlogged"); //NEEDED to UnBound Listener in UserBean!
             request.getSession().invalidate();
             Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies) {

@@ -131,23 +131,22 @@ public class TheOrderServlet extends HttpServlet {
             BigDecimal total = checkEachProduct(cart, discountValue); //Throws InvalidParameterException if some values are not valid!
             cart.setTotal(total);
 
+            /* Prepare Cart to DB Save: set Active false as it will not be the current cart anymore */
+            cart.setActive(false);
 
             // Cart is already Saved in DB if it has an ID but needs and update if user has added/removed some items
-            // If Cart is Saved: also CartItems should be already saved too but need an update.
+            // If Cart is Saved: Remove old data and save new items.
             if (cart.getId_cart() != null && cart.getId_cart() != 0) {
                 cartDao.doUpdate(cart);
-                for(Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()){
-                    item.getValue().setId_cart(cart.getId_cart());
-                    itemsDAO.doUpdate(item.getValue());
-                }
+                itemsDAO.doRemoveAllByCartID(cart);
             } else {
                 cartDao.doSave(cart);
-                for(Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()){
-                    item.getValue().setId_cart(cart.getId_cart());
-                    itemsDAO.doSave(item.getValue());
-                }
             }
 
+            for(Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()){
+                item.getValue().setId_cart(cart.getId_cart());
+                itemsDAO.doSave(item.getValue());
+            }
 
             /* (Re)Set total order price */
             order.setStatus(Data.OrderStatus.INPROCESS);
@@ -220,12 +219,13 @@ public class TheOrderServlet extends HttpServlet {
      * @return Total Price of Items in Cart with all Discount Counted
      * @throws SQLException if Queries to Retrieve Product Data fail
      */
-    private BigDecimal checkEachProduct(CartBean cart, Double discountCodeValue) throws SQLException {
+    public static BigDecimal checkEachProduct(CartBean cart, Double discountCodeValue) throws SQLException {
         BigDecimal total = new BigDecimal(0);
         ProductDAO productDAO = new ProductDAO();
 
         for(Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()){
             CartItemsBean cartItem = item.getValue();
+            cartItem.setRefund(1); // 1 is for Bought Element
             ProductBean p = productDAO.doRetrieveById(cartItem.getId_prod());
 
             /* Check for the Product and its applied Discount */
