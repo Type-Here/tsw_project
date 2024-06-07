@@ -9,7 +9,7 @@ public class CartItemsBean {
     private int id_cart;
     private int quantity;
     private BigDecimal real_price;
-    private Data.Condition condition; //NB NOT SAVED IN DATABASE! Used for Session Data Only!
+    private Data.Condition condition; //NB NOW SAVED IN DATABASE!
     private Integer refund;
 
     public CartItemsBean() {
