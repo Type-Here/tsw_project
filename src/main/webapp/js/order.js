@@ -74,6 +74,9 @@ Array.from(payForm.getElementsByTagName('input')).forEach(input =>{
 
 /**
  * Order Button Listener
+ * Collect Data from user (address and payment details) <br />
+ * Send Purchase order to server. <br />
+ * Show Status Popup <br />
  */
 document.getElementById('order-button').addEventListener('click', async () =>{
     let form = new FormData(payForm);
@@ -83,7 +86,7 @@ document.getElementById('order-button').addEventListener('click', async () =>{
     });
 
     let addDiv = document.getElementsByClassName('address-button-selected')[0];
-    let idAdd =addDiv.getElementsByTagName('input')[0].value;
+    let idAdd = addDiv.getElementsByTagName('input')[0].value;
 
     message += 'address=' + idAdd + '&';
     message += 'order=true';
@@ -93,6 +96,11 @@ document.getElementById('order-button').addEventListener('click', async () =>{
 });
 
 
+/**
+ * Presents a Popup to imitate a Payment. Then shows data as text.
+ * Last Redirects to Index Page
+ * @param data message from server to show
+ */
 function doPresent(data){
     const progressBar = document.getElementsByClassName('progress-bar')[0]
     let interval;
@@ -116,7 +124,7 @@ function doPresent(data){
             document.getElementsByClassName('popup-body')[0].appendChild(message);
             setTimeout(() => {
                 window.location.href = "index"
-            }, 2000); //1000ms = 1s
+            }, 2500); //1000ms = 1s
         }
     }, 7);
 }

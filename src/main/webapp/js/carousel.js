@@ -17,9 +17,9 @@ function carousel_changeimg(caller){
     // Get number of clicked thumbnail
     let slide_number = parseInt(caller.id.slice(-1));
     /* Set new active thumbnail */
-    caller.labels[0].childNodes[0].classList.add('active-thumbnail'); 
+    caller.labels[0].children[0].classList.add('active-thumbnail');
     
-    /* Beahiour on < 700 width: scroll container to correct position of slide */
+    /* Behaviour on < 700 width: scroll container to correct position of slide */
     if(screen.width < 700){
         const slide_width = document.getElementsByClassName('carousel-slide')[0].offsetWidth;
         document.getElementsByClassName('carousel')[0].scrollLeft = slide_width * (slide_number-1);
@@ -41,7 +41,7 @@ function prepare_function(){
     
     /**
      * Sync Radio Button to .carousel container Scroll View; 
-     * added to boby on load 
+     * added to body on load
      */
     document.getElementsByClassName('carousel')[0].addEventListener("scroll", function(){
         const slide_width = document.getElementsByClassName('carousel-slide')[0].offsetWidth;
