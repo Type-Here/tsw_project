@@ -17,6 +17,13 @@ create table products (
     primary key (id_prod)
 );
 
+-- Tabella Condition
+create table conditions(
+    id_cond int primary key,
+    letter char(1) not null
+);
+
+
 -- Tabella Quantità per condizione
 create table prod_quantity (
     id_prod int not null,
@@ -91,6 +98,7 @@ create table cart(
     total decimal(6,2) not null,
     id_client int not null,
     discount_code varchar(15),
+    active boolean,
     foreign key (id_client) references users(id_client),
     primary key (id_cart)
 );
@@ -103,7 +111,9 @@ create table cart_items (
     quantity int not null,
     real_price decimal(6,2) not null,
     refund int,
+    `condition` int not null,
     foreign key (id_cart) references cart(id_cart),
+    foreign key (`condition`) references conditions(id_cond),
     primary key (id_prod, id_cart)
 );
 
