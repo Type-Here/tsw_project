@@ -43,6 +43,10 @@ public class ConsoleDispatcherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Verify User /* TODO Remind Admin incorrect method */
         this.verifyAdminUser(req);
+        Optional<String> addedProd = Optional.ofNullable(req.getParameter("added"));
+        if(addedProd.isPresent() && addedProd.get().equals("true")){
+            req.setAttribute("upload", true);
+        }
         req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
     }
 

@@ -63,7 +63,7 @@ public class LoginAdminServlet extends HttpServlet {
             session.setAttribute("user", admin.getUser());
             session.setAttribute("admin", true);
             session.setAttribute("valid", true);
-            req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/console");
 
         } catch (SQLException e) {
             req.getRequestDispatcher("/WEB-INF/errors/error.jsp").forward(req, resp);

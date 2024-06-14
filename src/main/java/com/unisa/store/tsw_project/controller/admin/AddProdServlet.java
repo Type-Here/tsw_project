@@ -144,9 +144,10 @@ public class AddProdServlet extends HttpServlet {
             productDAO.doUpdate(p);
 
             /* Set attribute to true to display info of saved file */
-            req.setAttribute("upload", true);
+            //req.setAttribute("upload", true);
             /*Product is saved, Dispatch to view */
-            req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
+            //req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/console?added=true");
 
         } catch (SQLException | IOException e){
             throw new RuntimeException(e);
