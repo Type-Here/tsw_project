@@ -67,7 +67,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <label>Quantità:
-                                            <select>
+                                            <select class="quantity-select" data-item="${item.value.id_prod}" data-cond="${item.value.condition.dbValue}">
                                                 <c:forEach var="i" begin="1" end="${item.value.quantity}">
                                                     <option <c:if test="${i == item.value.quantity}">selected</c:if> >${i}</option>
                                                 </c:forEach>

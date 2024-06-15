@@ -16,7 +16,9 @@ async function ajax(message, responseType = 'text'){
 }
 
 
-
+/**
+ * Listener to Remove Buttons to remove Item from Cart
+ */
 Array.from(document.getElementsByClassName('remove-item')).forEach( btn =>{
     btn.addEventListener('click', async () =>{
         const message = 'option=removeFromCart&key=' + btn.value;
@@ -49,15 +51,36 @@ Array.from(document.getElementsByClassName('remove-item')).forEach( btn =>{
                 title.innerHTML = 'Prodotti in Carrello: ' + counter.innerHTML;
             }
 
-            let priceMsg = 'option=requestNewPrice';
-            const price = await ajax(priceMsg, 'json');
-            if(!price) return;
-
-            document.getElementsByClassName('subtotal')[0].children[1].innerHTML = price[0].toFixed(2) + '&euro;';
-            document.getElementsByClassName('total')[0].children[1].innerHTML = price[1].toFixed(2) + '&euro;'
+            await updatePrice();
 
         } catch (e){
             console.error(e);
         }
     });
 });
+
+
+Array.from(document.getElementsByClassName('quantity-select')).forEach(select =>{
+   select.addEventListener('change', async function (){
+       let id = this.getAttribute('data-item');
+       let condition = this.getAttribute('data-cond');
+       let quantity = this.value;
+       let message = 'option=addToCart&condition=' + condition + '&id_prod=' + id + '&quantity=' + quantity;
+       try{
+          await ajax(message, 'json');
+          await updatePrice();
+       } catch (error){
+           alert("OPS... Something Went Wrong:");
+       }
+   });
+});
+
+
+async function updatePrice(){
+    let priceMsg = 'option=requestNewPrice';
+    const price = await ajax(priceMsg, 'json');
+    if(!price) return;
+
+    document.getElementsByClassName('subtotal')[0].children[1].innerHTML = price[0].toFixed(2) + '&euro;';
+    document.getElementsByClassName('total')[0].children[1].innerHTML = price[1].toFixed(2) + '&euro;'
+}

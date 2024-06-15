@@ -60,7 +60,7 @@ public class TheCartServlet extends HttpServlet {
     /**
      * Answer to AJAX Request to Cart Operations <br />
      * Operations: <br /><ul>
-     * <li>addToCart: add item to cart: required id_prod, id_condition</li>
+     * <li>addToCart: add item to cart / update its quantity (no remove): required id_prod, id_condition</li>
      * <li>removeFromCart: remove item from cart if exist: required id_prod, id_condition</li>
      * <li>Others TODO </li>
      * </ul>
@@ -70,7 +70,7 @@ public class TheCartServlet extends HttpServlet {
      * @throws IOException if IO fails (i.e. sendError)
      * @throws com.unisa.store.tsw_project.other.exceptions.InvalidParameterException if some required parameter is not valid
      */
-    private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+    synchronized private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         Optional<String> option = Optional.ofNullable(req.getParameter("option"));
         if(option.isEmpty()){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No option set");
@@ -89,7 +89,9 @@ public class TheCartServlet extends HttpServlet {
     }
 
     /**
-     * Add Item to Cart or Update its Quantity. Private method only AJAX
+     * Add Item to Cart or Update its Quantity. Private method only AJAX <br />
+     * Send Optional Parameter quantity to update to a specific quantity.
+     * If no 'quantity' request param is available update to current Item + 1 (only physical products)
      * @param req to get parameters from
      * @param resp to set OK Answer or Error code + message
      * @throws IOException if IO fails (i.e. sendError)
@@ -104,12 +106,18 @@ public class TheCartServlet extends HttpServlet {
             //Retrieve Product ID from Request and validate it
             Optional<String> id = Optional.ofNullable(req.getParameter("id_prod"));
             Optional<String> id_condition = Optional.ofNullable(req.getParameter("condition"));
+            //Can be Null - Used only to Add More Products on Select Input!
+            Optional<String> quantity = Optional.ofNullable(req.getParameter("quantity"));
+
             if (id.isEmpty() || id_condition.isEmpty()) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No id or condition set");
                 return;
             }
-            validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
-            validator.validatePattern(id_condition.get(), DataValidator.PatternType.Int, 0, 5);
+
+            //NB To remove item use Remove Request instead
+            quantity.ifPresent(s -> validator.validatePattern(s, DataValidator.PatternType.Int, 1, null)); //Check only if Present - No values less than 1!
+            validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null); //Required Always Check
+            validator.validatePattern(id_condition.get(), DataValidator.PatternType.Int, 0, 5); //Required
 
             Data.Condition condition_requested = Data.Condition.getEnum(Integer.parseInt(id_condition.get()));
             if(condition_requested == null) {
@@ -149,6 +157,8 @@ public class TheCartServlet extends HttpServlet {
             // Get CartItem from Cart or Create a New One
             CartItemsBean item = Optional.ofNullable(cart.getCartItems().get(productBean.getId_prod() + condition_requested.toString() )).orElse(new CartItemsBean());
 
+            // Set Quantity to Update to Quantity Requested or Current Cart + 1 based on Request
+            int quantityRequested = quantity.map(Integer::parseInt).orElseGet(() -> item.getQuantity() + 1);
 
             //VALIDATION: Check for Quantity only on Physical Products! getType: false=physical, true=digital
             if(!productBean.getType()) {
@@ -158,10 +168,11 @@ public class TheCartServlet extends HttpServlet {
                 int quantityConditionLeft = productBean.getConditions().stream()
                         .filter(condBean -> condBean.getCondition().equals(condition_requested)).findFirst()
                         .orElseThrow(() -> new InvalidParameterException("Invalid Condition")).getQuantity();
+
                 if (quantityConditionLeft <= 0) {
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This specific product is unavailable");
                     return;
-                } else if(quantityConditionLeft < item.getQuantity() + 1){
+                } else if(quantityConditionLeft < quantityRequested){
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to add more quantity to cart");
                     return;
                 }
@@ -169,7 +180,7 @@ public class TheCartServlet extends HttpServlet {
 
             //Set ItemAttributes
             item.setId_prod(productBean.getId_prod());
-            item.addQuantity();
+            item.setQuantity(quantityRequested);
             item.setCondition(condition_requested);
 
 
@@ -190,9 +201,9 @@ public class TheCartServlet extends HttpServlet {
             //resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
 
         } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 1");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: Not a Number");
         } catch (NullPointerException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: 2");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: Null");
         } catch (InvalidParameterException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
@@ -205,7 +216,7 @@ public class TheCartServlet extends HttpServlet {
      * @param resp to send response status / message
      * @throws IOException if response writing fails
      */
-    private void removeFromCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    synchronized private void removeFromCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<String> key = Optional.ofNullable(req.getParameter("key"));
         DataValidator validator = new DataValidator();
 
