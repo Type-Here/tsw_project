@@ -34,6 +34,10 @@ public interface Data {
             return null;
         }
 
+        public int getDbValue() {
+            return this.dbValue;
+        }
+
         public String getDescription() {
             return description;
         }
