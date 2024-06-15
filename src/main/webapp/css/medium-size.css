@@ -18,7 +18,10 @@
         align-items: center;
         justify-content: center;
     }
-    
+
+    .log_form span{
+        max-width: 80px;
+    }
 
 
     /* ================= UPPER MENU BAR ======================== */
@@ -253,4 +256,26 @@
     }
 
 
+}
+
+
+/* ============================ FORM ONLY - MAX 500PX / 600PX ======================================= */
+@media only screen and (max-width: 500px) {
+    .log_form span{
+        text-align: center;
+        flex-basis: 100%;
+        max-width: 300px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .log_form .alternative-row{
+        flex-flow: row wrap;
+
+        span{
+            flex-basis: 100%;
+            text-align: center;
+            max-width: 300px;
+        }
+    }
 }

@@ -1051,7 +1051,9 @@ ul.carousel-thumbnails{
         width: 100%;
     }
 
-    & label span {min-width: 70px;}
+    & label span {
+        min-width: 70px;
+    }
 
     & .form-row{
         flex-flow: row wrap;
@@ -1073,6 +1075,15 @@ ul.carousel-thumbnails{
     /* Overrides previous spacing - Every FieldSet that doesn't have a submit type input */
     & .form-row.flex-start-row{
         justify-content: flex-start;
+    }
+
+    & .alternative-row{
+        & span{
+            display: inline-block;
+        }
+
+        flex-flow: row nowrap;
+        width: auto;
     }
 
 }
