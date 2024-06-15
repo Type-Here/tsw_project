@@ -206,7 +206,8 @@ hr{
     border-radius: 50%;
     outline: 3px solid #59595940;
     background-color: #59595940;
-    margin: auto 5px;   
+    margin: auto 8px;
+    width: 28px;
 }
 
 .general_icon:hover{
@@ -215,6 +216,21 @@ hr{
     transform: scale(1.1);
     transition: all 0.2s;
     cursor: pointer;
+}
+
+.userLoggedIcon{
+    min-width: 28px;
+    width: 30px;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    box-shadow: 0 0 3px 2px #121212;
+    cursor: pointer;
+
+    &:hover{
+        transition: all 0.2s ease-out;
+        transform: scale(1.05);
+        box-shadow: 0 0 1px 1px #121212;
+    }
 }
 
 .menu_icon {
@@ -461,6 +477,10 @@ div.upper_bar{
     z-index: 2;
     box-shadow: 0 0 5px 1px rgba(10,10,10,0.4);
 
+    figure{
+        margin: 0;
+    }
+
     & .upper-logo-name{
         display: flex;
         align-content: center;
@@ -585,6 +605,75 @@ div.upper_bar li {
     font-size: 12px;
     box-shadow: 0 0 1px 1px rgba(0,0,0,0.3);
 }
+
+
+/* -------------------- UPPER BAR LOGGED USER ----------------------------- */
+#userMenu{
+    position: relative;
+}
+
+#user-menu-div{
+    position: absolute;
+    min-width: 200px;
+    min-height: 100px;
+    background-color: #f5f5f5;
+    right: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 2px 2px #000000b8;
+    color: #121212;
+    padding: 0;
+
+    & hr{
+        margin: 0 auto;
+        border: none;
+        border-bottom: 1px solid #202020;
+        width: 80%;
+    }
+
+    & h4{
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        color: #f5f5f5;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        background-color: #0a78f5;
+        line-height: 2rem;
+    }
+
+    & nav{
+        padding: 0;
+        display: flex;
+        flex-flow: column;
+        color: #121212;
+        border-radius:inherit;
+    }
+
+    & span{
+        line-height: 2rem;
+        padding: 0 20px;
+
+        &:hover{
+            background-color: #CCCCCC;
+        }
+
+        &:last-child:hover{
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+        }
+    }
+
+    & a{
+        color: #121212;
+    }
+
+    & .logout{
+        cursor: pointer;
+    }
+}
+
+
+
 
 /* ==================== MAIN PAGE CAROUSEL ================== */
 

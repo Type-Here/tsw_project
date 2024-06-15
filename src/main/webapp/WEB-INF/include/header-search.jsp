@@ -34,7 +34,20 @@
         </span>
         <c:choose>
             <c:when test="${not empty userlogged}">
-                <a href="${pageContext.request.contextPath}/user-profile"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Area Utente" class="general_icon"></span></a>
+                <figure id="userMenu">
+                    <img src="${pageContext.request.contextPath}/img/user/Konqi.png" alt="Area Utente" title="Il mio account" class="userLoggedIcon">
+                    <div id="user-menu-div" tabindex="0">
+                        <h4>Ciao ${userlogged.firstname}!</h4>
+                        <nav>
+                            <span><a href="${pageContext.request.contextPath}/user-profile">Il mio Profilo</a></span>
+                            <hr />
+                            <span><a href="${pageContext.request.contextPath}/user-profile">I miei Ordini</a></span>
+                            <hr />
+                            <span class="logout"><a href="${pageContext.request.contextPath}/exit-user">Logout</a></span>
+                        </nav>
+                    </div>
+                </figure>
+                <script src = "${pageContext.request.contextPath}/js/user-menu.js" rel="text/javascript"></script>
             </c:when>
             <c:otherwise>
                 <a href="${pageContext.request.contextPath}/user-login"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>

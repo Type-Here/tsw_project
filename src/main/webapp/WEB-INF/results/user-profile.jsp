@@ -49,7 +49,7 @@
                                     <input id="surname" name="surname" type="text" value="${userlogged.lastname}"  required pattern="^[a-zA-Z']{3,}$" />
                                 </label>
                                 <label class="form-row" for="phone"><span>Numero di Telefono</span>
-                                    <input id="phone"  type="tel" name="phone" value="${userlogged.telephone}" required pattern="+39[0-9]{8,10}"/>
+                                    <input id="phone"  type="tel" name="phone" value="${userlogged.telephone}" required pattern="\+39[0-9]{8,10}"/>
                                 </label>
                                 <label class="form-row" for="birth"><span>Data di Nascita</span>
                                     <input id="birth" name="birthdate" type="date" value="${userlogged.birth}" required />
@@ -61,7 +61,7 @@
                             <fieldset class="address-data">
                                 <label class="" for="road-type"><span>Indirizzo</span>
                                     <input id="address" type="hidden" value="${userlogged.address}">
-                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^{3,}$" />
+                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-Z']{3,}$" />
                                     <input id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-Z'\s\-]{3,}$" />
                                     <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[\w]+$" />
                                 </label>
