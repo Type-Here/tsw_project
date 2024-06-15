@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -52,7 +53,7 @@
                 </label>
             </fieldset>
             <fieldset class="address-data">
-                <label class="" for="road-type"><span>Indirizzo</span>
+                <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
                     <input class="free-size" id="road-type" type="text" name="road-type" size="5" placeholder="Via" required pattern="^{3,}$" />
                     <input id="road-name" type="text" name="road-name" placeholder="Giovanni Paolo" required pattern="^[a-zA-Z'\s\-]{3,}$" />
                     <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[\w]+$" />

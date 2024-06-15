@@ -47,7 +47,7 @@
             <fieldset class="form-row centerized-row"><a href="#">Password Dimenticata?</a></fieldset>
             <fieldset class="form-row">
                 <input class="default" type="submit" value="Login">
-                <a href="${pageContext.request.contextPath}/jsp/register.jsp"><button type="button" class="default alternative" value="register" name="method" formnovalidate>Registrati</button></a>
+                <a href="${pageContext.request.contextPath}/user-register"><button type="button" class="default alternative" value="register" name="method" formnovalidate>Registrati</button></a>
             </fieldset>
         </form>
     </div>
