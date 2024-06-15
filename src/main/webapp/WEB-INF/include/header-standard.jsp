@@ -33,8 +33,8 @@
         <c:choose>
             <c:when test="${not empty userlogged}">
                 <figure id="userMenu">
-                    <img src="${pageContext.request.contextPath}/img/user/Konqi.png" alt="Area Utente" title="Il mio account" class="userLoggedIcon">
-                    <div id="user-menu-div" tabindex="0">
+                    <img src="${pageContext.request.contextPath}/img/user/Konqi.png" alt="Area Utente" tabindex="0" title="Il mio account" class="userLoggedIcon">
+                    <div class="general-display-none" id="user-menu-div" tabindex="0">
                         <h4>Ciao ${userlogged.firstname}!</h4>
                         <nav>
                             <span><a href="${pageContext.request.contextPath}/user-profile">Il mio Profilo</a></span>

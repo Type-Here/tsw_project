@@ -10,7 +10,7 @@ document.getElementsByClassName('userLoggedIcon')[0].addEventListener('click', (
     if(userMenu.classList.contains('general-display-none')){
         userMenu.classList.remove('general-display-none');
         userMenu.focus({preventScrollable:true, focusVisible:false}); //Options valid, ignore ide warnings
-    } else{
+    } else {
         userMenu.classList.add('general-display-none');
     }
 });
@@ -18,4 +18,13 @@ document.getElementsByClassName('userLoggedIcon')[0].addEventListener('click', (
 /**
  * Hide menu div on Focus Out
  */
-document.getElementById('user-menu-div').addEventListener('blur', function (){this.classList.add('general-display-none')});
+document.getElementById('user-menu-div').addEventListener('blur', function (event){
+    // if the blur was caused by outside:
+    // currentTarget is the parent element
+    // relatedTarget is the clicked element
+    //Ignore if Icon Element is clicked (icon must be focusable -- added tabindex="0" as attribute
+    if (!event.target.contains(event.relatedTarget) &&
+        event.relatedTarget !== document.getElementsByClassName('userLoggedIcon')[0]) {
+        this.classList.add('general-display-none');
+    }
+});
