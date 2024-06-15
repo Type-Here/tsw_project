@@ -37,7 +37,7 @@
                 <a href="${pageContext.request.contextPath}/user-profile"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Area Utente" class="general_icon"></span></a>
             </c:when>
             <c:otherwise>
-                <a href="${pageContext.request.contextPath}/jsp/login.jsp"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>
+                <a href="${pageContext.request.contextPath}/user-login"><span><img src="${pageContext.request.contextPath}/img/icons/account_circle.svg" alt="Accedi o Registrati" class="general_icon"></span></a>
             </c:otherwise>
         </c:choose>
     </div>

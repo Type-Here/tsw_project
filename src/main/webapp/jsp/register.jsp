@@ -71,7 +71,7 @@
             </fieldset>
             <fieldset class="form-row">
                 <input class="default" type="submit" value="Register">
-                <a href="${pageContext.request.contextPath}/jsp/login.jsp"><button type="button" class="default alternative" value="Login" name="method">Login</button></a>
+                <a href="${pageContext.request.contextPath}/user-login"><button type="button" class="default alternative" value="Login" name="method">Login</button></a>
             </fieldset>
         </form>
     </div>

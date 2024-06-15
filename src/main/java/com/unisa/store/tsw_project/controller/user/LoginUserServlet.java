@@ -44,7 +44,7 @@ public class LoginUserServlet extends HttpServlet{
         if(password.isEmpty() || email.isEmpty()){
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/results/login.jsp").forward(request, response);
             return;
         }
 
@@ -58,33 +58,40 @@ public class LoginUserServlet extends HttpServlet{
 
         try {
             userBean = userDAO.getUserByEmail(email.get());
-            if (userBean == null){
-                request.getSession().invalidate();
-                request.setAttribute("invalidUser", true);
-                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-                return;
-            }
-            if(userDAO.checkPassword(password.get(), userBean.getId_cred())){
+            String address = "WEB-INF/results/login.jsp"; //Default send to login page
+
+            if(userBean != null && userDAO.checkPassword(password.get(), userBean.getId_cred())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userlogged", userBean);
 
                 //Cookie
                 setUserCookies(request, response, userBean);
-
-                request.getRequestDispatcher("/index").forward(request, response);
-                return;
-
+                address = "/index";
             } else {
                 request.getSession().invalidate();
                 request.setAttribute("invalidUser", true);
-                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-                return;
             }
+            request.getRequestDispatcher(address).forward(request, response);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        if (req.getSession().getAttribute("userlogged") != null){
+            resp.sendRedirect(req.getContextPath() + "/index");
+            return;
+        }
+        req.getRequestDispatcher("/WEB-INF/results/login.jsp").forward(req, resp);
+    }
+
+
+
+    /* ------------------------------------- OTHER METHODS ------------------------------------------- */
+
+
 
     private static final String ALGORITHM = "AES";
     //private static final byte[] KEY = "8pipp8pipp8pipp8".getBytes(); //Key for cipher 16, 24 or 32 byte
