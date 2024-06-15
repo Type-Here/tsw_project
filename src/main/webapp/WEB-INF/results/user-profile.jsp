@@ -18,7 +18,7 @@
 
 <%@include file="/WEB-INF/include/header-standard.jsp"%>
 
-<div class="main_home">
+<div class="main_home" id="home_profile">
 
     <div class="utente-container">
         <div class="utente-header"><hr><h1 id="username">Bentornato ${userlogged.firstname}</h1><hr></div>
@@ -33,7 +33,7 @@
                 </ul>
             </div>
 
-            <form id="logout" action="${pageContext.request.contextPath}/exit-user" method="post" style="display: none;"></form>
+            <form id="logout" action="${pageContext.request.contextPath}/exit-user" method="post" class="general-display-none"></form>
 
             <div class="utente-main-content">
                 <div id="section1" class="utente-content-section">
@@ -59,10 +59,10 @@
                                 </label>
                             </fieldset>
                             <fieldset class="address-data">
-                                <label class="" for="road-type"><span>Indirizzo</span>
+                                <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
                                     <input id="address" type="hidden" value="${userlogged.address}">
                                     <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-Z']{3,}$" />
-                                    <input id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-Z'\s\-]{3,}$" />
+                                    <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-Z'\s\-]{3,}$" />
                                     <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[\w]+$" />
                                 </label>
                                 <label class="form-row" for="city"><span>Citt&agrave;</span>
@@ -157,7 +157,7 @@
                         <form action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input id="form2" type="hidden" name="section" value="four">
                             <fieldset class="address-data">
-                                <label class="" for="road-type"><span>Indirizzo</span>
+                                <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
                                     <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
                                            required
                                            pattern="^{3,}$"/>
@@ -168,7 +168,7 @@
                                 </label>
                                 <label class="form-row" for="city2"><span>Citt&agrave;</span>
                                     <input id="city2" name="city2" type="text" placeholder="Città" required
-                                           pattern="^[a-zA-Z'\s\-]{3,}$"/>
+                                           pattern="^[a-zA-Z'\- ]{3,}$"/>
                                 </label>
                                 <div class="form-row centerized-row">
                                     <label class="" for="cap"><span>CAP</span>

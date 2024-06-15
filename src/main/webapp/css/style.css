@@ -1078,12 +1078,12 @@ ul.carousel-thumbnails{
     }
 
     & .alternative-row{
+        flex-flow: row nowrap;
+        width: auto;
+
         & span{
             display: inline-block;
         }
-
-        flex-flow: row nowrap;
-        width: auto;
     }
 
 }
@@ -1091,6 +1091,7 @@ ul.carousel-thumbnails{
 /* ---- Register Form Overrides ---- */
 .reg_form{
     max-width: 800px;
+    margin: 0 auto;
 }
 
 .log_form form{

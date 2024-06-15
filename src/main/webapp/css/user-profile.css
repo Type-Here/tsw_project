@@ -51,10 +51,11 @@ th, td, caption {
 }
 
 .utente-header{
-    width: 100%;
+    width: calc(88% - 16px);
     text-align: center;
     margin-bottom: 20px;
     order: 1;
+    align-self: self-end;
 }
 
 .utente-content-wrapper {
@@ -164,7 +165,12 @@ th, td, caption {
     text-align: center; /* Allinea il testo al centro nelle celle della tabella */
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
+    .utente-header{
+        width: 100%;
+        align-self: center;
+    }
+
     .utente-sidebar ul.utente-nav {
         flex-direction: row;
     }
@@ -202,5 +208,21 @@ th, td, caption {
 
     .utente-sidebar ul.utente-nav {
         min-width: fit-content;
+    }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1000px) {
+    #home_profile{
+        margin: 5%;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #home_profile{
+        width: 100%;
+        box-sizing: border-box;
+        div{
+            box-sizing: border-box;
+        }
     }
 }
