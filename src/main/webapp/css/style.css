@@ -184,7 +184,7 @@ hr{
     opacity: .8;
     position: absolute;
     overflow: hidden;
-    z-index: 3; 
+    z-index: 10;
     display: none;  
 }
 
@@ -243,7 +243,7 @@ hr{
 .menu_icon {
     /*display: none; */ /*WideScreen Rule*/
     position: relative;
-    z-index: 5;
+    z-index: 11;
     transition: transform 0.4s;
 } 
 
@@ -336,6 +336,10 @@ input[type="reset"].default, input[type="submit"].default, button.default{
         background-color: #1d80f1;
         transform: scale(1.05);
     }
+}
+
+button.default:not(.alternative,.yellow){
+    text-shadow: 1px 1px 5px black;
 }
 
 input[type="reset"].default:disabled,
@@ -481,7 +485,7 @@ div.upper_bar{
     border-bottom-right-radius: 10px;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 9;
     box-shadow: 0 0 5px 1px rgba(10,10,10,0.4);
 
     figure{

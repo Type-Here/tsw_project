@@ -37,12 +37,12 @@
                 <ul class="img-container-front-inside">
                     <li class="img-container-front-slide"><img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" /></li>
                     <c:forEach items="${product.metaData.gallery}" var="img">
-                        <li class="img-container-front-slide"><img class="prod-front-image" src="${product.metaData.path}${img}" alt="front image" /></li>
+                        <li class="img-container-front-slide"><img class="prod-front-image" src="${product.metaData.path}${img}" alt="gallery image" /></li>
                     </c:forEach>
                 </ul>
             </div>
-            <svg class="img-container-arrow left-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
-            <svg class="img-container-arrow right-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+            <svg aria-label="left-arrow-slideshow" class="img-container-arrow left-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+            <svg aria-label="right-arrow-slideshow" class="img-container-arrow right-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
 
         </section>
         <div class="prod-overview">
