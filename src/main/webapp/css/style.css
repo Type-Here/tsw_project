@@ -1202,6 +1202,7 @@ input#pass{
     justify-content: center;   
 }
 
+/*Section*/
 #gallery{
     width: 60%;
     padding: 0;
@@ -1211,6 +1212,7 @@ input#pass{
     margin: 20px 50px;
 }
 
+/* Main Container windowing the slideshow */
 .img-container-front{
     flex-direction: column;
     align-items: flex-start;
@@ -1225,12 +1227,14 @@ input#pass{
     max-height: 620px;
     margin: 0;
     display: flex;
+    border-radius: 5px;
 
     &:hover{
         box-shadow: 0 0 2px 2px rgba(0,0,0,0.5);;
     }
 }
 
+/* Loading Slider to temporize slideshow timeout */
 .slider-container{
     position: relative;
     top:10px;
@@ -1254,6 +1258,7 @@ input#pass{
     height: 100%;
     margin: 0;
     overflow: hidden;
+    background-color: #20202085;
 }
 
 /* li - Single Image Container */
