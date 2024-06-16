@@ -1134,6 +1134,8 @@ input#pass{
 /* Error if Username or Password are wrong */
 .invalid-credentials{
     color: #ad212e;
+    font-size: 1.01rem;
+    text-align: center;
 }
 
 

@@ -42,7 +42,7 @@
     </div>
     <c:if test="${not empty invalidUser}">
         <div class="invalid-credentials">
-            <span>Username o Password errati. Riprovare</span>
+            <span>${errorMessage}</span>
         </div>
     </c:if>
 </div>

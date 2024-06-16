@@ -2,6 +2,7 @@ package com.unisa.store.tsw_project.controller.admin;
 
 import com.unisa.store.tsw_project.model.DAO.AdminDAO;
 import com.unisa.store.tsw_project.model.beans.AdminBean;
+import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
@@ -23,6 +24,12 @@ public class LoginAdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
         Optional<Object> validAtt = Optional.ofNullable(req.getSession().getAttribute("valid"));
+        Optional<UserBean> userBean = Optional.ofNullable((UserBean) req.getSession().getAttribute("userlogged"));
+
+        if(userBean.isPresent()){
+            respondInvalidUser(req, resp, "Please Log Off from User Account First");
+            return;
+        }
 
         //Admin already logged - Redirect to Admin Page
         if(adminAtt.isPresent() && validAtt.isPresent()){
@@ -36,7 +43,7 @@ public class LoginAdminServlet extends HttpServlet {
         AdminDAO adminDAO = new AdminDAO();
 
         if(pass.isEmpty() || user.isEmpty()) {
-            respondInvalidUser(req, resp);
+            respondInvalidUser(req, resp, "All Data Required");
             return;
         }
 
@@ -48,14 +55,14 @@ public class LoginAdminServlet extends HttpServlet {
             Optional<String[]> data = Optional.ofNullable(adminDAO.doRetrieveSaltAndHash(user.get()));
 
             if(data.isEmpty()){
-                respondInvalidUser(req, resp);
+                respondInvalidUser(req, resp, "Invalid username or password");
                 return;
             }
 
             admin = new AdminBean(user.get(), pass.get() + data.get()[0]);
 
             if(!admin.getPass().equals(data.get()[1])) {
-                respondInvalidUser(req, resp);
+                respondInvalidUser(req, resp, "Invalid username or password");
                 return;
             }
 
@@ -68,15 +75,16 @@ public class LoginAdminServlet extends HttpServlet {
         } catch (SQLException e) {
             req.getRequestDispatcher("/WEB-INF/errors/error.jsp").forward(req, resp);
         } catch (InvalidParameterException e){
-            respondInvalidUser(req, resp);
+            respondInvalidUser(req, resp, e.getMessage());
         }
 
     }
 
-    private void respondInvalidUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().invalidate(); //To be sure, to be sure
+    private void respondInvalidUser(HttpServletRequest req, HttpServletResponse resp, String message) throws ServletException, IOException {
+        //req.getSession().invalidate(); //To be sure, to be sure
+        req.setAttribute("errorMessage", message);
         req.setAttribute("invalidUser", true);
-        req.getRequestDispatcher("admin-login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/admin/admin-login.jsp").forward(req, resp);
     }
 
 
