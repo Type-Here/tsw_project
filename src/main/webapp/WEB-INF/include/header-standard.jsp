@@ -13,8 +13,8 @@
     <ul class="nav">
         <li class="this-page"><a href="${pageContext.request.contextPath}/">Home</a></li>
         <li><a href="${pageContext.request.contextPath}/store">Catalogo</a></li>
-        <li><a href="${pageContext.request.contextPath}/jsp/aboutus.jsp">Chi Siamo</a></li>
-        <li><a href="${pageContext.request.contextPath}/jsp/assistance.jsp">Assistenza</a></li>
+        <li><a href="${pageContext.request.contextPath}/about-us">Chi Siamo</a></li>
+        <li><a href="${pageContext.request.contextPath}/assistance">Assistenza</a></li>
         <li><a href="${pageContext.request.contextPath}/newsletter">Newsletter</a></li>
     </ul>
     <div class="upper-bar-right">

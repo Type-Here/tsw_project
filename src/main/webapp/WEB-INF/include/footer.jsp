@@ -4,8 +4,8 @@
         <img src="${pageContext.request.contextPath}/img/icons/share.svg" alt="Share Button" class="general_icon" />
     </div>
     <div class="ft-links">
-        <a href="${pageContext.request.contextPath}/jsp/aboutus.jsp">Chi Siamo</a>
-        <a href="${pageContext.request.contextPath}/jsp/assistance.jsp">Assistenza</a>
+        <a href="${pageContext.request.contextPath}/about-us">Chi Siamo</a>
+        <a href="${pageContext.request.contextPath}/assistance">Assistenza</a>
     </div>
     <div class="ft-copy">
         <p>&#169; 2024, RetroGamer. Tutti i diritti riservati.</p>

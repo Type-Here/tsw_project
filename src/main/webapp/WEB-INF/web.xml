@@ -3,4 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
+    <servlet>
+        <servlet-name>AboutUs</servlet-name>
+        <jsp-file>/WEB-INF/jsp/aboutus.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AboutUs</servlet-name>
+        <url-pattern>/about-us</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Assistance</servlet-name>
+        <jsp-file>/WEB-INF/jsp/assistance.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Assistance</servlet-name>
+        <url-pattern>/assistance</url-pattern>
+    </servlet-mapping>
 </web-app>

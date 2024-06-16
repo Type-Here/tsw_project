@@ -34,7 +34,7 @@ public class NewsletterServlet extends HttpServlet {
             request.setAttribute("newsletter", products);
 
             // Inoltra la richiesta a newsletter.jsp
-            request.getRequestDispatcher("/jsp/newsletter.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/results/newsletter.jsp").forward(request, response);
 
         } catch (SQLException e){
             throw new RuntimeException(e); /*TODO*/
