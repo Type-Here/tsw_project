@@ -14,6 +14,9 @@
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script src="${pageContext.request.contextPath}/js/prod-page.js" defer></script>
+    <style>
+
+    </style>
 </head>
 <body class="body_def">
 
@@ -26,9 +29,22 @@
     </div>
 
     <div class="front-view">
-        <div class="img-container-front">
-            <img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" />
-        </div>
+        <section id="gallery">
+            <div class="slider-container">
+                <div id="slider" class="overlay-bar slideshow-slider"></div>
+            </div>
+            <div class="img-container-front">
+                <ul class="img-container-front-inside">
+                    <li class="img-container-front-slide"><img class="prod-front-image" src="${product.metaData.path}${product.metaData.front}" alt="front image" /></li>
+                    <c:forEach items="${product.metaData.gallery}" var="img">
+                        <li class="img-container-front-slide"><img class="prod-front-image" src="${product.metaData.path}${img}" alt="front image" /></li>
+                    </c:forEach>
+                </ul>
+            </div>
+            <svg class="img-container-arrow left-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+            <svg class="img-container-arrow right-arrow" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f5f5dd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+
+        </section>
         <div class="prod-overview">
                 <div class="centerized-flex-container condition-select">
                     <h2 class="text-center">Condizione:</h2>

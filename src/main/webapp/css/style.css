@@ -198,7 +198,14 @@ hr{
     position: absolute;
     top: 0;
     left: 0;
+    -moz-animation:LeftToRightOver 5s ease-in-out;
     animation: LeftToRightOver 5s ease-in-out;
+}
+
+.removed-item{
+    height: 30px;
+    min-height: 10px !important;
+    overflow: hidden;
 }
 
 .general_icon{
@@ -1191,13 +1198,98 @@ input#pass{
     justify-content: center;   
 }
 
+#gallery{
+    width: 60%;
+    padding: 0;
+    position: relative;
+    max-width: 700px;
+    max-height: 620px;
+    margin: 20px 50px;
+}
+
+.img-container-front{
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-x: scroll;
+    --gallery-count: 3;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    width: 100%;
+    max-width: 700px;
+    max-height: 620px;
+    margin: 0;
+    display: flex;
+
+    &:hover{
+        box-shadow: 0 0 2px 2px rgba(0,0,0,0.5);;
+    }
+}
+
+.slider-container{
+    position: relative;
+    top:10px;
+    overflow: hidden;
+    height: 10px;
+    width: 100%;
+    z-index: 2;
+}
+
+.slideshow-slider{
+    background-color: #000000e0;
+
+}
+
+/* ul - Inside Container to have all images hidden in overflow */
+.img-container-front-inside{
+    padding: 0;
+    width: calc(100% * var(--gallery-count));
+    display: flex;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* li - Single Image Container */
+.img-container-front-slide{
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    scroll-snap-align: start;
+}
+
+/* Arrows */
+.img-container-arrow{
+    position: absolute;
+    top: calc(50% - 40px); /*Arrow Height 80px*/
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+    cursor: pointer;
+
+    &:hover{
+        transition: all 0.4s ease-out;
+        transform: scale(1.1);
+    }
+
+    &.left-arrow{
+        left: -50px;
+    }
+
+    &.right-arrow{
+        right: -50px;
+    }
+}
+
+
 /* ------- Main Image ----- */
 .prod-front-image{
     width: 100%;
     max-width: 800px;
     min-width: 300px;
-    margin: 20px 50px;
-    box-shadow: 0 0 4px 1px rgba(0,0,0,0.5);
+    margin: 0;
+    box-shadow: 0 0 10px 2px rgba(0,0,0,0.5);
     transition: transform 0.3s linear;
     object-fit: cover;
 
@@ -1209,14 +1301,6 @@ input#pass{
     &:not(:hover){
         transform: scale(1);
     }
-}
-
-.img-container-front{
-    width: 60%;
-    max-width: 700px;
-    max-height: 640px;
-    margin: 20px 50px;
-    display: flex;
 }
 
 /* ------ Lateral Overview ------ */
