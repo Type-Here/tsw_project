@@ -19,4 +19,13 @@
         <servlet-name>Assistance</servlet-name>
         <url-pattern>/assistance</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminLogin</servlet-name>
+        <jsp-file>/WEB-INF/admin/admin-login.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminLogin</servlet-name>
+        <url-pattern>/admin-access</url-pattern>
+    </servlet-mapping>
 </web-app>
