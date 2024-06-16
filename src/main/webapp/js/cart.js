@@ -59,7 +59,9 @@ Array.from(document.getElementsByClassName('remove-item')).forEach( btn =>{
     });
 });
 
-
+/**
+ *  Update Quantity Ajax Request from Select Change Input
+ */
 Array.from(document.getElementsByClassName('quantity-select')).forEach(select =>{
    select.addEventListener('change', async function (){
        let id = this.getAttribute('data-item');
@@ -75,7 +77,9 @@ Array.from(document.getElementsByClassName('quantity-select')).forEach(select =>
    });
 });
 
-
+/**
+ * Function to UpdatePrice - Ajax Request then set Subtotal and Total in lateral view
+ */
 async function updatePrice(){
     let priceMsg = 'option=requestNewPrice';
     const price = await ajax(priceMsg, 'json');

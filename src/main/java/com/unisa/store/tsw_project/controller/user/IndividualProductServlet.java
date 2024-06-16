@@ -30,7 +30,7 @@ public class IndividualProductServlet extends HttpServlet {
 
         try {
             if(id.isEmpty()){
-                resp.sendRedirect("/");
+                resp.sendRedirect(req.getContextPath());
                 return;
             }
             if(!validator.validatePattern(id.get(), DataValidator.PatternType.Int)){
