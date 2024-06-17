@@ -1,6 +1,6 @@
 package com.unisa.store.tsw_project.other;
 
-import java.security.InvalidParameterException;
+import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -8,7 +8,7 @@ public class DataValidator {
     public enum PatternType{
         Generic, GenericAlphaNumeric, Email, Surname, Phone, Password, CAP,
         Birthdate, Username, Path, Double, Int, Condition, Bool, Platform, Category,
-        StringOnlyNumbers, DateFuture;
+        StringOnlyNumbers, DateFuture
     }
 
     /**
@@ -19,7 +19,7 @@ public class DataValidator {
      * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType){
-        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException();
+        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException(patternType.name() + ":" + data);
         return true;
     }
 

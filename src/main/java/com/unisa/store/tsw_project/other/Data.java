@@ -59,7 +59,7 @@ public interface Data {
 
         public static OrderStatus getEnum(String value){
             for(OrderStatus os : OrderStatus.values()){
-                if (os.value.equals(value)){return os;}
+                if (os.value.equalsIgnoreCase(value)){return os;}
             }
             return null;
         }
@@ -73,4 +73,12 @@ public interface Data {
     public enum Platform{
         Atari2600, C64, GameBoy, GameCube, N64, PC, ps1, ps2, SegaMegaDrive
     }
+
+    /**
+     * A 422 status code indicates that the server was unable
+     * to process the request because it contains invalid data. <br />
+     * De Facto Standard
+     */
+    int SC_INVALID_DATA = 422;
+    //public static final redundant in interface
 }
