@@ -50,8 +50,19 @@ public class LoginUserServlet extends HttpServlet{
 
         // Validazione campi
         DataValidator validator = new DataValidator();
-        validator.validatePattern(email.get(), DataValidator.PatternType.Email);
-        validator.validatePattern(password.get(), DataValidator.PatternType.Password);
+
+        try {
+            validator.validatePattern(email.get(), DataValidator.PatternType.Email);
+            validator.validatePattern(password.get(), DataValidator.PatternType.Password);
+        } catch (Exception e) {
+            request.getSession().invalidate();
+            request.setAttribute("invalidUser", true);
+            request.getRequestDispatcher("/WEB-INF/results/login.jsp").forward(request, response);
+            return;
+        }
+
+
+        //Controllo se l'utente è registrato nel database
 
         UserBean userBean = new UserBean();
         UserDAO userDAO = new UserDAO();

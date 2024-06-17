@@ -102,8 +102,8 @@ insert into retrogamer.credentials(pass_hash, pass_salt, creation_date) values
 
 -- Users
 insert into retrogamer.users(id_client,firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred) values
-(1,'Domenico','Amorelli','+3932010234455','timidone@so.org','2004-05-15','Via, Girolamo Savonarola, 12','Sapri','SA','84073',1),
-(2,'Bianca','Neri','+3932010234456','chiara@unisa.it','2000-07-20','Via, Roma Campi, 4','Roma','RM','00100',2);
+(1,'Domenico','Amorelli','+393201023445','timidone@so.org','2004-05-15','Via, Girolamo Savonarola, 12','Sapri','SA','84073',1),
+(2,'Bianca','Neri','+393201023445','chiara@unisa.it','2000-07-20','Via, Roma Campi, 4','Roma','RM','00100',2);
 
 insert into retrogamer.shipping_addresses(id_client, firstname, lastname, address, city, prov, cap) VALUES
 (1,'Domenico','Amorelli','Via, Girolamo Savonarola, 12','Sapri','SA','84073'),

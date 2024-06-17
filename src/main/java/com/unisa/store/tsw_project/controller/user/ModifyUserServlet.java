@@ -10,7 +10,6 @@ import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,8 +22,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -114,7 +111,7 @@ public class ModifyUserServlet extends HttpServlet {
             userBean.setTelephone(phone.get());
             userBean.setEmail(email.get());
             userBean.setBirth(LocalDate.parse(birthdate.get()));
-            userBean.setAddress(roadType.get() + " " + roadName.get() + " " + roadNumber.get());
+            userBean.setAddress(roadType.get() + ", " + roadName.get() + ", " + roadNumber.get());
             userBean.setCity(city.get());
             userBean.setProv(province.get());
             userBean.setCAP(cap.get());
@@ -164,13 +161,20 @@ public class ModifyUserServlet extends HttpServlet {
         if (oldpass.isEmpty() || newpass.isEmpty()) {
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/index").forward(request, response);
             return;
         }
 
         DataValidator validator = new DataValidator();
-        validator.validatePattern(oldpass.get(), DataValidator.PatternType.Password);
-        validator.validatePattern(newpass.get(), DataValidator.PatternType.Password);
+        try {
+            validator.validatePattern(oldpass.get(), DataValidator.PatternType.Password);
+            validator.validatePattern(newpass.get(), DataValidator.PatternType.Password);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Set status code to 500 (Internal Server Error)
+            response.getWriter().write("Nuova Password non valida");
+            return;
+        }
+
 
         UserDAO userDAO = new UserDAO();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
@@ -213,12 +217,19 @@ public class ModifyUserServlet extends HttpServlet {
 
         DataValidator validator = new DataValidator();
 
-        validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
-        validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
+        try {
+            validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadNumber.get(), DataValidator.PatternType.Int, 1,999999);
+            validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
+        } catch (Exception e) {
+            request.setAttribute("invalidAddresses", true);
+            request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request, response);
+            return;
+        }
+
 
         ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
@@ -226,12 +237,13 @@ public class ModifyUserServlet extends HttpServlet {
 
         shippingAddressesBean.setFirstname(userBean.getFirstname());
         shippingAddressesBean.setLastname(userBean.getLastname());
-        shippingAddressesBean.setAddress(roadType.get() + " " + roadName.get() + " " + roadNumber.get());
+        shippingAddressesBean.setAddress(roadType.get() + ", " + roadName.get() + ", " + roadNumber.get());
         shippingAddressesBean.setCity(city.get());
         shippingAddressesBean.setProv(province.get());
         shippingAddressesBean.setCAP(cap.get());
         shippingAddressesBean.setId_client(userBean.getId());
         shippingAddressesDAO.doSave(shippingAddressesBean);
+
         request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request,response);
     }
 

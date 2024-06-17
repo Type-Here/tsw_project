@@ -21,12 +21,15 @@ function showContent(sectionId) {
 
 
 window.onload = function() {
+    if (document.getElementById('errorAddresses')){
+        showContent('section4');
+    }
     splitAddress();
 }
 
 function splitAddress() {
-    var address = document.getElementById('address').value;
-    var addressParts = address.split(',');
+    const address = document.getElementById('address').value;
+    const addressParts = address.split(', ');
     document.getElementById('road-type').value = addressParts[0];
     document.getElementById('road-name').value = addressParts[1];
     document.getElementById('road-number').value = addressParts[2];
@@ -140,7 +143,7 @@ function displayOrders(orders, addresses) {
 
             for (let j = 0; j < addresses.length; j++) {
                 if (addresses[j].id_add === orders[i].id_add) {
-                    cell4.textContent = addresses[j].address + ', ' + addresses[j].city + ' ' + addresses[j].prov + ',' + addresses[j].CAP;
+                    cell4.textContent = addresses[j].address + ', ' + addresses[j].city + ' ' + addresses[j].prov + ', ' + addresses[j].CAP;
                     break;
                 }
             }
