@@ -15,7 +15,7 @@
     <div class="overlay" onclick="overlay_menu()"></div>
 
     <ul class="nav">
-        <li class="this-page"><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
         <li><a href="#add_prod">Aggiungi Prodotto</a></li>
         <li><a href="#catalog_management">Gestione Catalogo</a></li>
         <li><a href="#">Gestione Ordini</a></li>

@@ -28,9 +28,10 @@
 
 .tos-body {
     grid-area: tos-base;
+    font-size: 1rem;
 }
 
-.tos-body li {
+.tos-body li{
     margin: 16px 0;
 }
 

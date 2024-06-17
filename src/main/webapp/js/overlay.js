@@ -28,3 +28,39 @@ window.addEventListener('load', () =>{
 window.addEventListener('resize', function(event) {
     adaptMarginLastTile();
 }, true);
+
+//Change the color of the current page in navbar
+function  updateActiveNavElement(){
+    let path = window.location.pathname;
+
+    //all element a in the nav class
+    let navItems = document.querySelectorAll('.nav li a');
+
+
+    navItems.forEach(item => {
+
+        let itemHref = item.getAttribute('href');
+
+        //?????
+        let contextPath = "${pageContext.request.contextPath}";
+        let itemPath = itemHref.replace(contextPath, "");
+        let currentPath = path.replace(contextPath, "");
+
+
+        if(itemHref === path || itemPath === currentPath){
+            console.log("Adding this-page class to: " + item);
+            if (!item.parentElement.classList.contains('this-page')){
+                item.parentElement.classList.add('this-page');
+            }
+        } else {
+            if (item.parentElement.classList.contains('this-page')) {
+                item.parentElement.classList.remove('this-page');
+            }
+        }
+    });
+}
+
+//Caricamento pagina
+window.addEventListener('load', updateActiveNavElement);
+//Cambia URL
+window.addEventListener('popstate', adaptMarginLastTile);

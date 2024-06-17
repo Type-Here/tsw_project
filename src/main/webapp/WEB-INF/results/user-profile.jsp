@@ -63,7 +63,7 @@
                                     <input id="address" type="hidden" value="${userlogged.address}">
                                     <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-Z']{3,}$" />
                                     <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-Z'\s\-]{3,}$" />
-                                    <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[\w]+$" />
+                                    <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[0-9]{1,6}$" />
                                 </label>
                                 <label class="form-row" for="city"><span>Citt&agrave;</span>
                                     <input id="city" name="city" type="text" value="${userlogged.city}" required pattern="^[a-zA-Z'\s\-]{3,}$" />
@@ -164,7 +164,7 @@
                                     <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
                                            pattern="^[a-zA-Z'\s\-]{3,}$"/>
                                     <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
-                                           placeholder="1" step="1" required pattern="^[\w]+$"/>
+                                           placeholder="1" step="1" required pattern="/^\d{1,6}$/"/>
                                 </label>
                                 <label class="form-row" for="city2"><span>Citt&agrave;</span>
                                     <input id="city2" name="city2" type="text" placeholder="Città" required
@@ -183,6 +183,12 @@
                             </fieldset>
                             <fieldset class="form-row">
                                 <input class="default" type="submit" value="Applica Modifica">
+                                <c:if test="${not empty invalidAddresses}">
+                                    <div class="invalid-credentials">
+                                        <span>Indirizzo inserito errato</span>
+                                    </div>
+                                    <div id="errorAddresses" style="display: none;"></div>
+                                </c:if>
                             </fieldset>
                         </form>
                     </div>

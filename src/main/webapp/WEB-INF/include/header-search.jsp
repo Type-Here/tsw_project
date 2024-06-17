@@ -10,7 +10,7 @@
     <div class="overlay" onclick="overlay_menu()"></div>
 
     <ul class="nav">
-        <li class=""><a href="${pageContext.request.contextPath}/">Home</a></li>
+        <li><a href="${pageContext.request.contextPath}/">Home</a></li>
         <li><a href="${pageContext.request.contextPath}/store">Catalogo</a></li>
         <li><a href="${pageContext.request.contextPath}/about-us">Chi Siamo</a></li>
         <li><a href="${pageContext.request.contextPath}/assistance">Assistenza</a></li>
