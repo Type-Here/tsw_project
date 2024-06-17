@@ -1,3 +1,4 @@
+use retrogamer;
 -- Testing Elements
 -- Condition Table Elements (Product Conditions: X = Digital)
 insert into conditions(id_cond, letter) values
@@ -98,14 +99,38 @@ insert into retrogamer.products(name, price, type, platform, developer, descript
 -- Credentials
 insert into retrogamer.credentials(pass_hash, pass_salt, creation_date) values
 (SHA2('Timidone2?dinosauri', 256), 'dinosauri','2024-05-12'),
-(SHA2('Chiara2?chiara', 256), 'chiara','2024-05-12');
+(SHA2('Chiara2?chiara', 256), 'chiara','2024-05-12'),
+(SHA2('Mario2?mario', 256), 'mario','2024-05-20'),
+(SHA2('Maria2?maria', 256), 'maria','2024-05-25'),
+(SHA2('Nicola2?nicola', 256), 'nicola','2024-05-27'),
+(SHA2('Giovanni2?giovanni', 256), 'giovanni','2024-05-29'),
+(SHA2('Giuseppe2?giuseppe', 256), 'giuseppe','2024-05-30'),
+(SHA2('Antonio2?antonio', 256), 'antonio','2024-06-01'),
+(SHA2('Francesco2?francesco', 256), 'francesco','2024-06-04'),
+(SHA2('Alessandra2?alessandra', 256), 'alessandra','2024-06-08');
 
 -- Users
 insert into retrogamer.users(id_client,firstname, lastname, telephone, email, birth, address, city, prov, cap, id_cred) values
-(1,'Domenico','Amorelli','+393201023445','timidone@so.org','2004-05-15','Via, Girolamo Savonarola, 12','Sapri','SA','84073',1),
-(2,'Bianca','Neri','+393201023445','chiara@unisa.it','2000-07-20','Via, Roma Campi, 4','Roma','RM','00100',2);
+(1,'Domenico','Amorelli','+393201023446','timidone@so.org','2004-05-15','Via, Girolamo Savonarola, 12','Sapri','SA','84073',1),
+(2,'Bianca','Neri','+393201023447','chiara@unisa.it','2000-07-20','Via, Roma Campi, 4','Roma','RM','00100',2),
+(3,'Mario','Rossi','+393201023448','mario@gmail.com','1990-07-20','Via, Roma, 7','Roma','RM','00100',3),
+(4,'Maria','Verdi','+393201023449','maria@gmail.com','2001-12-20','Via, Milano, 7','Milano','MI','20019',4),
+(5,'Nicola','Bianchi','+393201023410','nicola@gmail.com','2003-07-20','Via, Napoli, 7','Napoli','NA','80143',5),
+(6,'Giovanni','Gialli','+393201023411','giovanni@gmail.com','1988-09-20','Via, Bari, 7','Bari','BA','70100',6),
+(7,'Giuseppe','Verdi','+393201023412','giuseppe@gmail.com','1980-07-11','Via, Palermo, 7','Palermo','PA','90100',7),
+(8,'Antonio','Bianchi','+393201023413','antonio@gmail.com','1995-10-20','Via, Catania, 7','Catania','CT','95100',8),
+(9,'Francesco','Gialli','+393201023414','francesco@gmail.com','1998-09-20','Via, Messina, 7','Messina','ME','98100',9),
+(10,'Alessandra','Verdi','+393201023415','alessandra@gmail.com','2004-09-20','Via, Siracusa, 7','Siracusa','SR','96100',10);
 
 insert into retrogamer.shipping_addresses(id_client, firstname, lastname, address, city, prov, cap) VALUES
 (1,'Domenico','Amorelli','Via, Girolamo Savonarola, 12','Sapri','SA','84073'),
 (1,'Domenico','Amorelli','Via, Roma, 7','Napoli','NA','80143'),
-(2,'Bianca','Neri','Via, Roma Campi, 4','Roma','RM','00100');
+(2,'Bianca','Neri','Via, Roma Campi, 4','Roma','RM','00100'),
+(3,'Mario','Rossi','Via, Roma, 7','Roma','RM','00100'),
+(4,'Maria','Verdi','Via, Milano, 7','Milano','MI','20019'),
+(5,'Nicola','Bianchi','Via, Napoli, 7','Napoli','NA','80143'),
+(6,'Giovanni','Gialli','Via, Bari, 7','Bari','BA','70100'),
+(7,'Giuseppe','Verdi','Via, Palermo, 7','Palermo','PA','90100'),
+(8,'Antonio','Bianchi','Via, Catania, 7','Catania','CT','95100'),
+(9,'Francesco','Gialli','Via, Messina, 7','Messina','ME','98100'),
+(10,'Alessandra','Verdi','Via, Siracusa, 7','Siracusa','SR','96100');
