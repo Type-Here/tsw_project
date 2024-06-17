@@ -21,7 +21,9 @@ function xmlConsoleReq(message, option = 1, divToSet = null){
         if(xhr.readyState === 4 && xhr.status === 200){
             switch (option){
                 case 1:
-                    doPrintTable(xhr.response);
+                    const table = document.getElementById('admin-prod-table');
+                    const json = JSON.parse(xhr.response);
+                    doPrintTable(json, table, 1);
                     break;
                 case 2:
                     doPrintProdForm(xhr.response);
@@ -78,60 +80,84 @@ function xmlRequestPageNumber(){
  * Print a Row inside a Table
  * @param tableRow Pointer to the HTMLTableRowElement to fill
  * @param prod Product object to retrieve data from
+ * @param type Integer specifying which Table has to Be Set: 1=Products, 2=Orders, 3=Users
  */
-function printRow(tableRow, prod){
-    const printable = ["id_prod","name","price","platform","developer","metadataPath","type","discount"];
-    Object.keys(prod).forEach( key =>{
-        let cellText = prod[key];
-        if(printable.includes(key)){
-            if(key === 'type'){
-                if(prod[key]){
-                    cellText ="Digitale";
-                } else {
-                    cellText="Fisico";
+function printRow(tableRow, prod, type){
+    switch (type){
+        case 1:
+            const printable = ["id_prod","name","price","platform","developer","metadataPath","type","discount"];
+            Object.keys(prod).forEach( key =>{
+                let cellText = prod[key];
+                if(printable.includes(key)){
+                    if(key === 'type'){
+                        if(prod[key]){
+                            cellText ="Digitale";
+                        } else {
+                            cellText="Fisico";
+                        }
+                    }
+                    // Insert a cell at the end of the row
+                    let newCell = tableRow.insertCell();
+                    // Append a text node to the cell
+                    let newText = document.createTextNode(cellText);
+                    newCell.appendChild(newText);
                 }
-            }
-            // Insert a cell at the end of the row
-            let newCell = tableRow.insertCell();
-            // Append a text node to the cell
-            let newText = document.createTextNode(cellText);
-            newCell.appendChild(newText);
-        }
-    });
+            });
 
-    let button1cell = tableRow.insertCell();
-    button1cell.setAttribute('class', 'table-row-button');
+            let button1cell = tableRow.insertCell();
+            button1cell.setAttribute('class', 'table-row-button');
 
-    let button1 = document.createElement('button');
-    button1.title = "Modifica Prod " + prod["id_prod"];
-    button1.classList.add('secondary');
-    button1.value = prod["id_prod"];
-    button1.innerHTML ="Modifica";
-    button1cell.appendChild(button1);
-    addPopup(button1);
+            let button1 = document.createElement('button');
+            button1.title = "Modifica Prod " + prod["id_prod"];
+            button1.classList.add('secondary');
+            button1.value = prod["id_prod"];
+            button1.innerHTML ="Modifica";
+            button1cell.appendChild(button1);
+            addPopup(button1);
 
-    let button2cell = tableRow.insertCell();
-    button2cell.setAttribute('class', 'table-row-button');
+            let button2cell = tableRow.insertCell();
+            button2cell.setAttribute('class', 'table-row-button');
 
-    let button2 = document.createElement('button');
-    button2.title = "Elimina Prod " + prod["id_prod"];
-    button2.setAttribute('data-name', prod["name"]);
-    button2.setAttribute('class','secondary attention');
-    button2.value = prod["id_prod"];
-    button2.innerHTML ="&Cross;";
-    button2.onclick = () => removePopup(button2);
-    button2cell.appendChild(button2);
-    //addPopupRemove(button2);
+            let button2 = document.createElement('button');
+            button2.title = "Elimina Prod " + prod["id_prod"];
+            button2.setAttribute('data-name', prod["name"]);
+            button2.setAttribute('class','secondary attention');
+            button2.value = prod["id_prod"];
+            button2.innerHTML ="&Cross;";
+            button2.onclick = () => removePopup(button2);
+            button2cell.appendChild(button2);
+            //addPopupRemove(button2);
+            break;
+        case 2:
+            Object.keys(prod).forEach( key =>{
+                let cellText = prod[key];
+                // Insert a cell at the end of the row
+                let newCell = tableRow.insertCell();
+                // Append a text node to the cell
+                let newText = document.createTextNode(cellText);
+                newCell.appendChild(newText);
+            });
+            break;
+        case 3:
+            //printRow = printRowUsers;
+            break;
+        default:
+            console.error("No type defined in printTable Call");
+            break
+    }
+
 }
 
 /**
- * Print a List of Product in a table#admin-prod-table 1 for each row
- * @param response an AJAX response to parse JSON from
+ * Remove Old Elements first.
+ * Print a List of Product in a table 1 for each row
+ * @param responseJson an AJAX response parsed in JSON
+ * @param table HTMLTableElement to Fill
+ * @param type Integer specifying which Table has to Be Set: 1=Products, 2=Orders, 3=Users
  */
-function doPrintTable(response){
+export function doPrintTable(responseJson, table, type){
 
-    let products = JSON.parse(response);
-    const table = document.getElementById('admin-prod-table');
+    let products = responseJson;
     const tbody = table.tBodies[0];
 
     //Reset Table except first row (headers)
@@ -140,11 +166,11 @@ function doPrintTable(response){
         tbody.children[1].remove(); //Use fixed 1 to remove all data (0 = header) otherwise Error!
     }
 
-    //For Each Product in product List (from JSON) print a row
+    //For Each Product in response List (from JSON) print a row
     for(let i = 0; i < products.length; i++) {
         // Insert a row at the end of table
         let newRow = table.insertRow();
-        printRow(newRow, products[i]);
+        printRow(newRow, products[i], type);
     }
 }
 

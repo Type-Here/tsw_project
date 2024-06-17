@@ -18,7 +18,7 @@
         <li><a href="#">Home</a></li>
         <li><a href="#add_prod">Aggiungi Prodotto</a></li>
         <li><a href="#catalog_management">Gestione Catalogo</a></li>
-        <li><a href="#">Gestione Ordini</a></li>
+        <li><a href="#order_management">Gestione Ordini</a></li>
         <li><a href="#">Gestione Utenti</a></li>
     </ul>
     <div class="upper-bar-right">
