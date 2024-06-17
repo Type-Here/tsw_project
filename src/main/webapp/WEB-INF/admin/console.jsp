@@ -13,8 +13,9 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
-    <script src="${pageContext.request.contextPath}/js/add-product.js" defer></script>
-    <script src="${pageContext.request.contextPath}/js/prod-catalog.js" defer></script>
+    <script type="module" src="${pageContext.request.contextPath}/js/admin/console-module.js"></script>
+    <script src="${pageContext.request.contextPath}/js/admin/add-product.js" defer></script>
+    <script type="module" src="${pageContext.request.contextPath}/js/admin/prod-catalog.js" defer></script>
 </head>
 <body class="body_def">
 
@@ -162,6 +163,53 @@
                     <td></td>
                     <td class="table-row-button"><button disabled title="modifica" class="secondary">Modifica</button></td>
                     <td class="table-row-button"><button disabled title="remove" class="secondary attention">&Cross;</button></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="order_management" class="prod-reviews">
+        <div class="section-header">
+            <h2 class="text-center">Gestisci Ordini</h2>
+        </div>
+        <div class="catalog-buttons">
+            <button id="prev-order-button" disabled class="default alternative general-display-none margin-h-10">Prev</button>
+            <button id="next-order-button" class="default general-display-none margin-h-10">Next</button>
+            <div class="search_container">
+                <form id="order-search" class="search-bar">
+                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <label style="display: none" for="search-input">Search</label><input id="search-input-order" title="Search Order" type="text" name="search" placeholder="Cerca un ordine" alt="Cerca" />
+                </form>
+            </div>
+        </div>
+        <div class="order-filters">
+            <button class="active" value="in process">Nuovi</button>
+            <button value="shipped">Spediti</button>
+            <button value="delivering">In Consegna</button>
+            <button value="delivered">Consegnati</button>
+            <button value="refunded">Rimborsati</button>
+            <button value="canceled">Cancellati</button>
+        </div>
+        <span class="text-center invalid-credentials general-display-none" id="order_error_message"></span>
+        <div class="prod-table prod-reviews-internal">
+            <table id="admin-orders-table" class="prod-reviews-table">
+                <tr id="admin-orders-table-header">
+                    <th>Id Ordine</th>
+                    <th>Id Utente</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Indirizzo</th>
+                    <th>Status</th>
+                    <th>Data Ordine</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </table>
         </div>
