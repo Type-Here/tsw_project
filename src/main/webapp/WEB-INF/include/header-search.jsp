@@ -14,7 +14,7 @@
         <li><a href="${pageContext.request.contextPath}/store">Catalogo</a></li>
         <li><a href="${pageContext.request.contextPath}/about-us">Chi Siamo</a></li>
         <li><a href="${pageContext.request.contextPath}/assistance">Assistenza</a></li>
-        <li><a href="${pageContext.request.contextPath}/WEB-INF/results/newsletter.jsp">Newsletter</a></li>
+        <li><a href="${pageContext.request.contextPath}/newsletter">Newsletter</a></li>
     </ul>
 
     <%@include file="/WEB-INF/include/search-bar.jsp"%>
