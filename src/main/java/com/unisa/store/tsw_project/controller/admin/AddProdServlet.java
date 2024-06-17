@@ -7,7 +7,7 @@ import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
-import com.unisa.store.tsw_project.other.exceptions.InvalidUserException;
+import com.unisa.store.tsw_project.other.exceptions.InvalidAdminUserException;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -172,14 +172,14 @@ public class AddProdServlet extends HttpServlet {
     /**
      * Verifies if User is Correctly logged as Admin
      * @param req request to retrieve session data
-     * @throws InvalidUserException if user is not logged / incorrect
+     * @throws InvalidAdminUserException if user is not logged / incorrect
      */
     private void verifyAdminUser(HttpServletRequest req) {
         Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
         Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("user"));
 
         if(adminAtt.isEmpty() || !(adminAtt.get() instanceof Boolean b) || !b){
-            throw new InvalidUserException(user.map(o -> (String) o).orElse("undefined"));
+            throw new InvalidAdminUserException(user.map(o -> (String) o).orElse("undefined"));
         }
     }
 

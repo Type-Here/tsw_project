@@ -1,6 +1,6 @@
 package com.unisa.store.tsw_project.controller.admin;
 
-import com.unisa.store.tsw_project.other.exceptions.InvalidUserException;
+import com.unisa.store.tsw_project.other.exceptions.InvalidAdminUserException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -55,14 +55,14 @@ public class ConsoleDispatcherServlet extends HttpServlet {
     /**
      * Verifies if User is Correctly logged as Admin
      * @param req request to retrieve session data
-     * @throws InvalidUserException if user is not logged / incorrect
+     * @throws InvalidAdminUserException if user is not logged / incorrect
      */
     private void verifyAdminUser(HttpServletRequest req) {
         Optional<Object> adminAtt = Optional.ofNullable(req.getSession().getAttribute("admin"));
         Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("user"));
 
         if(adminAtt.isEmpty() || !(adminAtt.get() instanceof Boolean b) || !b){
-            throw new InvalidUserException(user.map(o -> (String) o).orElse("undefined"));
+            throw new InvalidAdminUserException(user.map(o -> (String) o).orElse("undefined"));
         }
     }
 

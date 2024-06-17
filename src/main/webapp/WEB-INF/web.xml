@@ -28,4 +28,10 @@
         <servlet-name>AdminLogin</servlet-name>
         <url-pattern>/admin-access</url-pattern>
     </servlet-mapping>
+
+    <!-- Errors Handling -->
+    <error-page>
+        <exception-type>com.unisa.store.tsw_project.other.exceptions.InvalidAdminUserException</exception-type>
+        <location>/WEB-INF/errors/InvalidAdminSession.jsp</location>
+    </error-page>
 </web-app>

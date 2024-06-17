@@ -44,6 +44,8 @@
 
 html{
     font-size: 16px;
+    max-width: 2000px;
+    margin: 0 auto;
 }
 
 /* Body */
@@ -2074,4 +2076,31 @@ section.section-container{
         outline: 1px solid #0a78f5 !important;
     }
 
+}
+
+/* ========================== ERROR PAGES ===================== */
+
+/* Error Pages Main Container */
+body.error{
+    margin: 0 auto;
+}
+
+.error_container{
+    width: 90%;
+    max-width: 1600px;
+    margin: 40px auto;
+    font-size: 1rem;
+    a{text-decoration: underline #0a78f5; color: #F0B50F;}
+    h1{font-weight: bold; margin: 5px 30px; text-shadow: 1px 1px 2px #ad212e; outline: 1px solid #c0c0c0 }
+    h2{font-weight: bold; margin: 5px 10px;}
+}
+
+.margin-top-90{
+    margin-top: 90px;
+}
+
+.error_content{
+    margin: 10px auto;
+    width: 80%;
+    border: 1px solid #c0c0c0;
 }
