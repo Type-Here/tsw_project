@@ -23,6 +23,7 @@ public class UserIDCheckFilter implements Filter {
         Cookie userIDCookie = null, userPasswordCookie = null;
         Boolean userLogged = false;
 
+        // Check if the JSESSIONID cookie is present
         if (cookies == null) {
             chain.doFilter(request, response); // continue with the rest of the filter chain
             return;
@@ -39,6 +40,7 @@ public class UserIDCheckFilter implements Filter {
             return;
         }
 
+        // Check if the cookies: userID and userPassword are present
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("userID")) {
                 userIDFromCookie = cookie.getValue();
@@ -49,6 +51,7 @@ public class UserIDCheckFilter implements Filter {
             }
         }
 
+        // Check if the user is already logged in
         if (httpRequest.getSession().getAttribute("userlogged") != null){
             chain.doFilter(request, response); // continue with the rest of the filter chain
             return;

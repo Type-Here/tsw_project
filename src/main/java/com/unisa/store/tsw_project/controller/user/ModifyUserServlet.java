@@ -66,6 +66,7 @@ public class ModifyUserServlet extends HttpServlet {
 
     private void updateUser (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        // Recupero parametri
         Optional<String> name = Optional.ofNullable(request.getParameter("name"));
         Optional<String> surname = Optional.ofNullable(request.getParameter("surname"));
         Optional<String> phone = Optional.ofNullable(request.getParameter("phone"));
@@ -86,19 +87,25 @@ public class ModifyUserServlet extends HttpServlet {
         }
 
         // Validazione campi DA VEDERE DATA
+        try {
+            DataValidator validator = new DataValidator();
+            validator.validatePattern(name.get(), DataValidator.PatternType.Username);
+            validator.validatePattern(surname.get(), DataValidator.PatternType.Surname);
+            validator.validatePattern(phone.get(), DataValidator.PatternType.Phone);
+            validator.validatePattern(email.get(), DataValidator.PatternType.Email);
+            validator.validatePattern(birthdate.get(), DataValidator.PatternType.Birthdate);
+            validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
+            validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
+        } catch (Exception e) {
+            request.setAttribute("invalidUserUpdate", true);
+            request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request, response);
+            return;
+        }
 
-        DataValidator validator = new DataValidator();
-        validator.validatePattern(name.get(), DataValidator.PatternType.Username);
-        validator.validatePattern(surname.get(), DataValidator.PatternType.Surname);
-        validator.validatePattern(phone.get(), DataValidator.PatternType.Phone);
-        validator.validatePattern(email.get(), DataValidator.PatternType.Email);
-        validator.validatePattern(birthdate.get(), DataValidator.PatternType.Birthdate);
-        validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
-        validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
 
         UserBean userBean = new UserBean();
         UserDAO userDAO = new UserDAO();
@@ -139,6 +146,7 @@ public class ModifyUserServlet extends HttpServlet {
 
         Boolean notDelete = false;
 
+        //Check if the address is used in an order
         for (OrdersBean ordersBean : ordersBeanList) {
             if (ordersBean.getId_add() == id_add) {
                 notDelete = true;
@@ -165,6 +173,7 @@ public class ModifyUserServlet extends HttpServlet {
             return;
         }
 
+        // Validazione campi
         DataValidator validator = new DataValidator();
         try {
             validator.validatePattern(oldpass.get(), DataValidator.PatternType.Password);
@@ -175,7 +184,7 @@ public class ModifyUserServlet extends HttpServlet {
             return;
         }
 
-
+        // Controllo password corrente ed esecuzione cambio password
         UserDAO userDAO = new UserDAO();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
 
@@ -215,8 +224,8 @@ public class ModifyUserServlet extends HttpServlet {
             return;
         }
 
+        // Validazione campi
         DataValidator validator = new DataValidator();
-
         try {
             validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
             validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
@@ -231,6 +240,7 @@ public class ModifyUserServlet extends HttpServlet {
         }
 
 
+        // Saving new shipping address
         ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
         ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();

@@ -33,6 +33,7 @@ public class ShippingAddressesDAO {
         }
     }
 
+    // Function to retrieve all shipping addresses for a user
     public List<ShippingAddressesBean> doRetrieveAllByUserId(int id_client) throws SQLException {
         try (Connection con = ConPool.getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM shipping_addresses WHERE id_client = ?");

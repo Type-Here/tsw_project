@@ -41,6 +41,7 @@ public class LoadOrdersServlet extends HttpServlet {
         // Fetch all orders
         try {
             orders = ordersDAO.doRetrieveAllOrdersByUserId(userBean.getId());
+            // Retrieve the shipping addresses for each order
             for (OrdersBean order : orders) {
                 orderAddresses.add(shippingAddressesDAO.doRetrieveAddressByAddressesID(order.getId_add()));
             }

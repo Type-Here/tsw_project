@@ -41,6 +41,7 @@ public class LoginUserServlet extends HttpServlet{
         Optional<String> email = Optional.ofNullable(request.getParameter("email"));
         Optional<String> password = Optional.ofNullable(request.getParameter("password"));
 
+        //Controllo campi vuoti
         if(password.isEmpty() || email.isEmpty()){
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
@@ -55,6 +56,7 @@ public class LoginUserServlet extends HttpServlet{
             validator.validatePattern(email.get(), DataValidator.PatternType.Email);
             validator.validatePattern(password.get(), DataValidator.PatternType.Password);
         } catch (Exception e) {
+            //Gestione errore di validazione campi
             request.getSession().invalidate();
             request.setAttribute("invalidUser", true);
             request.getRequestDispatcher("/WEB-INF/results/login.jsp").forward(request, response);
@@ -71,6 +73,7 @@ public class LoginUserServlet extends HttpServlet{
             userBean = userDAO.getUserByEmail(email.get());
             String address = "WEB-INF/results/login.jsp"; //Default send to login page
 
+            //Controllo password e settaggio sessione
             if(userBean != null && userDAO.checkPassword(password.get(), userBean.getId_cred())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userlogged", userBean);
@@ -103,7 +106,7 @@ public class LoginUserServlet extends HttpServlet{
     /* ------------------------------------- OTHER METHODS ------------------------------------------- */
 
 
-
+    //Encryption and Decryption
     private static final String ALGORITHM = "AES";
     //private static final byte[] KEY = "8pipp8pipp8pipp8".getBytes(); //Key for cipher 16, 24 or 32 byte
 
@@ -127,6 +130,7 @@ public class LoginUserServlet extends HttpServlet{
     }
 
     private static byte[] keyGeneratedByDate() {
+        //Key generation
         String key = java.time.LocalDate.now()+"pipp8";
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

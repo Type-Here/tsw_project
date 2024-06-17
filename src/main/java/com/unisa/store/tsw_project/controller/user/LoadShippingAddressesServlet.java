@@ -25,10 +25,12 @@ public class LoadShippingAddressesServlet extends HttpServlet {
             return;
         }
 
+        // Fetch all shipping addresses for the user
         ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
         try {
             List<ShippingAddressesBean> shippingAddresses = shippingAddressesDAO.doRetrieveAllByUserId(userBean.getId());
+            // Serialize the list of shipping addresses to JSON
             Gson gson = new Gson();
             String json = gson.toJson(shippingAddresses);
             response.setContentType("application/json");

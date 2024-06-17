@@ -22,6 +22,7 @@ public class RegisterReviewServlet extends HttpServlet {
         String evaluation = request.getParameter("evaluation");
         String review = request.getParameter("comment");
 
+        // Review
         ReviewsDAO reviewsDAO = new ReviewsDAO();
         ReviewsBean reviewsBean = new ReviewsBean();
         UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");

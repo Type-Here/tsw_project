@@ -35,7 +35,7 @@
                     <input id="email" type="email" name="email" placeholder="Email" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" />
                 </label>
                 <label class="form-row" for="pass-2"><span>Password</span>
-                    <input id="pass-2" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[&%$£\/\\\(\)=€?\^!]).{8,}$" maxlength="30"/>
+                    <input id="pass-2" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                 </label>
             </fieldset>
             <fieldset class="registry-data">
@@ -46,7 +46,7 @@
                     <input id="surname" type="text" name="surname" placeholder="Cognome" required pattern="^[a-zA-Z']{3,}$" />
                 </label>
                 <label class="form-row" for="phone"><span>Numero di Telefono</span>
-                    <input id="phone" type="tel" name="phone" placeholder="Numero di Telefono: 01234567" required pattern="[0-9]{10}"/>
+                    <input id="phone" type="tel" name="phone" placeholder="Numero di Telefono: 01234567" required pattern="\+39[0-9]{8,10}"/>
                 </label>
                 <label class="form-row" for="birth"><span>Data di Nascita</span>
                     <input id="birth" type="date" name="birthdate" placeholder="Data di Nascita" required />
@@ -73,6 +73,13 @@
             <fieldset class="form-row">
                 <input class="default" type="submit" value="Register">
                 <a href="${pageContext.request.contextPath}/user-login"><button type="button" class="default alternative" value="Login" name="method">Login</button></a>
+            </fieldset>
+            <fieldset>
+                <c:if test="${not empty invalidUser}">
+                    <div class="invalid-credentials">
+                        <span>Dati inseriti non corretti</span>
+                    </div>
+                </c:if>
             </fieldset>
         </form>
     </div>

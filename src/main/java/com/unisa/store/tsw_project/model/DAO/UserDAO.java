@@ -65,6 +65,7 @@ public class UserDAO {
         }
     }
 
+    // Funzione per settare tutti i campi di un UserBean in un PreparedStatement
     private void setPsAllCampUserBean(UserBean user, PreparedStatement ps) throws SQLException {
         ps.setString(1, user.getFirstname());
         ps.setString(2, user.getLastname());

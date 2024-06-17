@@ -37,7 +37,7 @@
             </fieldset>
             <fieldset class="form-row">
                 <label for="pass">Password</label>
-                <input id="pass" type="password" name="password" placeholder="Password" required pattern="^.{8,}$" maxlength="30"/>
+                <input id="pass" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
             </fieldset>
             <c:if test="${not empty invalidUser}">
                 <div class="invalid-credentials">

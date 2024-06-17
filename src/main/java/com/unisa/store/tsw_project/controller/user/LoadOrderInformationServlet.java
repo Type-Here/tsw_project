@@ -46,6 +46,7 @@ public class LoadOrderInformationServlet extends HttpServlet {
         ReviewsDAO reviewsDAO = new ReviewsDAO();
         List<ReviewsBean> reviewClient = new ArrayList<>();
 
+        // Retrieve all the reviews of the client, the cart, the cart items and the products
         try {
             reviewClient = reviewsDAO.doRetrieveByClientId(userBean.getId());
             cart = cartDAO.doRetrieveById(Integer.parseInt(orderId));
@@ -60,6 +61,7 @@ public class LoadOrderInformationServlet extends HttpServlet {
 
         List<ReviewsBean> reviews = new ArrayList<>();
 
+        // Retrieve all the reviews of the products in the cart
         for (ProductBean product : products) {
             for (ReviewsBean reviewsBean : reviewClient) {
                 if (reviewsBean.getId_prod() == product.getId_prod()) {
@@ -72,6 +74,7 @@ public class LoadOrderInformationServlet extends HttpServlet {
         JSONMetaParser parser = new JSONMetaParser();
         parser.doParseMetaData(products, getServletContext());
 
+        // Set attributes and forward to the order information page
         request.setAttribute("reviews", reviews);
         request.setAttribute("cart", cart);
         request.setAttribute("cartItems", cartItems);

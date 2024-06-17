@@ -45,6 +45,7 @@ public class NewsletterServlet extends HttpServlet {
     	List<ProductBean> products = new ArrayList<>();
         ProductDAO productDAO = new ProductDAO();
         String season;
+        //Get current month and set different season, different discount.
     	int month = java.time.LocalDate.now().getMonthValue();
     	if(month == 3 ) {
     		season = "spring";
@@ -71,6 +72,7 @@ public class NewsletterServlet extends HttpServlet {
 
     private List<Integer> getSeasonDiscountGames(String season) throws IOException {
 
+        //Parse JSON file to get the list of games on discount
         JSONMetaParser parser = new JSONMetaParser();
         List<Integer> discountGames = parser.doParseNewsletter(File.separator + "WEB-INF" +
                 File.separator +"data" + File.separator + season +"-discount.json", getServletContext());

@@ -1,3 +1,15 @@
+//When the page is loaded, split the address in road-type, road-name and road-number and if the addresses added is wrong show the section 4
+window.onload = function() {
+    if (document.getElementById('errorAddresses')){
+        showContent('section4');
+    }
+    if (document.getElementById('errorUserUpdate')){
+        showContent('section1');
+    }
+    splitAddress();
+}
+
+// Function to show the content of the selected section
 function showContent(sectionId) {
     if (sectionId === 'section4') {
         loadShippingAddresses();
@@ -19,14 +31,7 @@ function showContent(sectionId) {
     }
 }
 
-
-window.onload = function() {
-    if (document.getElementById('errorAddresses')){
-        showContent('section4');
-    }
-    splitAddress();
-}
-
+// Funzione per dividere l'indirizzo in strada, numero civico e città
 function splitAddress() {
     const address = document.getElementById('address').value;
     const addressParts = address.split(', ');
@@ -88,12 +93,12 @@ function displayFilteredOrders(ordersID) {
         } else {
             rows[i].style.display = 'none';
         }
-        console.log("Order ID: " + ordersID);
+        //console.log("Order ID: " + ordersID);
     }
 
 }
 
-// Function to load orders orderID = '' -> means all orders if no argument is passed
+// Function to load orders orderID = '' -> means all orders if no argument is passed, start of the page
 function loadOrders() {
     let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
     let url = base + "loadOrders";
@@ -124,6 +129,7 @@ function displayOrders(orders, addresses) {
         table.deleteRow(1);
     }
 
+    // If there are orders to display, display them
     if (orders !== null) {
         // Add each order to the table
         for (let i = 0; i < orders.length; i++) {
@@ -191,6 +197,7 @@ function loadShippingAddresses() {
 
 }
 
+//Function to print the table of shipping addresses
 function doPrintAddressesTable(response) {
     let addresses = JSON.parse(response);
     const table = document.getElementById('addresses-table');
@@ -219,6 +226,7 @@ function doPrintAddressesTable(response) {
     }
 }
 
+//Function to disable the delete button if the address is used in an order
 function disableDeleteButton(button){
     let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
     let url = base + "modify-user";
@@ -308,6 +316,7 @@ document.getElementById('changePassword').addEventListener('submit', function(ev
     let passwordNew = document.getElementById('pass-new').value;
     let confirmPassword = document.getElementById('pass-new-confirm').value;
 
+    // Check if the fields are filled correctly
     if (passwordOld === '' || confirmPassword === '' || passwordNew === '') {
         document.getElementById('passwordResults').innerHTML = 'Riempi tutti i campi obbligatori!';
         document.getElementById('passwordResults').style.color = '#ad212e';

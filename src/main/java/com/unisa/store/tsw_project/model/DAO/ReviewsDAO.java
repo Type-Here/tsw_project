@@ -11,6 +11,7 @@ import java.util.List;
 
 public class ReviewsDAO {
 
+    // Function to retrieve all reviews for a product
     private List<ReviewsBean> getReviewsBeanListSelectAll(int id_prod, PreparedStatement ps) throws SQLException {
         ps.setInt(1, id_prod);
         ResultSet rs = ps.executeQuery();

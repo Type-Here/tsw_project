@@ -41,6 +41,14 @@
                     <div class="log_form reg_form">
                         <form id="form1" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input type="hidden" name="section" value="one">
+                            <fieldset>
+                                <c:if test="${not empty invalidUserUpdate}">
+                                    <div class="invalid-credentials">
+                                        <span>Dati inseriti non corretti</span>
+                                    </div>
+                                    <div id="errorUserUpdate" style="display: none;"></div>
+                                </c:if>
+                            </fieldset>
                             <fieldset class="registry-data">
                                 <label class="form-row" for="name"><span>Nome</span>
                                     <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-Z']{3,}$" disabled/>
@@ -110,7 +118,7 @@
                             <input type="hidden" name="section" value="three">
                             <fieldset class="access-data">
                                 <label class="form-row" for="pass-old"><span>Password Vecchia</span>
-                                    <input id="pass-old" name="oldpass" type="password" placeholder="Password Vecchia" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[&%$£\/\\\(\)=€?\^!]).{8,}$" maxlength="30"/>
+                                    <input id="pass-old" name="oldpass" type="password" placeholder="Password Vecchia" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
                                 <label class="form-row" for="pass-new"><span>Password Nuova</span>
                                     <input id="pass-new" name="newpass" type="password" placeholder="Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
