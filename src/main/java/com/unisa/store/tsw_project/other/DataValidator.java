@@ -66,7 +66,7 @@ public class DataValidator {
                 case Email -> data.matches("^\\w+[\\w.-]+@[\\w.-]+[.]\\w+$");
                 case Username -> data.matches("^(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{3,}$");
                 case Surname -> data.matches("^[a-zA-Z0-9À-ÿ' ]+$");
-                case Password -> data.matches("^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
+                case Password -> data.matches("^(?=.*[a-zà-ÿàáèìòùéíóú])(?=.*[A-ZÀ-ŸĀÁÈÉÒÓÙ])(?=.*[#@€!£$%&/()=?'^])(?=.*[0-9]).{8,}$");
                 case Int -> {
                     int val = Integer.parseInt(data);
                     yield (max == null || !(val > max)) && (min == null || !(val < min));
