@@ -1149,6 +1149,17 @@ input#pass{
     color: #ad212e;
     font-size: 1.01rem;
     text-align: center;
+    margin: 2px;
+}
+
+/* Successful Info*/
+.successful-info{
+    color: #0a78f5;
+    font-size: 1.01rem;
+    margin: 2px;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 3px;
 }
 
 
