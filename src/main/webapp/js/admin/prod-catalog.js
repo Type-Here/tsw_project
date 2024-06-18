@@ -104,6 +104,7 @@ function printRow(tableRow, prod, type){
                 }
             });
 
+            //Modifica
             let button1cell = tableRow.insertCell();
             button1cell.setAttribute('class', 'table-row-button');
 
@@ -115,6 +116,7 @@ function printRow(tableRow, prod, type){
             button1cell.appendChild(button1);
             addPopup(button1);
 
+            //Elimina
             let button2cell = tableRow.insertCell();
             button2cell.setAttribute('class', 'table-row-button');
 
