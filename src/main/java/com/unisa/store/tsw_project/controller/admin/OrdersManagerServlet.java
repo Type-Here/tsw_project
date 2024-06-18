@@ -40,11 +40,23 @@ public class OrdersManagerServlet extends HttpServlet {
             switch (ask.get()) {
                 case "retrieve" -> doSendOrders(req, resp); //Retrieve By Status
                 case "retrieveId" -> doSendOrderByID(req, resp); //Retrieve By Id
+                case "updateStatus" -> doSetOrderStatus(req, resp); //Change Status to Order
                 default -> throw new InvalidParameterException("Ask Option not valid");
             }
-        } catch (InvalidParameterException e) {
+
+        } catch (InvalidParameterException e){
+            resp.setContentType("text/html");
+            resp.getWriter().print("Invalid data - " + e.getMessage());
             resp.setStatus(Data.SC_INVALID_DATA);
-            resp.getWriter().print(Data.SC_INVALID_DATA + ": invalid data; " + e.getMessage());
+
+        } catch (SQLException e) {
+            resp.setContentType("text/plain");
+            resp.getWriter().print(HttpServletResponse.SC_INTERNAL_SERVER_ERROR + ": something went wrong");
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception e){
+            //System.err.println("Error: " + e.getMessage());
+        } finally {
+            resp.getWriter().flush();
         }
     }
 
@@ -57,8 +69,9 @@ public class OrdersManagerServlet extends HttpServlet {
      * @param req HttpServletRequest
      * @param resp HttpServletResponse
      * @throws IOException if response write fails
+     * @throws SQLException if query fails
      */
-    private void doSendOrders(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void doSendOrders(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Optional<String> type = Optional.ofNullable(req.getParameter("type"));
         Optional<String> page = Optional.ofNullable(req.getParameter("page"));
         int pageOffset = 0;
@@ -71,42 +84,29 @@ public class OrdersManagerServlet extends HttpServlet {
 
         if(type.isEmpty()) { throw new InvalidParameterException("Type is required");}
 
-        try {
-            Data.OrderStatus status = Data.OrderStatus.getEnum(type.get());
-            if(status == null) throw new InvalidParameterException("Status Invalid");
 
-            OrdersDAO ordersDAO = new OrdersDAO();
-            List<OrderAdminView> orders = ordersDAO.doRetrieveAllOrdersAndAddressesByStatus(status, 10, pageOffset); //NB DIFFERENT BEAN NEEDED FOR JOIN
+        Data.OrderStatus status = Data.OrderStatus.getEnum(type.get());
+        if(status == null) throw new InvalidParameterException("Status Invalid");
 
-            String info = "{\"status\":\"continue\",";
-            if(orders.isEmpty() || orders.size() < 10) {
-                info = "{\"status\":\"last\",";
-            }
+        OrdersDAO ordersDAO = new OrdersDAO();
+        List<OrderAdminView> orders = ordersDAO.doRetrieveAllOrdersAndAddressesByStatus(status, 10, pageOffset); //NB DIFFERENT BEAN NEEDED FOR JOIN
 
-            // Create a GsonBuilder instance
-            GsonBuilder builder = new GsonBuilder();
-            // Register the LocalDateAdapter with the builder
-            builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-            // Create a Gson instance from the builder
-            Gson gson = builder.serializeNulls().create();
-
-            String json = gson.toJson(orders);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().print(info + "\"data\":" + json + "}");
-
-
-        } catch (InvalidParameterException | IllegalArgumentException e){
-            resp.setContentType("text/plain");
-            resp.getWriter().print(Data.SC_INVALID_DATA + ": invalid data; " + e.getMessage());
-            resp.setStatus(Data.SC_INVALID_DATA);
-        } catch (SQLException e){
-            resp.setContentType("text/plain");
-            resp.getWriter().print(HttpServletResponse.SC_INTERNAL_SERVER_ERROR + ": something went wrong");
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } finally {
-            resp.getWriter().flush();
+        String info = "{\"status\":\"continue\",";
+        if(orders.isEmpty() || orders.size() < 10) {
+            info = "{\"status\":\"last\",";
         }
+
+        // Create a GsonBuilder instance
+        GsonBuilder builder = new GsonBuilder();
+        // Register the LocalDateAdapter with the builder
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        // Create a Gson instance from the builder
+        Gson gson = builder.serializeNulls().create();
+
+        String json = gson.toJson(orders);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print(info + "\"data\":" + json + "}");
     }
 
     /**
@@ -115,45 +115,64 @@ public class OrdersManagerServlet extends HttpServlet {
      * @param req HttpServletRequest
      * @param resp HttpServletResponse
      * @throws IOException if response write fails
+     * @throws SQLException if query fails
      */
-    private void doSendOrderByID(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void doSendOrderByID(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Optional<String> id = Optional.ofNullable(req.getParameter("id"));
         if(id.isEmpty()) { throw new InvalidParameterException("ID is required");}
 
-        try {
-            DataValidator validator = new DataValidator();
-            validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
+        DataValidator validator = new DataValidator();
+        validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
 
-            OrdersDAO ordersDAO = new OrdersDAO();
-            List<OrderAdminView> order = ordersDAO.doRetrieveByID(Integer.parseInt(id.get()));
+        OrdersDAO ordersDAO = new OrdersDAO();
+        List<OrderAdminView> order = ordersDAO.doRetrieveByID(Integer.parseInt(id.get()));
 
-            // Create a GsonBuilder instance
-            GsonBuilder builder = new GsonBuilder();
-            // Register the LocalDateAdapter with the builder
-            builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-            // Create a Gson instance from the builder
-            Gson gson = builder.serializeNulls().create();
+        // Create a GsonBuilder instance
+        GsonBuilder builder = new GsonBuilder();
+        // Register the LocalDateAdapter with the builder
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        // Create a Gson instance from the builder
+        Gson gson = builder.serializeNulls().create();
 
-            String json = gson.toJson(order);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().print("{\"data\":" + json + "}");
+        String json = gson.toJson(order);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print("{\"data\":" + json + "}");
 
-        } catch (InvalidParameterException e){
-            resp.setContentType("text/html");
-            resp.getWriter().print("Invalid data - " + e.getMessage());
-            resp.setStatus(Data.SC_INVALID_DATA);
-        } catch (SQLException e) {
-            resp.setContentType("text/plain");
-            resp.getWriter().print(HttpServletResponse.SC_INTERNAL_SERVER_ERROR + ": something went wrong");
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Exception e){
-            //System.err.println("Error: " + e.getMessage());
-        } finally {
-            resp.getWriter().flush();
-        }
     }
 
 
+    /**
+     *
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws IOException if response write fails
+     * @throws SQLException if retrieve and update fails
+     */
+    synchronized private void doSetOrderStatus(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        Optional<String> status = Optional.ofNullable(req.getParameter("status"));
+        Optional<String> id = Optional.ofNullable(req.getParameter("id"));
+
+        if (id.isEmpty()) { throw new InvalidParameterException("ID is required");}
+        if (status.isEmpty()) { throw new InvalidParameterException("Status is required");}
+
+        Data.OrderStatus statusToSet = Data.OrderStatus.getEnum(status.get());
+        if (statusToSet == null) {throw new InvalidParameterException("Status Invalid");}
+
+        int idOrder = Integer.parseInt(id.get());
+        if (idOrder < 0) {throw new InvalidParameterException("ID Invalid");}
+
+        OrdersDAO ordersDAO = new OrdersDAO();
+        OrdersBean order = ordersDAO.doRetrieveOrderByCartId(idOrder);
+
+        if (order == null) {throw new InvalidParameterException("Order Not Found");}
+
+        order.setStatus(statusToSet);
+        ordersDAO.doUpdate(order);
+
+        resp.setContentType("text/html");
+        resp.getWriter().print("Ordine Aggiornato Correttamente");
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
 
 }
