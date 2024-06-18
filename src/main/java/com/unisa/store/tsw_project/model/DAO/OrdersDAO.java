@@ -62,7 +62,7 @@ public class OrdersDAO {
             ps.setInt(1, order.getId_cart());
             ps.setInt(2, order.getId_client());
             ps.setInt(3, order.getId_add());
-            ps.setString(4, order.getStatus().toString()); // Enum to String da vedere
+            ps.setString(4, order.getStatus().value); // Enum to String da vedere -- Checked: use value to get db enum parameter
             ps.setDate(5, java.sql.Date.valueOf(order.getOrder_date())); // LocalDate to Date da verificare funzionamento
             ps.setInt(6, order.getId_cart());
             if (ps.executeUpdate() != 1) {
