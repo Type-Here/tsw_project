@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,6 +36,8 @@ public class AdminSettingsServlet extends HttpServlet {
 
             switch (ask.get()) {
                 case "modifyAdmin" -> doModifyAdmin(req, resp); //Modify ADMIN
+                case "removeDiscountCode" -> removeDiscountCode(req, resp);
+                case "changeDiscountCode" -> changeDiscountCode(req, resp);
                 default -> throw new InvalidParameterException("Ask Option not valid");
             }
 
@@ -65,7 +68,7 @@ public class AdminSettingsServlet extends HttpServlet {
      * @throws IOException if response writing fails
      * @throws SQLException if query retrieve or update fails
      */
-    private void doModifyAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+    synchronized private void doModifyAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Optional<String> oldPass = Optional.ofNullable(req.getParameter("old"));
         Optional<String> newPass = Optional.ofNullable(req.getParameter("new"));
 
@@ -127,6 +130,58 @@ public class AdminSettingsServlet extends HttpServlet {
     }
 
 
+    /**
+     * Remove a Discount Code by Its Key (name) passed as Request Parameter argument
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws IOException if response message fails
+     */
+    synchronized private void removeDiscountCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Optional<String> codeKey = Optional.ofNullable(req.getParameter("key"));
+        DataValidator validator = new DataValidator();
+        if(codeKey.isEmpty()){
+            throw new InvalidParameterException("Key Required");
+        }
+        validator.validatePattern(codeKey.get(), DataValidator.PatternType.DiscountName, 5, 30);
+
+        Map<String, Double> discountMap = (Map<String, Double>) getServletContext().getAttribute("discountCode");
+
+        if(discountMap.remove(codeKey.get()) == null){
+            throw new InvalidParameterException("Key Not Found");
+        }
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print("Codice Rimosso con Successo");
+    }
+
+
+/**
+ * Replace (all) Discount Code(s) with New Discount, Key(name) Value(discount percentage) passed as Request Parameters
+ * @param req HttpServletRequest
+ * @param resp HttpServletResponse
+ * @throws IOException if response message fails
+ */
+    synchronized private void changeDiscountCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Optional<String> codeKey = Optional.ofNullable(req.getParameter("key"));
+        Optional<String> codeValue = Optional.ofNullable(req.getParameter("value"));
+
+        DataValidator validator = new DataValidator();
+        if(codeKey.isEmpty() || codeValue.isEmpty()){
+            throw new InvalidParameterException("Key and Value are Required");
+        }
+
+        validator.validatePattern(codeKey.get(), DataValidator.PatternType.DiscountName, 5, 30);
+        validator.validatePattern(codeValue.get(), DataValidator.PatternType.Double, 0 , 100);
+        Map<String, Double> discountMap = (Map<String, Double>) getServletContext().getAttribute("discountCode");
+
+        if(!discountMap.isEmpty()){ discountMap.clear(); }
+        discountMap.put(codeKey.get(), Double.valueOf(codeValue.get()));
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print("Codice Aggiunto con Successo");
+    }
 
 
 }
