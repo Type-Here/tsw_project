@@ -7,7 +7,6 @@ import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.JSONMetaParser;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
@@ -17,15 +16,14 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 @WebServlet(name = "InitService", urlPatterns = "/myinit", loadOnStartup = 0)
 public class InitServlet extends HttpServlet {
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         try {
             System.out.println("\n----- INIT ------");
 
@@ -48,20 +46,23 @@ public class InitServlet extends HttpServlet {
             int prodNum = productDAO.doCountAll();
             app.setAttribute("prod-number", prodNum);
 
+            /* Set Logger if context-param Logging in web.xml is set to true */
+            Boolean isLog = (Boolean) app.getAttribute("Logging");
+            if(isLog != null && isLog){
+                Logger logger = Logger.getLogger("base-log");
+                URL resource = getServletContext().getResource("/WEB-INF/log");
+                Files.createDirectories(Path.of(resource.getPath()));
+                File log = new File(resource + "log.txt");
+                if(!log.exists()){
+                    if(!log.createNewFile()){
+                        System.err.println("Unable to Create log File");
 
-            /* Logger logger = Logger.getLogger("base-log");
-            URL resource = getServletContext().getResource("/WEB-INF/log");
-            Files.createDirectories(Path.of(resource.getPath()));
-            File log = new File(resource + "log.txt");
-            if(!log.exists()){
-                if(!log.createNewFile()){
-                    System.err.println("Unable to Create log File");
-
+                    }
                 }
-            }
 
-            logger.addHandler(new FileHandler(log.getPath(), true));
-            app.setAttribute("logger", logger);*/
+                logger.addHandler(new FileHandler(log.getPath(), true));
+                app.setAttribute("logger", logger);
+            }
 
 
             /*Get IDs Info from highlights.json for Carousel Products */
@@ -82,6 +83,13 @@ public class InitServlet extends HttpServlet {
 
             //Set list in ServletContext
             app.setAttribute("highlights", highProd);
+
+
+            /* Set Discount Code Value */
+            HashMap<String, Double> discountCodeMap = new HashMap<>();
+            discountCodeMap.put("ESTATE88!", 12.0);
+            app.setAttribute("discountCodes", discountCodeMap);
+
 
             System.out.println("--- END OF INIT ---");
 
