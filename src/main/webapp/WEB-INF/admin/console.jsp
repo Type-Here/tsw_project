@@ -260,12 +260,13 @@
         <div class="centerized-flex-container">
             <h3 class="text-center margin-v-10">Cambia Password</h3>
             <div class="log_form admin-change-pwd">
-                <form id="pass_change">
+                <form id="pass-change" class="gen-form">
                     <label class="form-row"><span>Vecchia Password</span><input name="old" type="password" required/></label>
                     <label class="form-row"><span>Nuova Password</span><input name="new" type="password" required/></label>
                     <label class="form-row"><span>Conferma Password</span><input name="confirm" type="password" required/></label>
                     <label class="form-row centerized-row"><input class="default free-size" type="submit" name="Cambia"></label>
                 </form>
+                <div class="margin-h-10 centerized-flex-container"><span class="text-center invalid-credentials general-display-none" id="setting_error_message"></span></div>
             </div>
         </div>
     </section>

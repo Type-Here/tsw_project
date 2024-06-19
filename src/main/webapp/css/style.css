@@ -278,6 +278,10 @@ li.this-page{
     text-align: center;
 }
 
+.text-left{
+    text-align: left;
+}
+
 .margin-h-10{
     margin-left: 10px;
     margin-right: 10px;
