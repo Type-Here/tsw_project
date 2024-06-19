@@ -19,6 +19,7 @@ import java.util.*;
 public class StoreServlet extends HttpServlet {
     private DataValidator validator;
 
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestWith = req.getHeader("X-Requested-With");
@@ -48,7 +49,6 @@ public class StoreServlet extends HttpServlet {
 
             //Send to doFilter with Limit = 18 elements and Offset
             List<ProductBean> products = doFilter(req, limit, offset);
-            //pages = (products.size() /18) + 1;
 
             //Add product list to request and Send to JSP for View
             req.setAttribute("maxPage", pages);
@@ -58,15 +58,26 @@ public class StoreServlet extends HttpServlet {
 
         } catch (NumberFormatException e){
             throw new InvalidParameterException("page");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
     }
 
     /* ------------------------ PRIVATE METHOD ---------------------- */
 
-    private List<ProductBean> doFilter(HttpServletRequest req, Integer limit, Integer offset) throws IOException, ServletException {
-        /*resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");*/
+    /**
+     * Find Products that Apply to Filter in Filter Bar <br />
+     * Filters; Platform, Developer, Category/ies, Minimum Price, Maximum Price
+     * @param req HttpServletRequest
+     * @param limit list of products retrieved size is limited to this value
+     * @param offset offset to apply to DataBase query. Offset by Page
+     * @return List of Product Beans that apply to Filter
+     * @throws IOException if response fails
+     * @throws SQLException if query fails
+     */
+    private List<ProductBean> doFilter(HttpServletRequest req, Integer limit, Integer offset) throws IOException, SQLException {
+
         //Get Parameters
         Optional<String> platform = Optional.ofNullable(req.getParameter("platform"));
         Optional<String> dev = Optional.ofNullable(req.getParameter("dev"));
@@ -74,62 +85,54 @@ public class StoreServlet extends HttpServlet {
         Optional<String> minPrice = Optional.ofNullable(req.getParameter("minprice"));
         Optional<String> maxPrice = Optional.ofNullable(req.getParameter("maxprice"));
 
-        try {
-            //Params: Key=Column Name of DB, Value=Value from User
-            Map<String, String> params = new LinkedHashMap<>();
 
-            //Validate Parameters and Add them to params Map
-            platform.ifPresent(s -> {
-                if(s.isEmpty()) return;
-                validator.validatePattern(s, DataValidator.PatternType.Platform);
-                params.put("platform", s);
-            });
+        //Params: Key=Column Name of DB, Value=Value from User
+        Map<String, String> params = new LinkedHashMap<>();
 
-            dev.ifPresent(s -> {
-                if(s.isEmpty()) return;
-                validator.validatePattern(s, DataValidator.PatternType.GenericAlphaNumeric);
-                params.put("developer", s);
-            });
+        //Validate Parameters and Add them to params Map
+        platform.ifPresent(s -> {
+            if(s.isEmpty()) return;
+            validator.validatePattern(s, DataValidator.PatternType.Platform);
+            params.put("platform", s);
+        });
 
-            minPrice.ifPresent(s -> {
-                if(s.isEmpty()) return;
-                validator.validatePattern(s, DataValidator.PatternType.Double);
-                params.put("minprice", s);
-            });
+        dev.ifPresent(s -> {
+            if(s.isEmpty()) return;
+            validator.validatePattern(s, DataValidator.PatternType.GenericAlphaNumeric);
+            params.put("developer", s);
+        });
 
-            maxPrice.ifPresent(s -> {
-                if(s.isEmpty()) return;
-                validator.validatePattern(s, DataValidator.PatternType.Double);
-                params.put("maxprice", s);
-            });
+        minPrice.ifPresent(s -> {
+            if(s.isEmpty()) return;
+            validator.validatePattern(s, DataValidator.PatternType.Double);
+            params.put("minprice", s);
+        });
 
-            List<Integer> catIds = new ArrayList<>();
-            categories.ifPresent(c -> {
-                //Validate All possible Category Parameters (multiple checkbox)
-                for (String categoryParam : c) {
-                    validator.validatePattern(categoryParam, DataValidator.PatternType.Int);
-                    catIds.add(Integer.parseInt(categoryParam));
-                }
-            });
+        maxPrice.ifPresent(s -> {
+            if(s.isEmpty()) return;
+            validator.validatePattern(s, DataValidator.PatternType.Double);
+            params.put("maxprice", s);
+        });
 
-            //Retrieve Data with applied filters
-            ProductDAO productDAO = new ProductDAO();
-            /* Filter By Parameters Map. If no parameters are set a select all is done instead */
-            List<ProductBean> products = productDAO.doRetrieveByParameters(params, limit, offset, catIds);
+        List<Integer> catIds = new ArrayList<>();
+        categories.ifPresent(c -> {
+            //Validate All possible Category Parameters (multiple checkbox)
+            for (String categoryParam : c) {
+                validator.validatePattern(categoryParam, DataValidator.PatternType.Int);
+                catIds.add(Integer.parseInt(categoryParam));
+            }
+        });
 
-            //Parse Metadata and retrieve Images Path of Product Result
-            JSONMetaParser parser = new JSONMetaParser();
-            parser.doParseMetaData(products, getServletContext());
-            return products;
+        //Retrieve Data with applied filters
+        ProductDAO productDAO = new ProductDAO();
+        /* Filter By Parameters Map. If no parameters are set a select all is done instead */
+        List<ProductBean> products = productDAO.doRetrieveByParameters(params, limit, offset, catIds);
 
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+        //Parse Metadata and retrieve Images Path of Product Result
+        JSONMetaParser parser = new JSONMetaParser();
+        parser.doParseMetaData(products, getServletContext());
+        return products;
 
-        /* ArrayList<String> a = new ArrayList<>();
-         a.add(pep);
-        String json = new Gson().toJson(a);
-        resp.getWriter().write(json); */
     }
 
     /* UNUSED FOR NOW */
@@ -153,8 +156,6 @@ public class StoreServlet extends HttpServlet {
             );
         });
     }
-
-
 
 
 }

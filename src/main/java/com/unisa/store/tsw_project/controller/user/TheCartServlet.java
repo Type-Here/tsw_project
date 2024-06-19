@@ -245,6 +245,14 @@ public class TheCartServlet extends HttpServlet {
     }
 
 
+    /**
+     * Send Updated Price for Products in Cart <br />
+     * Send JSON
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws SQLException if query fails (retrieve products)
+     * @throws IOException  if response writing fails
+     */
     private void sendNewPrice(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         CartBean cart = (CartBean) req.getSession().getAttribute("cart");
         BigDecimal[] prices = new BigDecimal[]{BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.0)};
@@ -256,7 +264,7 @@ public class TheCartServlet extends HttpServlet {
 
             prices[0] = value;
             if(prices[0].compareTo(new BigDecimal(100)) < 0) {
-                prices[1] = value.add(new BigDecimal("15.00"));
+                prices[1] = value.add(new BigDecimal("15.00")); //Shipping Costs
             } else prices[1] = value;
         }
 
@@ -270,6 +278,14 @@ public class TheCartServlet extends HttpServlet {
     }
 
 
+    /**
+     * Send ProductBean Data to Print <br />
+     * Send JSON
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws SQLException if query to database fails
+     * @throws IOException if json response writing fails
+     */
     private void retrieveProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         Optional<String> id = Optional.ofNullable(req.getParameter("id"));
         DataValidator validator = new DataValidator();
