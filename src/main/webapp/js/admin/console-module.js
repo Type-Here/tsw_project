@@ -377,7 +377,7 @@ document.forms.namedItem('pass-change').addEventListener('submit', async functio
         return;
     }
 
-    let message = 'action=usersManager&ask=modifyAdmin&old=' + oldInput + '&new=' + newInput;
+    let message = 'action=settings&ask=modifyAdmin&old=' + oldInput + '&new=' + newInput;
     let response = await ajax(message);
     let responseText = await response.text();
 

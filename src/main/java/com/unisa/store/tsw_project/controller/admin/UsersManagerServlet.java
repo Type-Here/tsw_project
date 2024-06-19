@@ -2,9 +2,7 @@ package com.unisa.store.tsw_project.controller.admin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.unisa.store.tsw_project.model.DAO.AdminDAO;
 import com.unisa.store.tsw_project.model.DAO.UserDAO;
-import com.unisa.store.tsw_project.model.beans.AdminBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
@@ -21,7 +19,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @WebServlet(name = "UsersManagerAdmin", urlPatterns = "/WEB-INF/admin/users-manager")
 public class UsersManagerServlet extends HttpServlet {
@@ -43,7 +40,6 @@ public class UsersManagerServlet extends HttpServlet {
                 case "retrieve" -> doSendUsers(req, resp); //Retrieve By Status
                 case "retrieveId" -> doSendUserByID(req, resp); //Retrieve By Id
 
-                case "modifyAdmin" -> doModifyAdmin(req, resp); //Modify ADMIN
                 default -> throw new InvalidParameterException("Ask Option not valid");
             }
 
@@ -145,77 +141,6 @@ public class UsersManagerServlet extends HttpServlet {
         //AJAX Expects an Array of Users so add [] to print table, this avoids the use of an arraylist
         resp.getWriter().print("{\"data\":[" + json + "]}");
 
-    }
-
-
-    /* ============================================ FOR ADMIN =================================================== */
-
-    /**
-     * FOR ADMIN: Change Password
-     * @param req HttpServletRequest
-     * @param resp HttpServletResponse
-     * @throws IOException if response writing fails
-     * @throws SQLException if query retrieve or update fails
-     */
-    private void doModifyAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
-        Optional<String> oldPass = Optional.ofNullable(req.getParameter("old"));
-        Optional<String> newPass = Optional.ofNullable(req.getParameter("new"));
-
-        if(oldPass.isEmpty() || newPass.isEmpty()){
-            throw new InvalidParameterException("Old and New Passwords Required");
-        }
-
-        AdminDAO adminDAO = new AdminDAO();
-        DataValidator validator = new DataValidator();
-
-        validator.validatePattern(oldPass.get(), DataValidator.PatternType.Generic);
-        validator.validatePattern(newPass.get(), DataValidator.PatternType.Password); //If not valid throws InvalidParameterException
-
-        //Check Old Password
-
-        String sessionAdmin = (String) req.getSession().getAttribute("user");
-
-        Optional<String[]> data = Optional.ofNullable(adminDAO.doRetrieveSaltAndHash(sessionAdmin));
-        if(data.isEmpty()){ throw new RuntimeException("User not found"); } //Should Never Happen since Admin should be already logged
-
-        AdminBean checkAdmin = new AdminBean(sessionAdmin, oldPass.get() + data.get()[0]);
-        if(!checkAdmin.getPass().equals(data.get()[1])) {
-            throw new InvalidParameterException("Invalid password");
-        }
-
-        //Set new Password and Salt
-
-        String newSalt = getSalt();
-        checkAdmin.setPass(newPass.get() + newSalt); //new Admin
-
-        adminDAO.doUpdatePassword(checkAdmin, newSalt); //Throws SQLException if fails
-
-        //Update AdminBean in Session
-        //req.getSession().setAttribute("user", checkAdmin.getUser()); //NOT REQUIRED
-
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().print("Password Modificata con Successo");
-    }
-
-
-    /**
-     * Generate New Salt String
-     * @return Random AlphaNumeric String of 6 chars
-     */
-    private static String getSalt(){
-        //ASCII A=65, Z=90
-        Random rand = new Random();
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < 6; i++){
-            if(rand.nextBoolean()) builder.append(rand.nextInt(10));
-            else{
-                int upperCase = rand.nextBoolean() ? 65 : 97;
-                char c = (char) (rand.nextInt(26) + upperCase);
-                builder.append(c);
-            }
-        }
-        return builder.toString();
     }
 
 }

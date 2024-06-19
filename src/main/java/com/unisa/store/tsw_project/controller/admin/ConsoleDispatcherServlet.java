@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @WebServlet(name = "ConsoleDispatcher", urlPatterns = "/console")
 public class ConsoleDispatcherServlet extends HttpServlet {
-    private enum Actions{addProd, prodManager, ordersManager, usersManager}
+    private enum Actions{addProd, prodManager, ordersManager, usersManager, settings}
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,6 +28,7 @@ public class ConsoleDispatcherServlet extends HttpServlet {
                     case prodManager -> req.getRequestDispatcher("/WEB-INF/admin/prod-manager").forward(req, resp);
                     case ordersManager -> req.getRequestDispatcher("/WEB-INF/admin/order-manager").forward(req, resp);
                     case usersManager -> req.getRequestDispatcher("/WEB-INF/admin/users-manager").forward(req, resp);
+                    case settings -> req.getRequestDispatcher("/WEB-INF/admin/settings").forward(req, resp);
                     default -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 }
                 return;
