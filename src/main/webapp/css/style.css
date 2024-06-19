@@ -1283,6 +1283,7 @@ input#pass{
     box-sizing: border-box;
     position: relative;
     height: 100%;
+    width: 100%;
     overflow: hidden;
     scroll-snap-align: start;
 }
