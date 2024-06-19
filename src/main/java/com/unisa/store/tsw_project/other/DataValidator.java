@@ -8,7 +8,7 @@ public class DataValidator {
     public enum PatternType{
         Generic, GenericAlphaNumeric, Email, Surname, Phone, Password, CAP,
         Birthdate, Username, Path, Double, Int, Condition, Bool, Platform, Category,
-        StringOnlyNumbers, DateFuture
+        StringOnlyNumbers, DateFuture, DiscountName
     }
 
     /**
@@ -81,6 +81,7 @@ public class DataValidator {
                 case Condition -> data.matches("[XABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
                 case Platform ->Arrays.stream(Data.Platform.values()).anyMatch(e -> data.equalsIgnoreCase(e.name()));
+                case DiscountName -> data.matches("^[A-Z0-9!€$]{5,30}$");
                 default -> false;
             };
         } catch (NullPointerException|NumberFormatException e){
