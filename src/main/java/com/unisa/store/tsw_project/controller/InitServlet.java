@@ -88,7 +88,7 @@ public class InitServlet extends HttpServlet {
             /* Set Discount Code Value */
             HashMap<String, Double> discountCodeMap = new HashMap<>();
             discountCodeMap.put("ESTATE88!", 12.0);
-            app.setAttribute("discountCodes", discountCodeMap);
+            app.setAttribute("discountCode", discountCodeMap);
 
 
             System.out.println("--- END OF INIT ---");

@@ -92,7 +92,7 @@ body.body_def{
 }
 
 
-/*Hide Unorderd List Bulltes*/
+/*Hide Unordered List Bullets*/
  .hide-bullets{
     list-style-type: none;
     padding: 0 5px;
@@ -1166,6 +1166,13 @@ input#pass{
     border-radius: 3px;
 }
 
+.green-info{
+    color:darkgreen;
+    font-weight: 500;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    padding: 1px 3px;
+}
 
 .category-form{
     justify-content: space-around;
