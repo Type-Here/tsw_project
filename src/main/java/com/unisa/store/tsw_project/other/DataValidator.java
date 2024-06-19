@@ -76,7 +76,7 @@ public class DataValidator {
                     yield (max == null || !(valD > max)) && (min == null || !(valD < min));
                 }
                 case GenericAlphaNumeric -> data.matches("^[a-zA-Z0-9_\\- ]+$");
-                case Generic -> data.matches("^[a-zA-Z0-9_.'&$\"\\- ]+$");
+                case Generic -> data.matches("^[a-zA-ZÀ-ÿ0-9_.'!€#@£%/?&$\"\\- ]+$");
                 case StringOnlyNumbers -> data.matches("^[0-9]+$");
                 case Condition -> data.matches("[XABCDE]");
                 case Bool -> data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false");
