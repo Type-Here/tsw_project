@@ -257,6 +257,39 @@
         <div class="section-header">
             <h2 class="text-center">Impostazioni Admin</h2>
         </div>
+
+        <div class="margin-v-10">
+            <h3 class="text-center margin-v-10">Codici Sconto</h3>
+            <div class="margin-v-10 centerized-flex-container discount-div">
+                <c:set var="substitute" value="Sostituisci il"/>
+                <c:choose>
+                    <c:when test="${not empty discountCode}">
+                        <c:forEach var="entry" items="${discountCode}" varStatus="eventCount">
+                            <div class="space-around-row-flex-container" id="discount-display">
+                                <ul class="text-center hide-bullets">
+                                    <li class="margin-v-10">Codice Sconto: <span class="green-info">${entry.key}</span></li>
+                                    <li>Percentuale Sconto: <span class="discount">${entry.value} </span></li>
+                                </ul>
+                                <button data-value="${entry.key}" class="remove-discount-button secondary attention">Rimuovi</button>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="substitute" value="Aggiungi un"/>
+                        <span class="text-center">Non ci sono Codici Attivi</span>
+                    </c:otherwise>
+                </c:choose>
+                <span class="text-center invalid-credentials general-display-none" id="discount_error_message"></span>
+                <span class="text-center">${substitute} Codice:</span>
+                <div class="centerized-flex-container log_form">
+                    <label class="form-row"><span>Nome: </span><input id="discountName" type="text" name="discountName" required/></label>
+                    <label class="form-row"><span>Valore in %: </span><input id="discountValue" type="number" step="0.5" name="discountValue" required/></label>
+                    <label class="form-row centerized-row"><button id="add-discountCode-button" class="free-size default alternative" type="submit">Invia</button></label>
+                </div>
+            </div>
+        </div>
+
+
         <div class="centerized-flex-container">
             <h3 class="text-center margin-v-10">Cambia Password</h3>
             <div class="log_form admin-change-pwd">
