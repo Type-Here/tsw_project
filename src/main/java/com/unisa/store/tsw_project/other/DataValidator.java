@@ -19,7 +19,7 @@ public class DataValidator {
      * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType){
-        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException(patternType.name() + ":" + data);
+        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException(patternType.name() + ":");
         return true;
     }
 
@@ -34,7 +34,7 @@ public class DataValidator {
      */
     public boolean validatePattern(String data, PatternType patternType,
                                                          Integer min, Integer max){
-        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException(patternType.name() + ":" + data);
+        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException(patternType.name() + ":" );
         return true;
     }
 

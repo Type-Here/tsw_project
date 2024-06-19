@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminDAO {
+
     /**
      * Return true if credential are valid, false otherwise. <br />
      * Bean password has to be already hashed with salt.
@@ -48,6 +49,25 @@ public class AdminDAO {
                 data[1] = saltSet.getString("hash");
             }
             return data;
+        }
+    }
+
+
+    /**
+     * Update Admin Password with new Salt. Password already has to be already Hashed.
+     * @param bean AdminBean with Username and new Password
+     * @param salt String of new Salt
+     * @throws SQLException if update fails
+     */
+    public void doUpdatePassword(AdminBean bean, String salt) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE admin SET hash = ?, salt = ? WHERE user = ?"); //Already Hashed Password
+            ps.setString(1, bean.getPass());
+            ps.setString(2, salt);
+            ps.setString(3, bean.getUser());
+            if (ps.executeUpdate() < 1) {
+                throw new SQLException("Failed to update password");
+            }
         }
     }
 
