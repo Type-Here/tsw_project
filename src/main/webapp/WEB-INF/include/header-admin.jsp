@@ -19,7 +19,7 @@
         <li><a href="#add_prod">Aggiungi Prodotto</a></li>
         <li><a href="#catalog_management">Gestione Catalogo</a></li>
         <li><a href="#order_management">Gestione Ordini</a></li>
-        <li><a href="#">Gestione Utenti</a></li>
+        <li><a href="#users_management">Gestione Utenti</a></li>
     </ul>
     <div class="upper-bar-right">
         <button class="default" name="action" value="Admin">${user}</button>

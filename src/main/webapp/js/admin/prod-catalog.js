@@ -84,6 +84,7 @@ function xmlRequestPageNumber(){
  */
 function printRow(tableRow, prod, type){
     switch (type){
+        //Products Table
         case 1:
             const printable = ["id_prod","name","price","platform","developer","metadataPath","type","discount"];
             Object.keys(prod).forEach( key =>{
@@ -130,6 +131,8 @@ function printRow(tableRow, prod, type){
             button2cell.appendChild(button2);
             //addPopupRemove(button2);
             break;
+
+        //Order Table
         case 2:
             Object.keys(prod).forEach( key =>{
                 let cellText = prod[key];
@@ -140,9 +143,29 @@ function printRow(tableRow, prod, type){
                 newCell.appendChild(newText);
             });
             break;
+
+        //User Table
         case 3:
-            //printRow = printRowUsers;
+            const addressComponents = ["road", "address", "CAP", "prov", "city"];
+            let address = '';
+            let counter = 0;
+            Object.keys(prod).forEach( key =>{
+                let cellText = prod[key];
+                //if(key === 'birth') return; //return is equivalent of continue in this forEach method
+                if(addressComponents.includes(key)) {
+                    address += prod[key] + " ";
+                    if(++counter === 4) cellText = address;
+                    else return; //return is equivalent of continue in this forEach method
+                }
+
+                // Insert a cell at the end of the row
+                let newCell = tableRow.insertCell();
+                // Append a text node to the cell
+                let newText = document.createTextNode(cellText);
+                newCell.appendChild(newText);
+            });
             break;
+
         default:
             console.error("No type defined in printTable Call");
             break

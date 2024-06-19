@@ -58,7 +58,7 @@ document.getElementById('next-order-button').addEventListener('click', async ()=
 
     let orderStatus = document.getElementsByClassName('order-filters')[0].getElementsByClassName('active')[0].value;
     let message = "action=ordersManager&ask=retrieve&type=" + orderStatus + "&page=" + ++page;
-    await populateOrderTable(message);
+    await populateOrderTable(message); //This Call will disable next button if page has < 10 elements
     ordersTable.setAttribute('data-page', page.toString());
 });
 
@@ -197,3 +197,126 @@ function addListenerToSelect(select){
         }, 6000);
     });
 }
+
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ========================================================================= USERS TABLE =========================================================================== */
+
+
+
+
+/* ------- LISTENERS ------- */
+
+/**
+ * Listener for Load Data Button: Load First Page
+ */
+document.getElementById('load-users-button').addEventListener('click', async ()=>{
+    let message = "action=usersManager&ask=retrieve";
+    await populateUserTable(message)
+});
+
+
+/**
+ * Listener For Prev Users Page Button
+ */
+document.getElementById('prev-users-button').addEventListener('click', async ()=>{
+    const usersTable = document.getElementById('admin-users-table')
+    let page = parseInt(usersTable.getAttribute('data-page'));
+    if(!page || page <= 1) {this.disabled = 'true'; return;}
+
+    let message = "action=ordersManager&ask=retrieve&page=" + --page;
+    await populateUserTable(message);
+    usersTable.setAttribute('data-page', page.toString());
+});
+
+
+/**
+ * Listener for Next Users Page Button
+ */
+document.getElementById('next-users-button').addEventListener('click', async ()=>{
+    const usersTable = document.getElementById('admin-users-table')
+    let page = parseInt(usersTable.getAttribute('data-page'));
+    let message = "action=ordersManager&ask=retrieve&page=" + ++page;
+    await populateUserTable(message); //This Call will disable next button if page has < 10 elements
+    usersTable.setAttribute('data-page', page.toString());
+});
+
+
+/**
+ * Search Bar Users Table AJAX Listener
+ */
+document.forms.namedItem('users-search').addEventListener('submit', async function (e){
+    e.preventDefault(); //Abort Submit and use ajax instead (to reuse code from search bar)
+
+    let input = this.elements[0].value;
+    let message = "action=usersManager&ask=retrieveId&id=" + input;
+    await populateUserTable(message);
+
+    document.getElementById("prev-order-button").classList.add('general-display-none'); //Hide Prev Button
+    document.getElementById("next-order-button").classList.add('general-display-none'); //Hide Next Button
+});
+
+
+
+
+/* ------- FUNCTIONS ------ */
+
+
+/**
+ * Function To Populate User Table.
+ * Execute AJAX based on message as parameter.
+ * Call printTable
+ * Set span (error) messages
+ * @param message POST request message
+ */
+async function populateUserTable(message){
+    const response = await ajax(message);
+    //Error Span to print message
+    const span = document.getElementById('users_error_message');
+    if(response.ok){
+        const data = await response.json();
+
+        const usersTable = document.getElementById('admin-users-table')
+        usersTable.setAttribute('data-page', '1');
+        document.getElementById('prev-users-button').classList.remove('general-display-none');
+        document.getElementById('next-users-button').classList.remove('general-display-none');
+
+        // no more content, disable next button
+        if(data.status === "last"){
+            document.getElementById('next-users-button').disabled = 'true';
+        }
+
+        //Reset Error Message if any
+        span.classList.add('general-display-none');
+        span.innerHTML = '';
+
+        //Print Data
+        doPrintTable(data.data, usersTable, 3);
+
+    } else { //Display Error Message
+        span.classList.remove('general-display-none');
+        span.classList.add('invalid-credentials');
+        span.innerHTML = await response.text();
+        console.error(response.status + ":" + response.statusText);
+    }
+}
+
+/* ------ VALIDATION DATA LISTENERS ----- */
+
+/**
+ * Input User Search Validation - Only Numbers
+ */
+document.getElementById('search-input-users').addEventListener('input', function(e){
+    if(!e.data) return;
+    const pattern = /[0-9]+/
+    if(!pattern.test(e.data)) this.value = this.value.slice(0, this.value.length - e.data.length);
+    //if(this.value.length > 1000) this.value = this.value.slice(0, 1000);
+});
+
+
+
+
+
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ========================================================================= SETTINGS TABLE =========================================================================== */
