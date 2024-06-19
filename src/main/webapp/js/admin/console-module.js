@@ -170,7 +170,7 @@ function doAddSelectOrderStatus(ordersTable){
  * @param select select input to add listener
  */
 function addListenerToSelect(select){
-    select.addEventListener('change', async (e)=>{
+    select.addEventListener('change', async ()=>{
 
         //'data-id' custom attribute in tag where id_order is saved, select.value = option selected to update status
         let message = "action=ordersManager&ask=updateStatus&id=" + select.getAttribute('data-id') + "&status=" + select.value;
@@ -320,3 +320,75 @@ document.getElementById('search-input-users').addEventListener('input', function
 /* ----------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* ========================================================================= SETTINGS TABLE =========================================================================== */
+
+
+/* ------------- CHANGE PASSWORD ------------- */
+
+/**
+ * Input New and Confirm listeners to validate data (visual suggestion to user red = wrong, green = ok)
+ */
+Array.from(document.forms.namedItem('pass-change').elements).forEach((input, index, array) =>{
+    if((input.type === 'text' || input.type === 'password') && input.name !== 'old'){
+        input.addEventListener('input', function (){
+
+            let confirm = array.find(e => e.name === 'confirm'); //confirm input
+            let isConfirmCheck = (confirm.value === array.find(e => e.name === 'new').value); //verify if new and confirm input are equals
+
+            const pattern = /^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[#@€!£$%&/()=?'^])(?=.*[0-9]).{8,}$/ //Validation Pattern
+            if(!pattern.test(input.value)) this.style.background = '#77000090';
+            else this.style.background = '#00770090';
+
+            if(!isConfirmCheck) confirm.style.background = '#77000090'; //set confirm to red if password doesn't match with 'new' input value
+        });
+    }
+})
+
+
+/**
+ * Listener on Submit Change Password Form: validate and send data to Update: AJAX
+ */
+document.forms.namedItem('pass-change').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const pattern = /^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[#@€!£$%&/()=?'^])(?=.*[0-9]).{8,}$/ //Validation Pattern
+    const data = new FormData(this);
+
+    const newInput = data.get('new').toString(); //Gets Directly the Value
+    const oldInput = data.get('old').toString();
+    const confirmInput = data.get('confirm').toString();
+
+    const span = document.getElementById('setting_error_message');
+    console.log(newInput);
+    if(!pattern.test(newInput)){
+        span.classList.remove('general-display-none');
+        span.innerHTML = 'Criteri Nuova Password: <ul class="text-left"><li>Almeno 8 Caratteri</li><li>Almeno una lettera minuscola a-z</li>' +
+            '<li>Almeno una lettera maiuscola A-Z</li><li>Almeno un numero 0-9</li><li> Almeno un Carattere Speciale £$%&€...</li></ul>'
+        return;
+    }
+
+    if(newInput !== confirmInput){
+        span.classList.remove('general-display-none');
+        span.innerHTML = 'La Nuova Password non combacia con la Conferma!'
+        return;
+    }
+
+    if(!oldInput){
+        span.classList.remove('general-display-none');
+        span.innerHTML = 'Inserisci la Vecchia Password'
+        return;
+    }
+
+    let message = 'action=usersManager&ask=modifyAdmin&old=' + oldInput + '&new=' + newInput;
+    let response = await ajax(message);
+    let responseText = await response.text();
+
+    response.ok ? span.classList.add('successful-info') : span.classList.remove('successful-info');
+
+    span.classList.remove('general-display-none');
+    span.innerHTML = responseText;
+
+    setTimeout(()=>{
+        span.innerHTML = '';
+        span.classList.remove('successful-info');
+        span.classList.add('general-display-none');
+    }, 6000);
+})
