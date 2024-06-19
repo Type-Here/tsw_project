@@ -25,7 +25,7 @@ public class UserBean implements HttpSessionBindingListener {
     private String city;
     private String prov;
     private String CAP;
-    private int id_cred;
+    private Integer id_cred;
 
 
     public UserBean() {
@@ -130,7 +130,7 @@ public class UserBean implements HttpSessionBindingListener {
         this.CAP = CAP;
     }
 
-    public void setId_cred(int id_cred) {
+    public void setId_cred(Integer id_cred) {
         this.id_cred = id_cred;
     }
 

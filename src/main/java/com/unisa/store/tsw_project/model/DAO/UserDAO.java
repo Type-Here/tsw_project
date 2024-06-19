@@ -11,9 +11,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class UserDAO {
+
+    /**
+     * Retrieve a List of UserBeans
+     * @param limit limit result to this value. If null default = 200
+     * @param offset offset the results to this value, if null default = 0
+     * @return List of UserBean
+     * @throws SQLException if query fails
+     */
+    public List<UserBean> doRetrieveUsers(Integer limit, Integer offset) throws SQLException {
+        List<UserBean> users = new ArrayList<>();
+        try (Connection con = ConPool.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users LIMIT ? OFFSET ?");
+            ps.setInt(1, Objects.requireNonNullElse(limit, 200)); //limit or default 200
+            ps.setInt(2, Objects.requireNonNullElse(offset, 0)); //offset or default 0
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                users.add(setUserBeanFromRS(rs, true));
+            }
+        }
+        return users;
+    }
 
     // LocalDate to Date da verificare funzionamento
 
@@ -23,47 +47,67 @@ public class UserDAO {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                UserBean u = new UserBean();
-                u.setId(rs.getInt(1));
-                u.setFirstname(rs.getString(2));
-                u.setLastname(rs.getString(3));
-                u.setTelephone(rs.getString(4));
-                u.setEmail(rs.getString(5));
-                u.setBirth(rs.getDate(6).toLocalDate());
-                u.setAddress(rs.getString(7));
-                u.setCity(rs.getString(8));
-                u.setProv(rs.getString(9));
-                u.setCAP(rs.getString(10));
-                u.setId_cred(rs.getInt(11));
-                return u;
+                return setUserBeanFromRS(rs, false);
             }
             return null;
         }
     }
 
-    public UserBean getUserById(int id_client) throws SQLException {
+
+    /**
+     * OverLoaded <br />
+     * Retrieve User by his ID. isAdminView will set id_credential and birthdate to null if is True. <br />
+     * The 1 Parameter method use default value of isAdminView = false
+     * @param id_client user id to retrieve
+     * @param isAdminView true = return UserBean with d_credential and birthdate set to null. false = return normal UserBean
+     * @return UserBean with the data of the user with id_client equal to parameter
+     * @throws SQLException if query fails
+     */
+    public UserBean getUserById(int id_client, boolean isAdminView) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id_client = ?");
             ps.setInt(1, id_client);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                UserBean u = new UserBean();
-                u.setId(rs.getInt(1));
-                u.setFirstname(rs.getString(2));
-                u.setLastname(rs.getString(3));
-                u.setTelephone(rs.getString(4));
-                u.setEmail(rs.getString(5));
-                u.setBirth(rs.getDate(6).toLocalDate());
-                u.setAddress(rs.getString(7));
-                u.setCity(rs.getString(8));
-                u.setProv(rs.getString(9));
-                u.setCAP(rs.getString(10));
-                u.setId_cred(rs.getInt(11));
-                return u;
+                return setUserBeanFromRS(rs, isAdminView);
             }
             return null;
         }
     }
+
+
+    /**
+     * @see UserDAO#getUserById(int, boolean)
+     * @param id_client id of the user
+     * @return UserBean with the data of the User of id_client = to parameter
+     * @throws SQLException if query fails
+     */
+    public UserBean getUserById(int id_client) throws SQLException {
+        return getUserById(id_client, false);
+    }
+
+    /**
+     * Populate an UserBean from ResultSet
+     * @param rs ResultSet
+     * @return UserBean
+     * @throws SQLException if data retrieve fails
+     */
+    private UserBean setUserBeanFromRS(ResultSet rs, boolean isAdminView) throws SQLException {
+        UserBean u = new UserBean();
+        u.setId(rs.getInt(1));
+        u.setFirstname(rs.getString(2));
+        u.setLastname(rs.getString(3));
+        u.setTelephone(rs.getString(4));
+        u.setEmail(rs.getString(5));
+        u.setBirth(isAdminView? null : rs.getDate(6).toLocalDate());
+        u.setAddress(rs.getString(7));
+        u.setCity(rs.getString(8));
+        u.setProv(rs.getString(9));
+        u.setCAP(rs.getString(10));
+        u.setId_cred(isAdminView ? null : rs.getInt(11));
+        return u;
+    }
+
 
     // Funzione per settare tutti i campi di un UserBean in un PreparedStatement
     private void setPsAllCampUserBean(UserBean user, PreparedStatement ps) throws SQLException {
