@@ -214,7 +214,62 @@
             </table>
         </div>
     </section>
-    <!-- TODO -->
+
+    <section id="users_management" class="prod-reviews">
+        <div class="section-header">
+            <h2 class="text-center">Gestisci Utenti</h2>
+        </div>
+        <div class="catalog-buttons">
+            <button id="load-users-button" class="default alternative">Carica Dati</button>
+            <button id="prev-users-button" disabled class="default alternative general-display-none margin-h-10">Prev</button>
+            <button id="next-users-button" class="default general-display-none margin-h-10">Next</button>
+            <div class="search_container">
+                <form id="users-search" class="search-bar">
+                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <label style="display: none" for="search-input">Search</label><input id="search-input-users" title="Search User" type="text" name="search" placeholder="Cerca un utente" alt="Cerca" />
+                </form>
+            </div>
+        </div>
+        <span class="text-center invalid-credentials general-display-none" id="users_error_message"></span>
+        <div class="prod-table prod-reviews-internal">
+            <table id="admin-users-table" class="prod-reviews-table">
+                <tr id="admin-users-table-header">
+                    <th>Id Utente</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th>Indirizzo</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="settings" class="prod-reviews">
+        <div class="section-header">
+            <h2 class="text-center">Impostazioni Admin</h2>
+        </div>
+        <div class="centerized-flex-container">
+            <h3 class="text-center margin-v-10">Cambia Password</h3>
+            <div class="log_form admin-change-pwd">
+                <form id="pass_change">
+                    <label class="form-row"><span>Vecchia Password</span><input name="old" type="password" required/></label>
+                    <label class="form-row"><span>Nuova Password</span><input name="new" type="password" required/></label>
+                    <label class="form-row"><span>Conferma Password</span><input name="confirm" type="password" required/></label>
+                    <label class="form-row centerized-row"><input class="default free-size" type="submit" name="Cambia"></label>
+                </form>
+            </div>
+        </div>
+    </section>
+
 </div><!-- End Main_Home Div-->
 
 <%@include file="/WEB-INF/include/footer.jsp"%>
