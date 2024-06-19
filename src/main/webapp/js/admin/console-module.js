@@ -357,7 +357,7 @@ document.forms.namedItem('pass-change').addEventListener('submit', async functio
     const confirmInput = data.get('confirm').toString();
 
     const span = document.getElementById('setting_error_message');
-    console.log(newInput);
+
     if(!pattern.test(newInput)){
         span.classList.remove('general-display-none');
         span.innerHTML = 'Criteri Nuova Password: <ul class="text-left"><li>Almeno 8 Caratteri</li><li>Almeno una lettera minuscola a-z</li>' +
@@ -381,14 +381,127 @@ document.forms.namedItem('pass-change').addEventListener('submit', async functio
     let response = await ajax(message);
     let responseText = await response.text();
 
-    response.ok ? span.classList.add('successful-info') : span.classList.remove('successful-info');
+    printSpanMessage(span, responseText, response.ok); //Print Success or Error Message
+})
 
+
+
+/* ---------------------------- DISCOUNT CODE -------------------------------------- */
+
+
+/* REMOVE CODE */
+
+/**
+ * Remove Discount Code Button(s) Listener AJAX
+ * Should be only 1 Discount Code, but used class for future improvements
+ */
+Array.from(document.getElementsByClassName('remove-discount-button')).forEach(button => {
+    button.addEventListener('click', async ()=>{
+        let message = 'action=settings&ask=removeDiscountCode&key=' + button.getAttribute('data-value');
+        const response = await ajax(message);
+        const responseText = await response.text();
+
+        const span = document.getElementById('discount_error_message');
+        printSpanMessage(span, responseText, response.ok); //Print Response
+
+        //Remove Old Code from Console View
+        if(response.ok){
+            document.getElementById('discount-display').innerHTML = ' <span class="text-center">Non ci sono Codici Attivi</span>';
+        }
+    });
+})
+
+
+/* SET NEW CODE (ADD/CHANGE) */
+
+/**
+ * Discount Code Name Validation Listener
+ */
+document.getElementById('discountName').addEventListener('input', function(e){
+
+    if(!e.data) return;
+    const pattern = /^[A-Z0-9!€$]+$/;
+    if(!pattern.test(e.data)) this.value = this.value.slice(0, this.value.length - e.data.length);
+    if(this.value.length > 30) this.value = this.value.slice(0, 30); //max length 30
+});
+
+
+/**
+ * Discount Code Value Validation Listener
+ */
+document.getElementById('discountValue').addEventListener('input', function(e){
+    if(!e.data) return;
+    const pattern = /^[0-9,.]+$/;
+    if(!pattern.test(e.data)) this.value = this.value.slice(0, this.value.length - e.data.length);
+    if(parseFloat(this.value) > 100.0) this.value = '100';
+    if(this.value.length > 5) this.value = this.value.slice(0, 5); //max length 30
+});
+
+
+/**
+ * Submit Discount Code Button Listener: Validation and Send Data: AJAX
+ * Change / Add new Discount Code
+ */
+document.getElementById('add-discountCode-button').addEventListener('click', async () => {
+    let key = document.getElementById('discountName').value;
+    let value = document.getElementById('discountValue').value;
+    const patternKey = /^[A-Z0-9!€$]{5,30}$/;
+    const patternValue = /^[0-9,.]{1,5}$/;
+    let val = parseFloat(value);
+
+    const span = document.getElementById('discount_error_message');
+    if (!patternKey.test(key) || !patternValue.test(value) || val <= 0 || val > 100) {
+        printSpanMessage(span, "Codice o Valore non Valido", false);
+        return;
+    }
+
+    let message = 'action=settings&ask=changeDiscountCode&key=' + key + '&value=' + value;
+    let response = await ajax(message);
+    printSpanMessage(span, await response.text(), response.ok);
+
+    // Change Old Discount Code View and Add The New One if Response is OK
+    if(response.ok) {
+        const ul = document.createElement('ul');
+        ul.classList.add('text-center');
+        ul.classList.add('hide-bullets');
+
+        const liName = document.createElement('li');
+        liName.classList.add('margin-v-10');
+        liName.innerHTML = 'Codice Sconto: <span class="green-info">' + key + '</span>';
+
+        const liVal = document.createElement('li');
+        liVal.innerHTML = 'Percentuale Sconto: <span class="discount">' + value +' </span>';
+
+        ul.appendChild(liName);
+        ul.appendChild(liVal);
+
+        const display = document.getElementById('discount-display');
+        display.innerHTML = '';
+        display.appendChild(ul);
+
+    }
+
+});
+
+
+/* ===================================================== USEFUL FUNCTIONS ==================================================== */
+
+
+/**
+ * Display Message inside Message Span <br />
+ * Show Success - Error Message, Hide after 6 second
+ * @param span pointer to span to show
+ * @param message message to print inside the span
+ * @param isOk true = success message, false = error message, default = false
+ */
+function printSpanMessage(span, message, isOk = false){
+    isOk ? span.classList.add('successful-info') : span.classList.remove('successful-info');
     span.classList.remove('general-display-none');
-    span.innerHTML = responseText;
+    span.innerHTML = message;
 
-    setTimeout(()=>{
-        span.innerHTML = '';
+    setTimeout(() =>{
         span.classList.remove('successful-info');
         span.classList.add('general-display-none');
+        span.innerHTML = '';
     }, 6000);
-})
+}
