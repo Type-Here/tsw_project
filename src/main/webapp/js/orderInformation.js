@@ -78,7 +78,7 @@ document.querySelector('.modalForm').addEventListener('submit', function(event) 
         let button = document.querySelector('.openModal[value="' + formData.get('id_prod') + '"]');
 
         let base = document.URL.match("(http[s]?://.*?/.*?/)")[0]
-        let url = base + "egisterReviewServlet";
+        let url = base + "registerReviewServlet";
 
         fetch(url, {
             method: 'POST',
