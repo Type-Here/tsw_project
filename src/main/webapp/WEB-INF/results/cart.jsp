@@ -98,13 +98,22 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <div class="discount-code">
-                    <h3>Hai un codice sconto?</h3>
-                    <label for="input-discount-code">Inseriscilo qui! <br />
-                        <input id="input-discount-code" type="text" name="code" />
-                        <button id="button-discount-code" class="default alternative">Invia</button>
-                    </label>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty cart.discount_code}">
+                        <div class="discount-code">
+                            <span class="message-ok">Codice Sconto Presente!</span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="discount-code">
+                            <h3>Hai un codice sconto?</h3>
+                            <label for="input-discount-code">Inseriscilo qui! <br />
+                                <input id="input-discount-code" type="text" name="code" />
+                                <button id="button-discount-code" class="default alternative">Invia</button>
+                            </label>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
                 <div class="cart-overview-price">
                     <div class="subtotal">
                         <h3>Subtotale</h3>
