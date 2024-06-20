@@ -4,6 +4,7 @@ import com.unisa.store.tsw_project.model.DAO.*;
 import com.unisa.store.tsw_project.model.beans.*;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
+import com.unisa.store.tsw_project.other.exceptions.BadRequestException;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,36 +56,32 @@ public class TheOrderServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /* AJAX Header */
-        Optional<String> requestType = Optional.ofNullable(req.getHeader("X-Requested-With"));
-        if(requestType.isEmpty() || !requestType.get().equals("XMLHttpRequest")) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        DataValidator validator = new DataValidator();
-        /* User, Cart, Parameter Validation */
-
-        if(isInvalidUser(req)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid User or Cart");
-            return;
-        }
-
-        //If verification is passed user and cart/cartItems exist
-        Optional<String> orderCmd = Optional.ofNullable(req.getParameter("order"));
-        if(orderCmd.isEmpty() || !orderCmd.get().equals("true")){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid order parameter");
-            return;
-        }
-
-        Optional<String> shippingAddress = Optional.ofNullable(req.getParameter("address"));
-        if(shippingAddress.isEmpty() ||
-                !validator.validatePattern(shippingAddress.get(), DataValidator.PatternType.Int, 1, null)){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid order parameter");
-            return;
-        }
-
         try {
+            /* AJAX Header */
+            Optional<String> requestType = Optional.ofNullable(req.getHeader("X-Requested-With"));
+            if(requestType.isEmpty() || !requestType.get().equals("XMLHttpRequest")) {
+                throw new BadRequestException("X-Requested-With Header required or not Valid");
+            }
+
+            DataValidator validator = new DataValidator();
+            /* User, Cart, Parameter Validation */
+
+            if(isInvalidUser(req)) {
+                throw new InvalidParameterException("Invalid User or Cart");
+            }
+
+            //If verification is passed user and cart/cartItems exist
+            Optional<String> orderCmd = Optional.ofNullable(req.getParameter("order"));
+            if(orderCmd.isEmpty() || !orderCmd.get().equals("true")){
+                throw new InvalidParameterException("Invalid order parameter");
+            }
+
+            Optional<String> shippingAddress = Optional.ofNullable(req.getParameter("address"));
+            if(shippingAddress.isEmpty() ||
+                    !validator.validatePattern(shippingAddress.get(), DataValidator.PatternType.Int, 1, null)){
+                throw new InvalidParameterException("Invalid order parameter");
+            }
+
 
             Optional<String> name = Optional.ofNullable(req.getParameter("name"));
             Optional<String> pan = Optional.ofNullable(req.getParameter("pan"));
@@ -92,8 +89,7 @@ public class TheOrderServlet extends HttpServlet {
             Optional<String> date = Optional.ofNullable(req.getParameter("expire"));
 
             if(name.isEmpty() || pan.isEmpty() || cvv.isEmpty() || date.isEmpty()){
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Check Payment Parameters");
-                return;
+                throw new InvalidParameterException("Check Payment Parameters");
             }
 
             validator.validatePattern(name.get().trim(), DataValidator.PatternType.Generic);
@@ -172,19 +168,30 @@ public class TheOrderServlet extends HttpServlet {
                 }
             }
 
-
             /* Clear Cart from Session */
             req.getSession().removeAttribute("cart");
 
             /* Write Message Answer */
             resp.setContentType("text/html");
             resp.getWriter().write("Acquisto Effettuato!");
-            resp.getWriter().flush();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidParameterException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            resp.setContentType("text/plain");
+            resp.getWriter().println("OPS... Something went wrong");
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        } catch (InvalidParameterException e) {
+            resp.setContentType("text/plain");
+            resp.getWriter().println(e.getMessage());
+            resp.setStatus(Data.SC_INVALID_DATA);
+
+        } catch (BadRequestException e){
+            resp.setContentType("text/plain");
+            resp.getWriter().println(e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+        } finally {
+            resp.getWriter().flush();
         }
     }
 

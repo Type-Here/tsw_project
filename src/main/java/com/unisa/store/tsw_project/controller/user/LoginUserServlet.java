@@ -82,7 +82,7 @@ public class LoginUserServlet extends HttpServlet{
                 address = "/index";
 
                 Optional<String> redirect = Optional.ofNullable(request.getParameter("redirect"));
-                System.out.println(redirect);
+
                 if(redirect.isPresent() && redirect.get().equals("order")){
                     response.sendRedirect("order");
                     return;
