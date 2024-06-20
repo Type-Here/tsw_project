@@ -60,6 +60,11 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
         </dependency>
+        <dependency> <!-- To Remove Errors in web.xml, not really needed here -->
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>10.0.17</version>
+        </dependency>
 
     </dependencies>
 
