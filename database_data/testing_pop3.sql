@@ -20,7 +20,6 @@ insert into cart (total, id_client) values
 (22.70, 9),
 (167.99, 1),
 (300.30, 1),
-(300.30, 1),
 (35.00, 1);
 
 

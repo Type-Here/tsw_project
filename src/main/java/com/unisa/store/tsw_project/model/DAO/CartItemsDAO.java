@@ -78,7 +78,7 @@ public class CartItemsDAO {
             ps.setInt(1, cartItemID);
             ps.setInt(2, cartID);
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("DELETE error.");
+                throw new RuntimeException("Refound error.");
             }
         }
     }

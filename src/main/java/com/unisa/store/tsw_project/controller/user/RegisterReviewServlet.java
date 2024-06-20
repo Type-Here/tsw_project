@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class RegisterReviewServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    synchronized protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String id_prod = request.getParameter("id_prod");
         String evaluation = request.getParameter("evaluation");

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class RefundServlet extends HttpServlet{
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    synchronized protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int cartItemID = Integer.parseInt(request.getParameter("cartItemID"));
         int cartID = Integer.parseInt(request.getParameter("cartID"));
 
