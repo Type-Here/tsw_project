@@ -89,6 +89,23 @@ async function addToCart(prod, condition){
 }
 
 
+/**
+ * Listener for One-Click Button
+ */
+document.getElementById('one-click').addEventListener('click', async () =>{
+    //Simulate a Click on Add To Cart Button
+    document.getElementById('add-to-cart').click();
+
+    //Redirect
+    //window.location.href = 'order';
+    setTimeout( () =>{
+        window.location.replace("order");
+    }, 200);
+});
+
+
+
+
 /* ===================================== GALLERY JS ================================================= */
 
 //section#gallery

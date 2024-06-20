@@ -73,14 +73,14 @@
                     <c:choose>
                         <c:when test="${empty product.discount or product.discount == 0}">
                             <span id="prod-price" class="actual-price">
-                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price}"/>&euro;
+                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * (1.0 -  product.conditions[0].condition.discount/100)}"/>&euro;
                             </span>
                         </c:when>
                         <c:otherwise>
                             <span class="discount">${product.discount}</span>
-                            <span class="original-rem-price">${product.price}</span>
+                            <span class="original-rem-price">${product.price * (1.0 -  product.conditions[0].condition.discount/100)}</span>
                             <span id="prod-price" class="actual-price">
-                                <c:set var="price" scope="page" value="${product.price - product.price*product.discount/100}"/>
+                                <c:set var="price" scope="page" value="${product.price * (1.0 -  product.conditions[0].condition.discount/100) * (1 - product.discount/100)}"/>
                                  <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${price}"/>&euro;
                             </span>
                         </c:otherwise>
