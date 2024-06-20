@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,6 +91,9 @@ public class InitServlet extends HttpServlet {
             discountCodeMap.put("ESTATE88!", 12.0);
             app.setAttribute("discountCode", discountCodeMap);
 
+            /* Set Shipping Price -- Only if Order Total is Under 100€*/
+            BigDecimal shippingCost = new BigDecimal("15.0");
+            app.setAttribute("shippingCost", shippingCost);
 
             System.out.println("--- END OF INIT ---");
 
