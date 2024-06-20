@@ -162,8 +162,8 @@ public class LoginUserServlet extends HttpServlet{
             // Add the cookie to the response
             userIDCookie.setHttpOnly(true);
             userPasswordCookie.setHttpOnly(true);
-            //userIDCookie.setSecure(true); // solo se il sito è in HTTPS
-            //userPasswordCookie.setSecure(true); // solo se il sito è in HTTPS
+            userIDCookie.setSecure(true); // solo se il sito è in HTTPS
+            userPasswordCookie.setSecure(true); // solo se il sito è in HTTPS
             response.addCookie(userPasswordCookie);
             response.addCookie(userIDCookie);
 
