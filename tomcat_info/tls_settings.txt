@@ -1,0 +1,9 @@
+<!-- FOR HTTPS / TLS, after loading a generated keystore.jks -->
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+    maxThreads="150" SSLEnabled="true">
+    <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+    <SSLHostConfig>
+        <Certificate certificateKeystoreFile="conf/keystore.jks"
+            type="RSA" certificateKeystorePassword="myPassword" />
+    </SSLHostConfig>
+</Connector>
