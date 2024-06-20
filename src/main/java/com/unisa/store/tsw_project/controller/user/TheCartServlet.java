@@ -8,6 +8,7 @@ import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
 import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
+import com.unisa.store.tsw_project.other.exceptions.BadRequestException;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,27 +27,41 @@ public class TheCartServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPostCart(req, resp);
+        doPostCart(req, resp); //  -- Load Cart Page
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<String> requestType = Optional.ofNullable(req.getHeader("X-Requested-With"));
-        //No AJAX request: respond with normal post
-        if(requestType.isEmpty()){
+        //No AJAX request: respond with normal post -- Load Cart Page
+        if(requestType.isEmpty()) {
             doPostCart(req, resp);
+            return;
+        }
 
-        //If X-Requested-With has no valid option
-        } else if(!requestType.get().equalsIgnoreCase("XMLHttpRequest")) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-
-        //If valid AJAX is sent
-        } else {
-            try {
-                answerToAjax(req, resp);
-            } catch (SQLException e){
-                throw new RuntimeException(e);
+        try {
+            //If X-Requested-With has no valid option
+            if(!requestType.get().equalsIgnoreCase("XMLHttpRequest")) {
+                throw new BadRequestException("Only XMLHttpRequest is supported");
             }
+
+            //If valid AJAX is sent
+            answerToAjax(req, resp);
+
+        } catch (SQLException e){
+            resp.getWriter().println("Something went wrong");
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        } catch (InvalidParameterException e) {
+            resp.getWriter().println(e.getMessage());
+            resp.setStatus(Data.SC_INVALID_DATA);
+
+        } catch (BadRequestException e){
+            resp.getWriter().println(e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+        } finally {
+            resp.getWriter().flush();
         }
     }
 
@@ -70,10 +85,10 @@ public class TheCartServlet extends HttpServlet {
      * @throws IOException if IO fails (i.e. sendError)
      * @throws com.unisa.store.tsw_project.other.exceptions.InvalidParameterException if some required parameter is not valid
      */
-    synchronized private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+    synchronized private void answerToAjax(HttpServletRequest req, HttpServletResponse resp) throws BadRequestException, SQLException, IOException {
         Optional<String> option = Optional.ofNullable(req.getParameter("option"));
         if(option.isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No option set");
+            throw new BadRequestException("No option set");
         } else {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
@@ -83,7 +98,8 @@ public class TheCartServlet extends HttpServlet {
                 case "removeFromCart" -> removeFromCart(req,resp);
                 case "requestNewPrice" -> sendNewPrice(req,resp);
                 case "retrieveProduct" -> retrieveProduct(req,resp);
-                default -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid option");
+                case "addDiscountCode" -> addDiscountCode(req,resp);
+                default -> throw new BadRequestException("Invalid option");
             }
         }
     }
@@ -97,8 +113,7 @@ public class TheCartServlet extends HttpServlet {
      * @throws IOException if IO fails (i.e. sendError)
      * @throws SQLException if query to retrieve product data fails
      */
-    synchronized private void addToCart(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
-        HttpSession session = req.getSession();
+    synchronized private void addToCart(HttpServletRequest req, HttpServletResponse resp) throws BadRequestException, IOException, SQLException {
         DataValidator validator = new DataValidator();
         ProductDAO productDAO = new ProductDAO();
 
@@ -110,8 +125,7 @@ public class TheCartServlet extends HttpServlet {
             Optional<String> quantity = Optional.ofNullable(req.getParameter("quantity"));
 
             if (id.isEmpty() || id_condition.isEmpty()) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No id or condition set");
-                return;
+                throw new BadRequestException("No id or condition set");
             }
 
             //NB To remove item use Remove Request instead
@@ -121,38 +135,18 @@ public class TheCartServlet extends HttpServlet {
 
             Data.Condition condition_requested = Data.Condition.getEnum(Integer.parseInt(id_condition.get()));
             if(condition_requested == null) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Condition");
-                return;
+                throw new InvalidParameterException("Invalid Condition");
             }
 
             // VALIDATION: Check if product exists and retrieve it
             ProductBean productBean = productDAO.doRetrieveById(Integer.parseInt(id.get()));
             if (productBean == null) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product not found");
-                return;
+                throw new InvalidParameterException("Product not found");
             }
 
-
-            //Check if user is logged: Set id_client to user id if logged, null if not
-            Optional<UserBean> user = Optional.ofNullable((UserBean) session.getAttribute("userlogged"));
-            Integer id_client = user.isPresent() ? user.get().getId_cred() : null;
-
-            //Check for an existing Cart in Session
-            Optional<Object> cartObj = Optional.ofNullable(session.getAttribute("cart"));
-
-            //If Cart doesn't exist Create it
-            if (cartObj.isEmpty()) {
-                CartBean cartBean = new CartBean();
-
-                cartBean.setId_cart(null); //Null because we don't have a valid ID from the Database Yet.
-                cartBean.setId_client(id_client); //int ID if logged - null if not
-                cartBean.setCartItems(new LinkedHashMap<>()); //Initiate HashMap ( Key: id_prod (Integer), value: CartItem )
-                cartBean.setActive(true); //This Flag for Current Active Cart
-                session.setAttribute("cart", cartBean);
-            }
-
+            /* Obtain Cart: getCart Method Below */
             //Cart here is always not null
-            CartBean cart = (CartBean) session.getAttribute("cart");
+            CartBean cart = getCart(req);
 
             // Get CartItem from Cart or Create a New One
             CartItemsBean item = Optional.ofNullable(cart.getCartItems().get(productBean.getId_prod() + condition_requested.toString() )).orElse(new CartItemsBean());
@@ -170,11 +164,9 @@ public class TheCartServlet extends HttpServlet {
                         .orElseThrow(() -> new InvalidParameterException("Invalid Condition")).getQuantity();
 
                 if (quantityConditionLeft <= 0) {
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "This specific product is unavailable");
-                    return;
+                    throw new InvalidParameterException( "This specific product is unavailable");
                 } else if(quantityConditionLeft < quantityRequested){
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to add more quantity to cart");
-                    return;
+                    throw new InvalidParameterException("Unable to add more quantity to cart");
                 }
             }
 
@@ -201,11 +193,9 @@ public class TheCartServlet extends HttpServlet {
             //resp.sendError(HttpServletResponse.SC_OK, "Item correctly added to Cart");
 
         } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: Not a Number");
+           throw new InvalidParameterException("Generic invalid Parameter: Not a Number");
         } catch (NullPointerException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Generic invalid Parameter: Null");
-        } catch (InvalidParameterException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            throw new InvalidParameterException("Generic invalid Parameter: Null");
         }
     }
 
@@ -221,27 +211,23 @@ public class TheCartServlet extends HttpServlet {
         DataValidator validator = new DataValidator();
 
         if(key.isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No key prod set");
-            return;
+            throw new InvalidParameterException("No key prod set");
         }
         validator.validatePattern(key.get(), DataValidator.PatternType.GenericAlphaNumeric);
 
         CartBean cart = (CartBean) req.getSession().getAttribute("cart");
         if(cart == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cart is Empty");
-            return;
+            throw new InvalidParameterException("Cart is Empty");
         }
 
         CartItemsBean item = cart.getCartItems().remove(key.get());
         if(item == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Item not found in Cart");
-            return;
+            throw new InvalidParameterException("Item not found in Cart");
         }
 
         resp.setContentType("text/plain");
         resp.getWriter().write("Prodotto rimosso correttamente dal carrello...");
         resp.getWriter().flush();
-        //resp.sendError(HttpServletResponse.SC_OK, "OK");
     }
 
 
@@ -250,10 +236,9 @@ public class TheCartServlet extends HttpServlet {
      * Send JSON
      * @param req HttpServletRequest
      * @param resp HttpServletResponse
-     * @throws SQLException if query fails (retrieve products)
      * @throws IOException  if response writing fails
      */
-    private void sendNewPrice(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+    private void sendNewPrice(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         CartBean cart = (CartBean) req.getSession().getAttribute("cart");
         BigDecimal[] prices = new BigDecimal[]{BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.0)};
         BigDecimal value = new BigDecimal("0.00");
@@ -286,21 +271,19 @@ public class TheCartServlet extends HttpServlet {
      * @throws SQLException if query to database fails
      * @throws IOException if json response writing fails
      */
-    private void retrieveProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+    private void retrieveProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException, BadRequestException {
         Optional<String> id = Optional.ofNullable(req.getParameter("id"));
         DataValidator validator = new DataValidator();
 
         if(id.isEmpty()){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No id prod set");
-            return;
+            throw new BadRequestException("No id prod set");
         }
         validator.validatePattern(id.get(), DataValidator.PatternType.Int, 1, null);
 
         ProductDAO productDAO = new ProductDAO();
         ProductBean prod = productDAO.doRetrieveById(Integer.parseInt(id.get()));
         if(prod == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid id prod");
-            return;
+            throw new BadRequestException("Invalid id prod");
         }
 
         Gson gson = new Gson();
@@ -310,5 +293,75 @@ public class TheCartServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(json);
         resp.getWriter().flush();
+    }
+
+    /**
+     * AJAX <br />
+     * Add A Discount Code to Cart if Possible <br />
+     * - Discount Code must be Valid <br />
+     * - A Discount COde must not be Already Set <br />
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws IOException if response writing fails
+     */
+    synchronized private void addDiscountCode(HttpServletRequest req, HttpServletResponse resp) throws IOException, BadRequestException {
+        Optional<String> key = Optional.ofNullable(req.getParameter("key"));
+        DataValidator validator = new DataValidator();
+
+        CartBean cart = getCart(req); //Get Cart
+        if(cart.getDiscount_code() != null){
+            throw new BadRequestException("Hai già un Codice Sconto Attivo");
+        }
+
+        if(key.isEmpty()){
+            throw new InvalidParameterException("Discount code is Empty");
+        }
+        String code = key.get().trim();
+        validator.validatePattern(code, DataValidator.PatternType.DiscountName);
+
+        Map<String, Double> discountAvailable = (Map<String, Double>) getServletContext().getAttribute("discountCode");
+        if(discountAvailable == null || !discountAvailable.containsKey(code)) {
+            throw new InvalidParameterException("Discount code not found");
+        }
+
+        cart.setDiscount_code(code);
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write("Codice Aggiunto Correttamente!");
+    }
+
+
+
+    /* ================================= GENERATE OR RETRIEVE CART =================================================== */
+
+    /**
+     * Function to Get Cart from Current Session or Create a New One if there isn't
+     * @param req HttpServletRequest
+     * @return CartBean with current Session Cart
+     */
+    private CartBean getCart(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+
+        //Check if user is logged: Set id_client to user id if logged, null if not
+        Optional<UserBean> user = Optional.ofNullable((UserBean) session.getAttribute("userlogged"));
+        Integer id_client = user.isPresent() ? user.get().getId_cred() : null;
+
+        //Check for an existing Cart in Session
+        Optional<Object> cartObj = Optional.ofNullable(session.getAttribute("cart"));
+
+        //If Cart doesn't exist Create it
+        if (cartObj.isEmpty()) {
+            CartBean cartBean = new CartBean();
+
+            cartBean.setId_cart(null); //Null because we don't have a valid ID from the Database Yet.
+            cartBean.setId_client(id_client); //int ID if logged - null if not
+            cartBean.setCartItems(new LinkedHashMap<>()); //Initiate HashMap ( Key: id_prod (Integer), value: CartItem )
+            cartBean.setActive(true); //This Flag for Current Active Cart
+            session.setAttribute("cart", cartBean);
+        }
+
+        //Cart here is always not null
+        return (CartBean) session.getAttribute("cart");
     }
 }
