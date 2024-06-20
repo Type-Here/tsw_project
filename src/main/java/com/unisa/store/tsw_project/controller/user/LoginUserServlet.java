@@ -37,7 +37,6 @@ public class LoginUserServlet extends HttpServlet{
         }
 
 
-
         Optional<String> email = Optional.ofNullable(request.getParameter("email"));
         Optional<String> password = Optional.ofNullable(request.getParameter("password"));
 
@@ -81,6 +80,14 @@ public class LoginUserServlet extends HttpServlet{
                 //Cookie
                 setUserCookies(request, response, userBean);
                 address = "/index";
+
+                Optional<String> redirect = Optional.ofNullable(request.getParameter("redirect"));
+                System.out.println(redirect);
+                if(redirect.isPresent() && redirect.get().equals("order")){
+                    response.sendRedirect("order");
+                    return;
+                }
+
             } else {
                 request.getSession().invalidate();
                 request.setAttribute("invalidUser", true);
@@ -98,7 +105,8 @@ public class LoginUserServlet extends HttpServlet{
             resp.sendRedirect(req.getContextPath() + "/index");
             return;
         }
-        req.getRequestDispatcher("/WEB-INF/results/login.jsp").forward(req, resp);
+        String address = "/WEB-INF/results/login.jsp";
+        req.getRequestDispatcher(address).forward(req, resp);
     }
 
 

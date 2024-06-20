@@ -28,7 +28,7 @@ public class TheOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        if(isInvalidUser(req)) {
-           resp.sendRedirect(req.getContextPath() + "/user-login");
+           resp.sendRedirect(req.getContextPath() + "/user-login?redirect=order");
            return;
        }
 

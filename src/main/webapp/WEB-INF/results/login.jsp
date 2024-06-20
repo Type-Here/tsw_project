@@ -11,6 +11,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/login.js" defer></script>
     <title>Retrogamer: Login</title>
 </head>
 
@@ -29,7 +30,7 @@
 <div class="main centerized-flex-container">
     <div class="log_form">
         <!--TODO password dimenticata -->
-        <form action="${pageContext.request.contextPath}/user-login" method="post">
+        <form id="login" action="${pageContext.request.contextPath}/user-login" method="post">
             <fieldset class="form-row">
                 <label for="user">Username</label>
                 <input id="user" type="email" name="email" placeholder="Username" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" /> <!-- Email -->
@@ -37,7 +38,7 @@
             </fieldset>
             <fieldset class="form-row">
                 <label for="pass">Password</label>
-                <input id="pass" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
+                <input id="pass" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[\\!£$%&\/\(\)=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
             </fieldset>
             <c:if test="${not empty invalidUser}">
                 <div class="invalid-credentials">
