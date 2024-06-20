@@ -22,6 +22,9 @@ import java.util.Optional;
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class TheOrderServlet extends HttpServlet {
 
+    /**
+     * Load Order Page
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        if(isInvalidUser(req)) {
@@ -34,6 +37,9 @@ public class TheOrderServlet extends HttpServlet {
         try {
             ShippingAddressesDAO addressDAO = new ShippingAddressesDAO();
 
+            /* Set a Temporary Total to Display */
+            setTotal((CartBean) req.getSession().getAttribute("cart"));
+
             List<ShippingAddressesBean> addresses = addressDAO.doRetrieveAllByUserId(user.getId());
             req.setAttribute("addresses", addresses);
             req.getRequestDispatcher("/WEB-INF/results/order.jsp").forward(req, resp);
@@ -43,6 +49,10 @@ public class TheOrderServlet extends HttpServlet {
         }
     }
 
+
+    /**
+     * Only AJAX: Make the Order
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /* AJAX Header */
@@ -91,7 +101,7 @@ public class TheOrderServlet extends HttpServlet {
             validator.validatePattern(cvv.get().trim(), DataValidator.PatternType.StringOnlyNumbers, 3, 3);
             validator.validatePattern(date.get().trim(), DataValidator.PatternType.DateFuture);
 
-            /* VALIDATE THAN DO NOTHING SINCE IT'S ONLY A PROJECT */
+            /* VALIDATE PAYMENT DETAILS THAN DO NOTHING SINCE IT'S ONLY A PROJECT */
 
             CartBean cart = (CartBean) req.getSession().getAttribute("cart");
             UserBean user = (UserBean) req.getSession().getAttribute("userlogged");
@@ -114,22 +124,8 @@ public class TheOrderServlet extends HttpServlet {
             /* Set Id-Client */
             cart.setId_client(user.getId());
 
-            /* Check For Discount */
-            Map<String, Double> discounts = (Map<String, Double>) getServletContext().getAttribute("discounts");
-            Double discountValue = null;
-
-            // Retrieve Discount
-            if(cart.getDiscount_code() != null && !discounts.isEmpty()){
-                    discountValue = discounts.get(cart.getDiscount_code());
-            }
-
-            if(discountValue == null){
-                cart.setDiscount_code(null);
-            }
-
-            /* Check Item and Set Total */
-            BigDecimal total = checkEachProduct(cart, discountValue); //Throws InvalidParameterException if some values are not valid!
-            cart.setTotal(total);
+            /* CALCULATE TOTAL - VALUTATE QUANTITY And CONDITION For Each Product; Valutate DISCOUNT CODE */
+            setTotal(cart);
 
             /* Prepare Cart to DB Save: set Active false as it will not be the current cart anymore */
             cart.setActive(false);
@@ -192,17 +188,47 @@ public class TheOrderServlet extends HttpServlet {
         }
     }
 
+    /* ====================== CALCULATE DATA FOR ORDER METHODS ======================== */
+
+
     /**
-     * Validate UserLogged and Check for Cart Existence. <br/>
-     * Check if Cart is not Empty.
-     * @param req Servlet Request
-     * @return true if user and cart are valid, false otherwise
+     * Calculate Total for the Current Cart in Session <br />
+     * <ul>
+     *     <li>Set Discount Code Value</li>
+     *     <li>Set Discount for B-E Condition Products </li>
+     *     <li>Calculate price for each physical product by its quantity</li>
+     *     <li> Eventually Add Shipping Costs </li>
+     * </ul>
+     * @implNote Total set inside Cart#total variable (BigDecimal)
+     * @param cart CartBean to calculate total and set in Bean
+     * @throws SQLException if query for product data retrieval fails
      */
-    private boolean isInvalidUser(HttpServletRequest req) {
-        Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("userlogged"));
-        Optional<CartBean> cart = Optional.ofNullable((CartBean) req.getSession().getAttribute("cart"));
-        return user.isEmpty() || cart.isEmpty() || cart.get().getCartItems().isEmpty();
+    private void setTotal(CartBean cart) throws SQLException {
+        /* Check For Discount */
+        Map<String, Double> discounts = (Map<String, Double>) getServletContext().getAttribute("discountCode");
+        Double discountValue = null;
+
+        // Retrieve Discount
+        if(cart.getDiscount_code() != null && !discounts.isEmpty()){
+            discountValue = discounts.get(cart.getDiscount_code());
+        }
+
+        if(discountValue == null){ //Reset Discount Name if it's not valid anymore
+            cart.setDiscount_code(null);
+        }
+
+        /* Check Item and Set Total */
+        BigDecimal total = checkEachProduct(cart, discountValue); //Throws InvalidParameterException if some values are not valid!
+
+        /* If Total is Less Than 100€ add Shipping Costs */
+        BigDecimal shippingCost = (BigDecimal) getServletContext().getAttribute("shippingCost");
+        if(total.compareTo(BigDecimal.valueOf(100.00)) < 0) total = total.add(shippingCost);
+        cart.setTotal(total);
     }
+
+
+
+
 
 
     /**
@@ -263,6 +289,25 @@ public class TheOrderServlet extends HttpServlet {
             total = total.add(discountedPrice);
         }
         return total;
+    }
+
+
+
+
+
+    /* ================ SECURITY ==================== */
+
+
+    /**
+     * Validate UserLogged and Check for Cart Existence. <br/>
+     * Check if Cart is not Empty.
+     * @param req Servlet Request
+     * @return true if user and cart are valid, false otherwise
+     */
+    private boolean isInvalidUser(HttpServletRequest req) {
+        Optional<Object> user = Optional.ofNullable(req.getSession().getAttribute("userlogged"));
+        Optional<CartBean> cart = Optional.ofNullable((CartBean) req.getSession().getAttribute("cart"));
+        return user.isEmpty() || cart.isEmpty() || cart.get().getCartItems().isEmpty();
     }
 
 
