@@ -110,24 +110,30 @@
                 <div class="cart-overview-price">
                     <div class="subtotal">
                         <h3>Subtotale</h3>
-                        <c:set var="subtotal" value="0"/>
-                        <c:forEach var="item" items="${cart.cartItems}">
-                            <c:set var="subtotal" value="${subtotal + item.value.real_price * item.value.quantity}"/>
-                        </c:forEach>
-                        <span><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${subtotal}"/>&euro;</span>
+                        <c:choose>
+                            <c:when test="${cart.total - shippingCost >= 100.00}">
+                                <span><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${cart.total}"/>&euro;</span>
                     </div>
+                            </c:when>
+                            <c:otherwise>
+                            <span><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${cart.total - shippingCost}"/>&euro;</span>
+                    </div>
+                    <div class="subtotal other-expenses">
+                                <h3>Costi di Spedizione</h3>
+                                <span><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${shippingCost}"/>&euro;</span>
+                    </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:if test="${not empty cart.discount_code}">
+                        <div class="subtotal other-expenses">
+                            <h3>Codice Sconto</h3><span>-${discountCode[cart.discount_code]}%</span>
+                        </div>
+                        </c:if>
                     <div class="total">
                         <h2><b>Totale</b></h2>
                         <span><b>
-                            <c:choose>
-                                <c:when test="${subtotal == 0 or subtotal >= 100}">
-                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${subtotal}"/>&euro;
-                                </c:when>
-                                <c:otherwise>
-                                    <fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${subtotal + 15.00}"/>&euro;
-                                </c:otherwise>
-                            </c:choose>
-                            </b></span>
+                            <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${cart.total}"/>&euro;
+                        </b></span>
                     </div>
                 </div>
 

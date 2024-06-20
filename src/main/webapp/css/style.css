@@ -338,6 +338,7 @@ input[type="reset"].default, input[type="submit"].default, button.default{
     border: none;
     border-radius: 5px;
     box-shadow: 0 0 2px 2px rgba(0,0,0,0.5);
+    cursor: pointer;
     &:hover{
         background-color: #1d80f1;
         transform: scale(1.05);
@@ -450,6 +451,7 @@ input[type="reset"].secondary, input[type="submit"].secondary, button.secondary{
     border: none;
     border-radius: 3px;
     box-shadow: 0 0 1px 1px rgba(0,0,0,0.4);
+    cursor: pointer;
     &:hover{
         background-color: #014c01;
         transform: scale(1.005);
@@ -1935,9 +1937,6 @@ aside.side-cart-view{
     gap: 30px 10px;
     font-size: 1.04rem;
 
-    .subtotal, .total{
-        margin: 0 10px 20px 10px;
-    }
 
     & .cart-overview-title{
         margin: -10px;
@@ -1982,11 +1981,25 @@ aside.side-cart-view{
         }
     }
 
+    .subtotal{
+        margin: 0 10px 10px 10px;
+    }
+
+    .subtotal.other-expenses{
+        padding-top: 2px;
+        border-top: none;
+    }
+
     .subtotal, .total{
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
+    }
+
+    .total{
+        justify-content: space-around;
+        margin: 0 10px 20px 10px;
     }
 
     .total span{
