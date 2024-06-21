@@ -92,10 +92,10 @@ public class TheOrderServlet extends HttpServlet {
                 throw new InvalidParameterException("Check Payment Parameters");
             }
 
-            validator.validatePattern(name.get().trim(), DataValidator.PatternType.Generic);
-            validator.validatePattern(pan.get().trim(), DataValidator.PatternType.GenericAlphaNumeric, 16, 16);
-            validator.validatePattern(cvv.get().trim(), DataValidator.PatternType.StringOnlyNumbers, 3, 3);
-            validator.validatePattern(date.get().trim(), DataValidator.PatternType.DateFuture);
+            validator.validatePattern(name.get().trim(), DataValidator.PatternType.Generic, "Nome");
+            validator.validatePattern(pan.get().trim(), DataValidator.PatternType.GenericAlphaNumeric, 16, 16, "pan");
+            validator.validatePattern(cvv.get().trim(), DataValidator.PatternType.StringOnlyNumbers, 3, 3, "cvv");
+            validator.validatePattern(date.get().trim(), DataValidator.PatternType.DateFuture, "date");
 
             /* VALIDATE PAYMENT DETAILS THAN DO NOTHING SINCE IT'S ONLY A PROJECT */
 
