@@ -49,43 +49,47 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
  * Add to Cart Button Listener
  */
 
-document.getElementById('add-to-cart').addEventListener('click',()=>{
+document.getElementById('add-to-cart').addEventListener('click',async ()=>{
     const counter = document.getElementById('cart-counter');
     let val = counter.innerHTML;
 
     const id_prod = getIdProdFromURL();
     const id_condition = document.querySelector('.prod-condition-button.active-button').value;
-    addToCart(id_prod, id_condition)
-        .then(r => {if(r.ok) return r.text(); else throw new Error(r.status + ' ' + r.statusText)})
-        .then(async data => {
-            let itemNum = await data;
-            if (itemNum && itemNum === '1') {
-                counter.innerHTML = (parseInt(val) + 1).toString();
-                counter.classList.remove('general-display-none');
-            }
-        }).catch(r => console.log(r));
+    await addToCart();
 });
 
 
 /**
- * Add to Cart Async Function
- * @param prod id of the product
- * @param condition id cf the condition
- * @returns {Promise<Response>}
+ * Add to Cart Async Function AJAX
  */
-async function addToCart(prod, condition){
-    if(!prod || !condition){
+async function addToCart(){
+    const counter = document.getElementById('cart-counter');
+    let val = counter.innerHTML;
+
+    const id_prod = getIdProdFromURL();
+    const id_condition = document.querySelector('.prod-condition-button.active-button').value;
+
+    if(!id_prod || !id_condition){
         console.error("No Enough Data to Add");
         return null;
     }
-    return fetch('cart', {
+
+    fetch('cart', {
         headers: {
             "Content-type": "application/x-www-form-urlencoded",
             'X-Requested-With': 'XMLHttpRequest',
         },
         method: 'POST',
-        body: 'option=addToCart&condition=' + condition + '&id_prod=' + prod
-    });
+        body: 'option=addToCart&condition=' + id_condition + '&id_prod=' + id_prod
+    })
+        .then(r => r.text())
+        .then(data => {
+            let itemNum = parseInt(data);
+            if (itemNum && itemNum === 1) {
+                counter.innerHTML = (parseInt(val) + 1).toString();
+                counter.classList.remove('general-display-none');
+            }
+        }).catch(r => console.log(r));
 }
 
 
@@ -93,14 +97,14 @@ async function addToCart(prod, condition){
  * Listener for One-Click Button
  */
 document.getElementById('one-click').addEventListener('click', async () =>{
-    //Simulate a Click on Add To Cart Button
-    document.getElementById('add-to-cart').click();
+    //Add To Cart
+    await addToCart();
 
     //Redirect
     //window.location.href = 'order';
     setTimeout( () =>{
         window.location.replace("order");
-    }, 200);
+    }, 50);
 });
 
 
