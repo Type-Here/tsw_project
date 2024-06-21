@@ -7,7 +7,9 @@ import com.unisa.store.tsw_project.model.DAO.UserDAO;
 import com.unisa.store.tsw_project.model.beans.OrdersBean;
 import com.unisa.store.tsw_project.model.beans.ShippingAddressesBean;
 import com.unisa.store.tsw_project.model.beans.UserBean;
+import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
+import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -209,7 +211,17 @@ public class ModifyUserServlet extends HttpServlet {
         }
     }
 
-    private void addShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+
+    /**
+     * Add A New Shipping Address for the Current User. <br />
+     * Validate Data and save new address if valid. <br />
+     * Manage Both Http Form Posts and AJAX Requests
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException if forward fails
+     * @throws IOException if write/forward fails
+     */
+    synchronized private void addShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Optional<String> roadType = Optional.ofNullable(request.getParameter("road-type2"));
         Optional<String> roadName = Optional.ofNullable(request.getParameter("road-name2"));
         Optional<String> roadNumber = Optional.ofNullable(request.getParameter("road-number2"));
@@ -217,47 +229,74 @@ public class ModifyUserServlet extends HttpServlet {
         Optional<String> province = Optional.ofNullable(request.getParameter("prov2"));
         Optional<String> cap = Optional.ofNullable(request.getParameter("cap2"));
 
-        if (roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
-            request.getSession().invalidate();
-            request.setAttribute("invalidUser", true);
-            request.getRequestDispatcher("/jsp/user-register.jsp").forward(request, response);
-            return;
-        }
+        try{
+            if (roadType.isEmpty() || roadName.isEmpty() || roadNumber.isEmpty() || city.isEmpty() || province.isEmpty() || cap.isEmpty()) {
+                throw new InvalidParameterException("All fields are required");
+            }
 
-        // Validazione campi
-        DataValidator validator = new DataValidator();
-        try {
+            //Fields Validation
+            DataValidator validator = new DataValidator();
+
+            //Throws InvalidParameterException if fails validation
             validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
             validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
             validator.validatePattern(roadNumber.get(), DataValidator.PatternType.Int, 1,999999);
             validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
-            validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
-            validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
-        } catch (Exception e) {
-            request.setAttribute("invalidAddresses", true);
-            request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request, response);
-            return;
+            validator.validatePattern(province.get(), DataValidator.PatternType.Generic, 2, 2);
+            validator.validatePattern(cap.get(), DataValidator.PatternType.CAP, 5, 6);
+
+
+            // Saving new shipping address
+            ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
+            UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
+            ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
+
+            shippingAddressesBean.setFirstname(userBean.getFirstname());
+            shippingAddressesBean.setLastname(userBean.getLastname());
+            shippingAddressesBean.setAddress(roadType.get().trim() + ", " + roadName.get().trim() + ", " + roadNumber.get().trim());
+            shippingAddressesBean.setCity(city.get().trim());
+            shippingAddressesBean.setProv(province.get().trim());
+            shippingAddressesBean.setCAP(cap.get().trim());
+            shippingAddressesBean.setId_client(userBean.getId());
+
+            //Save New Address
+            shippingAddressesDAO.doSave(shippingAddressesBean);
+
+            Optional<String> header = Optional.ofNullable(request.getHeader("X-Requested-With"));
+
+            //Normal request
+            if (header.isEmpty() || !header.get().equalsIgnoreCase("XMLHttpRequest")) {
+                request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request,response);
+
+            //AJAX
+            } else {
+                Gson gson = new Gson();
+                String json = gson.toJson(shippingAddressesBean);
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                response.getWriter().flush();
+            }
+
+        } catch(SQLException | InvalidParameterException e) {
+
+            Optional<String> header = Optional.ofNullable(request.getHeader("X-Requested-With"));
+            if (header.isEmpty() || !header.get().equalsIgnoreCase("XMLHttpRequest")) {
+                request.setAttribute("invalidAddresses", true);
+                request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request, response);
+
+            //AJAX
+            } else {
+                response.setContentType("text/plain");
+                response.getWriter().write("OPS... Something went wrong");
+                response.setStatus(Data.SC_INVALID_DATA);
+                response.getWriter().flush();
+            }
         }
-
-
-        // Saving new shipping address
-        ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
-        UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
-        ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
-
-        shippingAddressesBean.setFirstname(userBean.getFirstname());
-        shippingAddressesBean.setLastname(userBean.getLastname());
-        shippingAddressesBean.setAddress(roadType.get() + ", " + roadName.get() + ", " + roadNumber.get());
-        shippingAddressesBean.setCity(city.get());
-        shippingAddressesBean.setProv(province.get());
-        shippingAddressesBean.setCAP(cap.get());
-        shippingAddressesBean.setId_client(userBean.getId());
-        shippingAddressesDAO.doSave(shippingAddressesBean);
-
-        request.getRequestDispatcher("/WEB-INF/results/user-profile.jsp").forward(request,response);
     }
 
-    private void deleteShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    synchronized private void deleteShippingAddresses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 
         Optional<String> id = Optional.ofNullable(request.getParameter("id_add"));
 
