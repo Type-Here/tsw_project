@@ -24,10 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -150,8 +147,8 @@ public class AddProdServlet extends HttpServlet {
             //req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
             resp.sendRedirect(req.getContextPath() + "/console?added=true");
 
-        } catch (SQLException | IOException e){
-            throw new RuntimeException(e);
+        } catch (InvalidParameterException| SQLException | IOException e){
+            resp.sendRedirect(req.getContextPath() + "/console?added=false&error=" + e.getMessage().substring(0, Math.min(25,e.getMessage().length())));
 
         } finally {
             Logger logger = (Logger) getServletContext().getAttribute("base-log");
@@ -233,18 +230,25 @@ public class AddProdServlet extends HttpServlet {
             return;
         }
 
+        // Needed because quantities even if not presents will send an empty string as data! (i.e. = ["", "", "", "2", ""])
+        List<String> purifiedQuantities = new ArrayList<>();
+        for(String q: quantities){
+            if(q.isEmpty()) continue;
+            purifiedQuantities.add(q);
+        }
+
         //Else is a Physical Item: Check for Values
-        if(conditions.length != quantities.length) throw new InvalidParameterException("conditions != quantities");
+        if(conditions.length != purifiedQuantities.size()) throw new InvalidParameterException("conditions != quantities");
         DataValidator validator = new DataValidator();
         for(int i = 0; i < conditions.length; i++){
 
             //Validator Throws Error if Value not Valid
             validator.validatePattern(conditions[i], DataValidator.PatternType.Condition);
-            validator.validatePattern(quantities[i], DataValidator.PatternType.Int);
+            validator.validatePattern(purifiedQuantities.get(i), DataValidator.PatternType.Int);
 
             ConditionBean c = new ConditionBean();
             c.setId_cond(Data.Condition.valueOf(conditions[i]).dbValue);
-            c.setQuantity(Integer.parseInt(quantities[i]));
+            c.setQuantity(Integer.parseInt(purifiedQuantities.get(i)));
             p.addCondition(c);
         }
     }
@@ -321,6 +325,7 @@ public class AddProdServlet extends HttpServlet {
 
                 case "condition":
                 case "category":
+                case "quantity":
                 case "action": //Ignore action and ask params used for req handle
                 case "ask":
                     // Validated in other methods
