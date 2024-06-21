@@ -51,6 +51,8 @@
                         </div>
                     </div>
                 </c:forEach>
+
+                <c:if test="${addresses.size() < 6}">
                     <div id="add-address-btn" class="cart-item address-button">
                         <div class="cart-item-upper">
                             <h3>Aggiungi Indirizzo</h3>
@@ -59,8 +61,10 @@
                             <span class=>+</span>
                         </div>
                     </div>
+                </c:if>
             </section>
 
+            <c:if test="${addresses.size() < 6}">
             <section id="add-address" class="cart-prod-list general-display-none">
                 <div class="order-section-top">
                     <h2>Aggiungi Indirizzo</h2>
@@ -118,6 +122,7 @@
                     </form>
                 </div>
             </section>
+            </c:if>
     
             <section id="cart" class="cart-prod-list">
                 <div class="order-section-top">

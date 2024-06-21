@@ -249,7 +249,14 @@ public class ModifyUserServlet extends HttpServlet {
             // Saving new shipping address
             ShippingAddressesBean shippingAddressesBean = new ShippingAddressesBean();
             UserBean userBean = (UserBean) request.getSession().getAttribute("userlogged");
+
             ShippingAddressesDAO shippingAddressesDAO = new ShippingAddressesDAO();
+
+            // Limit Number of Shipping Addresses per User to 6
+            List<ShippingAddressesBean> shippingAddressesBeanList = shippingAddressesDAO.doRetrieveAllByUserId(userBean.getId());
+            if(shippingAddressesBeanList.size() >= 6){
+                throw new InvalidParameterException("Maximum number of shipping addresses is 6");
+            }
 
             shippingAddressesBean.setFirstname(userBean.getFirstname());
             shippingAddressesBean.setLastname(userBean.getLastname());
