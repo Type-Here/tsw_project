@@ -219,14 +219,14 @@ document.getElementById('load-users-button').addEventListener('click', async ()=
 /**
  * Listener For Prev Users Page Button
  */
-document.getElementById('prev-users-button').addEventListener('click', async ()=>{
+document.getElementById('prev-users-button').addEventListener('click', async function(){
     const usersTable = document.getElementById('admin-users-table')
     let page = parseInt(usersTable.getAttribute('data-page'));
-    if(!page || page <= 1) {this.disabled = 'true'; return;}
+    let message = "action=usersManager&ask=retrieve&page=" + --page;
 
-    let message = "action=ordersManager&ask=retrieve&page=" + --page;
     await populateUserTable(message);
     usersTable.setAttribute('data-page', page.toString());
+    if(!page || page <= 1) {this.disabled = true;}
 });
 
 
@@ -236,9 +236,10 @@ document.getElementById('prev-users-button').addEventListener('click', async ()=
 document.getElementById('next-users-button').addEventListener('click', async ()=>{
     const usersTable = document.getElementById('admin-users-table')
     let page = parseInt(usersTable.getAttribute('data-page'));
-    let message = "action=ordersManager&ask=retrieve&page=" + ++page;
+    let message = "action=usersManager&ask=retrieve&page=" + ++page;
     await populateUserTable(message); //This Call will disable next button if page has < 10 elements
     usersTable.setAttribute('data-page', page.toString());
+    document.getElementById('prev-users-button').disabled = false;
 });
 
 
@@ -282,9 +283,8 @@ async function populateUserTable(message){
         document.getElementById('next-users-button').classList.remove('general-display-none');
 
         // no more content, disable next button
-        if(data.status === "last"){
-            document.getElementById('next-users-button').disabled = 'true';
-        }
+        document.getElementById('next-users-button').disabled = (data.status === "last");
+
 
         //Reset Error Message if any
         span.classList.add('general-display-none');

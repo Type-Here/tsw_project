@@ -79,8 +79,8 @@ public class UsersManagerServlet extends HttpServlet {
 
         if(page.isPresent()){
             DataValidator validator = new DataValidator();
-            validator.validatePattern(page.get(), DataValidator.PatternType.Int, 0, null);
-            pageOffset = Integer.parseInt(page.get()) * 10;
+            validator.validatePattern(page.get(), DataValidator.PatternType.Int, 1, null);
+            pageOffset = (Integer.parseInt(page.get()) - 1) * 10;
         }
 
         UserDAO userDAO = new UserDAO();
@@ -102,7 +102,7 @@ public class UsersManagerServlet extends HttpServlet {
         String json = gson.toJson(users);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        System.out.println(json);
+
         resp.getWriter().print(info + "\"data\":" + json + "}");
     }
 
