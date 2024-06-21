@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.unisa.store.tsw_project.model.DAO.ProductDAO;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
+import com.unisa.store.tsw_project.other.Data;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.JSONMetaParser;
 import com.unisa.store.tsw_project.other.exceptions.BadRequestException;
@@ -52,7 +53,7 @@ public class ProdManagerServlet extends HttpServlet {
 
                     int idNum = Integer.parseInt(id.get());
                     doSendByID(idNum, resp);
-                    return;
+                    break;
 
                 case "requestPages": //Send Number of Product Pages Available
                     sendPageNumber(pages, resp);
@@ -88,14 +89,21 @@ public class ProdManagerServlet extends HttpServlet {
                     doUpdateProd(req, resp);
                     break;
             }
+        } catch (InvalidParameterException e){
+            doSendAjaxText(resp, Data.SC_INVALID_DATA, e.getMessage());
+        } catch (SQLException e){
+            doSendAjaxText(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (BadRequestException e){
+            doSendAjaxText(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (Exception e){
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+            doSendAjaxText(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "EG: OPS... Something went wrong");
         }
     }
 
 
-    /* -------- PRIVATE METHODS -------- */
+    /* ----------------------------------------------------- PRIVATE METHODS -------------------------------------------------- */
+
+    /* ======================== SENDING INFO METHODS ============================== */
 
     /**
      * AJAX: Send a Single Product Data JSON.
@@ -146,40 +154,9 @@ public class ProdManagerServlet extends HttpServlet {
         doSendResponse(products, resp);
     }
 
-    /**
-     * AJAX
-     * Send JSON type of Answer
-     * @param products List of product to transform data in JSON
-     * @param resp to write json to
-     * @throws IOException if response write fails
-     */
-    private void doSendResponse(List<ProductBean> products, HttpServletResponse resp) throws IOException {
-        Type listType = new TypeToken<ArrayList<ProductBean>>() {}.getType();
-        Gson gson = new Gson();
-        String json = gson.toJson(products, listType);
 
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().print(json);
-        resp.getWriter().flush();
-    }
 
-    /**
-     * AJAX
-     * Send number of pages of product table in JSON format
-     * @param pages number of total pages of the product table
-     * @param resp to write data
-     * @throws IOException if response write fails
-     */
-    private void sendPageNumber(Integer pages, HttpServletResponse resp) throws IOException {
-        Gson gson = new Gson();
-        String json = gson.toJson(pages);
-
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().print(json);
-
-    }
+    /* ================================================== WRITING / MODIFYNG METHODS ========================================= */
 
     /**
      * AJAX
@@ -207,17 +184,16 @@ public class ProdManagerServlet extends HttpServlet {
         Map<String, String[]> parameters = req.getParameterMap();
 
         /* Each validate throws Error if Values are not valid */
+        AddProdServlet.validateParametersAndSetProd(p, parameters);
         AddProdServlet.validateCategoriesAndSet(p, req.getParameterValues("category"), getServletContext());
         AddProdServlet.validateConditionsAndSet(p, req.getParameterValues("condition"), req.getParameterValues("quantity"));
-        AddProdServlet.validateParametersAndSetProd(p, parameters);
 
-        try{
-            productDAO.doUpdate(p);
+        /* Execute Update */
+        productDAO.doUpdate(p);
 
-            resp.sendError(HttpServletResponse.SC_OK, "Product updated successfully");
-        } catch (RuntimeException e){
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        }
+        //Send Response
+        doSendAjaxText(resp, HttpServletResponse.SC_OK, "Product updated successfully");
+        //Do not catch errors: will be written by doPost Catch in response. Messages are Set in Methods Called.
     }
 
 
@@ -240,31 +216,24 @@ public class ProdManagerServlet extends HttpServlet {
         if(id.isEmpty() || !validator.validatePattern(id.get(), DataValidator.PatternType.Int)) {
             throw new InvalidParameterException("id");
         }
-        String message = "OK";
+
         ProductDAO productDAO = new ProductDAO();
         ProductBean p = productDAO.doRetrieveById(Integer.parseInt(id.get()));
 
-        try {
-            JSONMetaParser parser = new JSONMetaParser();
-            parser.doParseMetaData(p, getServletContext());
-        } catch (Exception e){
-            message = " Unable to delete metadata json;";
-        }
-
-        try {
-            productDAO.doRemoveById(p);
-        } catch (SQLException e){
-            message = " Unable to delete product: " + e.getMessage();
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
-            return;
-        }
+        /* Remove From DataBase */
+        productDAO.doRemoveById(p);
 
         //Delete Metadata only if Product is Successfully Removed from DataBase before
-        if(!deleteMetaData(p)) message += " Unable to delete metadata"; //Call to deleteMetaData method below
+        JSONMetaParser parser = new JSONMetaParser();
+        parser.doParseMetaData(p, getServletContext());
+
+        //Delete Metadata only if Product is Successfully Removed from DataBase before
+        if (!deleteMetaData(p)) throw new IOException("Product removed from DB but Unable to delete metadata"); //Call to deleteMetaData method below
 
         //No actual error SEND OK
-        message += " Successfully deleted";
-        resp.sendError(HttpServletResponse.SC_OK, message);
+
+        doSendAjaxText(resp, HttpServletResponse.SC_OK, "Product Successfully Removed");
+        //Do not catch errors: will be written by doPost Catch in response. Messages are Set in Methods Called.
     }
 
 
@@ -282,6 +251,7 @@ public class ProdManagerServlet extends HttpServlet {
             List<String> gallery = prod.getMetaData().getGallery();
 
             String pathCorrected;
+
             //MacOS Parsing of getResource gives problems with WhiteSpaces: replace %20 with a whitespace
             if (System.getProperty("os.name").contains("mac") || System.getProperty("os.name").contains("Mac")) {
                 pathCorrected = getServletContext().getResource(path + front).getFile().replaceAll("%20", " ");
@@ -303,5 +273,61 @@ public class ProdManagerServlet extends HttpServlet {
             return false;
         }
     }
+
+
+    /* ============================================ RESPONSE WRITING METHODS ================================================= */
+
+    /**
+     * AJAX
+     * Send JSON type of Answer
+     * @param products List of product to transform data in JSON
+     * @param resp to write json to
+     * @throws IOException if response write fails
+     */
+    private void doSendResponse(List<ProductBean> products, HttpServletResponse resp) throws IOException {
+        Type listType = new TypeToken<ArrayList<ProductBean>>() {}.getType();
+        Gson gson = new Gson();
+        String json = gson.toJson(products, listType);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print(json);
+        resp.getWriter().flush();
+    }
+
+
+    /**
+     * AJAX: <br />
+     * Send TEXT Ajax Response Message
+     * @param resp HttpServletResponse
+     * @param statusCode Server Status Code to se to Response
+     * @param message Message to Write
+     * @throws IOException if writing response fails
+     */
+    private void doSendAjaxText(HttpServletResponse resp, int statusCode, String message) throws IOException {
+        resp.setContentType("text/html");
+        resp.getWriter().print(message);
+        resp.setStatus(statusCode);
+        resp.getWriter().flush();
+    }
+
+    /**
+     * AJAX
+     * Send number of pages of product table in JSON format
+     * @param pages number of total pages of the product table
+     * @param resp to write data
+     * @throws IOException if response write fails
+     */
+    private void sendPageNumber(Integer pages, HttpServletResponse resp) throws IOException {
+        Gson gson = new Gson();
+        String json = gson.toJson(pages);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print(json);
+
+    }
+
+
 
 }

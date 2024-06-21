@@ -128,7 +128,7 @@ public class ProductDAO {
             setPSAllCampProductBean(product, ps);
             ps.setInt(10, product.getId_prod());
             if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("UPDATE error.");
+                throw new SQLException("UPDATE Error: " + product.getName());
             }
         }
     }
@@ -289,10 +289,10 @@ public class ProductDAO {
             psCat.setInt(1, product.getId_prod());
             ps.setInt(1, product.getId_prod());
             if(psCat.executeUpdate() == 0){
-                throw new RuntimeException("DELETE error Categories of the Product");
+                throw new SQLException("DELETE error Categories of the Product");
             }
             if(ps.executeUpdate() == 0){
-                throw new RuntimeException("DELETE error Product");
+                throw new SQLException("DELETE error Product from DB");
             }
         }
     }
