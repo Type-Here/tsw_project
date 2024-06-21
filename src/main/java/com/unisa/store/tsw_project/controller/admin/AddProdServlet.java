@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "Console", urlPatterns = "/admin/add-prod")
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 100, // 100 KB
+        fileSizeThreshold = 1024 * 1024, // 1 MB
         maxFileSize = 1024 * 1024 * 10,      // 10 MB
         maxRequestSize = 1024 * 1024 * 20   // 20 MB
 )
@@ -59,9 +59,10 @@ public class AddProdServlet extends HttpServlet {
         Map<String, String[]> parameters = req.getParameterMap();
 
         /* Each validate throws Error if Values are not valid */
+        validateParametersAndSetProd(p, parameters); //Needs to be the first : i.e. type is required to check conditions!
+
         validateCategoriesAndSet(p, req.getParameterValues("category"), req.getServletContext());
         validateConditionsAndSet(p, req.getParameterValues("condition"), req.getParameterValues("quantity"));
-        validateParametersAndSetProd(p, parameters);
 
         try {
 
@@ -326,7 +327,7 @@ public class AddProdServlet extends HttpServlet {
                     break;
 
                 default:
-                    throw new InvalidParameterException(key);
+                    throw new InvalidParameterException("Invalid Par: " + key);
             }
         }
     }
