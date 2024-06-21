@@ -12,6 +12,7 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/register.js" defer></script>
 </head>
 
 <c:if test="${not empty userlogged}">
@@ -29,13 +30,13 @@
 <div class="main centerized-flex-container">
     <div class="log_form reg_form">
         <!--TODO-->
-        <form action="${pageContext.request.contextPath}/user-register" method="post">
+        <form id="register" action="${pageContext.request.contextPath}/user-register" method="post">
             <fieldset class="access-data">
                 <label class="form-row" for="email"><span>Email</span>
                     <input id="email" type="email" name="email" placeholder="Email" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" />
                 </label>
                 <label class="form-row" for="pass-2"><span>Password</span>
-                    <input id="pass-2" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
+                    <input id="pass-2" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&\/\(\)=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                 </label>
             </fieldset>
             <fieldset class="registry-data">
@@ -46,20 +47,20 @@
                     <input id="surname" type="text" name="surname" placeholder="Cognome" required pattern="^[a-zA-Z']{3,}$" />
                 </label>
                 <label class="form-row" for="phone"><span>Numero di Telefono</span>
-                    <input id="phone" type="tel" name="phone" placeholder="Numero di Telefono: 01234567" required pattern="\+39[0-9]{8,10}"/>
+                    <input id="phone" type="tel" name="phone" title="Tel: +3912345678" placeholder="Numero di Telefono: +3901234567" required pattern="\+39[0-9]{8,10}" value="+39"/>
                 </label>
                 <label class="form-row" for="birth"><span>Data di Nascita</span>
-                    <input id="birth" type="date" name="birthdate" placeholder="Data di Nascita" required />
+                    <input id="birth" type="date" name="birthdate" placeholder="Data di Nascita" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})"/>
                 </label>
             </fieldset>
             <fieldset class="address-data">
                 <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
-                    <input class="free-size" id="road-type" type="text" name="road-type" size="5" placeholder="Via" required pattern="^{3,}$" />
-                    <input id="road-name" type="text" name="road-name" placeholder="Giovanni Paolo" required pattern="^[a-zA-Z'\s\-]{3,}$" />
-                    <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[\w]+$" />
+                    <input class="free-size" id="road-type" type="text" name="road-type" size="5" placeholder="Via" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$" maxlength="15" />
+                    <input id="road-name" type="text" name="road-name" placeholder="Giovanni Paolo" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,60}$" maxlength="60" />
+                    <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[0-9]{1,6}$" />
                 </label>
                 <label class="form-row" for="city"><span>Citt&agrave;</span>
-                    <input id="city" type="text" name="city" placeholder="Città" required pattern="^[a-zA-Z'\s\-]{3,}$" />
+                    <input id="city" type="text" name="city" placeholder="Città" required pattern="^[a-zA-Z'\- ]{3,50}$" maxlength="50" />
                 </label>
                 <div class="form-row centerized-row">
                     <label class="" for="cap"><span>CAP</span>
@@ -74,6 +75,7 @@
                 <input class="default" type="submit" value="Register">
                 <a href="${pageContext.request.contextPath}/user-login"><button type="button" class="default alternative" value="Login" name="method">Login</button></a>
             </fieldset>
+            <div id="tooltip" class="general-display-none"></div>
             <fieldset>
                 <c:if test="${not empty invalidUser}">
                     <div class="invalid-credentials">
