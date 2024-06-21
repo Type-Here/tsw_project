@@ -1,9 +1,8 @@
 /**
- * AJAX
+ * AJAX to order page
  * @param message post body
- * @param responseType text/json to return
  */
-async function ajax(message, responseType = 'text'){
+async function ajax(message){
     if(!message) return;
     return fetch('order', {
         headers:{
@@ -12,13 +11,10 @@ async function ajax(message, responseType = 'text'){
         },
         method:'POST',
         body: message
-    }).then(r => {
-        if(!r.ok) {return Promise.reject(new Error("Impossibile effettuare operazione: " + r.status));}
-        else return responseType === 'text' ? r.text() : r.json();
     });
 }
 
-
+/* ===================== ADDRESS SELECTOR BUTTONS =================== */
 
 /**
  * Address Button Tiles Listeners
@@ -35,6 +31,8 @@ Array.from(document.getElementsByClassName('address-button'))
     });
 });
 
+/* =================================== PAYMENT VALIDATION =============================================== */
+
 
 /**
  * Input Payment Validation
@@ -47,7 +45,7 @@ Array.from(payForm.getElementsByTagName('input')).forEach(input =>{
     let max;
     switch (inputName){
         case 'name':
-            pattern = /[a-zA-ZÀ-ɏ' ]+/
+            pattern = /[a-zA-ZÀ-ɏ&' ]+/
             max = 60;
             break;
         case 'pan':
@@ -73,7 +71,7 @@ Array.from(payForm.getElementsByTagName('input')).forEach(input =>{
     }.bind(pattern));
 });
 
-
+/* ============================================== DO ORDER ==================================== */
 
 /**
  * Order Button Listener
@@ -82,9 +80,29 @@ Array.from(payForm.getElementsByTagName('input')).forEach(input =>{
  * Show Status Popup <br />
  */
 document.getElementById('order-button').addEventListener('click', async () =>{
+    let isValid = true;
+    //Validate Data
+    Array.from(payForm.elements).forEach(element =>{
+        if(element.pattern){
+            let pattern = new RegExp(element.pattern);
+
+            if(!element.value || !pattern.test(element.value)) {
+                isValid = false;
+                element.style.animation = '0.2s ShakyShaky 6';
+                const span = document.createElement('span');
+                span.classList.add('invalid-credentials');
+                element.parentElement.appendChild(span);
+                span.innerHTML = "Campo non valido";
+                setTimeout(()=>{ element.parentElement.removeChild(span)}, 4000);
+            }
+        }
+    });
+
+    if(!isValid) return;
+
     let form = new FormData(payForm);
-    let message ='';
-    form.forEach((value, key, parent )=>{
+    let message = '';
+    form.forEach((value, key, parent) => {
         message += key + '=' + value + '&';
     });
 
@@ -94,8 +112,21 @@ document.getElementById('order-button').addEventListener('click', async () =>{
     message += 'address=' + idAdd + '&';
     message += 'order=true';
 
-    let data = await ajax(message, 'text');
-    doPresent(data);
+    let response = await ajax(message);
+    let data = await response.text();
+    if (response.ok) {
+        doPresent(data);
+
+    } else {
+        let span = document.getElementById('order-error-span');
+        if(!span){
+            span = document.createElement('span');
+            span.id = 'order-error-span';
+            span.classList.add('invalid-credentials');
+            document.getElementsByClassName('cart-overview')[0].appendChild(span);
+        }
+        span.innerHTML = data;
+    }
 });
 
 
@@ -182,7 +213,7 @@ Array.from(document.forms.namedItem('address-form').elements).forEach(element =>
 
 /**
  * Form Add Address, Validate and
- * Send Data AJAX to Add a New Shipping Address for the USer
+ * Send Data AJAX to Add a New Shipping Address for the User
  */
 document.forms.namedItem('address-form').addEventListener('submit', async function (e){
     e.preventDefault();
