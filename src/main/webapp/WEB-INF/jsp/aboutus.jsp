@@ -27,7 +27,7 @@
 
                 <div class="grid-item grid-txt1">
                     <h2>Storia</h2>
-                    <h3>Retrogamers: un viaggio nel tempo videoludico</h3>
+                    <h3>Retrogamer: un viaggio nel tempo videoludico</h3>
                     <p>
                         Nel cuore del 2010, due amici accomunati da una passione ardente per i videogiochi retro,
                         Manuel e Gianluigi, decisero di trasformare la loro nostalgia in realtà. Nacque così
@@ -40,7 +40,7 @@
                     <h2>Chi Siamo</h2>
                     <h3>Un sogno che prende vita</h3>
                     <p>
-                        Retrogamers non era solo un negozio, ma un tempio dedicato ai videogiochi del passato.
+                        Retrogamer non era solo un negozio, ma un tempio dedicato ai videogiochi del passato.
                         Tra gli scaffali ordinati si potevano trovare rarità come Atari 2600, N64, Commodore64 e Sega
                         Mega Drive
                         accanto a classici indimenticabili come Pac-Man, Super Mario Bros. e Zelda. Manuel e Gianluigi
@@ -57,7 +57,7 @@
                     <h3>Passione</h3>
                     <p>
                         La passione per i videogiochi retro è il motore che ha spinto Manuel e Gianluigi a
-                        creare Retrogamers. Ogni prodotto in vendita è selezionato con cura e attenzione,
+                        creare Retrogamer. Ogni prodotto in vendita è selezionato con cura e attenzione,
                         per offrire ai clienti un'esperienza autentica e coinvolgente.
                     </p>
                 </div>
@@ -66,7 +66,7 @@
                     <h2>Obiettivi</h2>
                     <h3>Esperienza unica</h3>
                     <p>
-                        Retrogamers si impegna a offrire ai clienti un'esperienza unica e indimenticabile.
+                        Retrogamer si impegna a offrire ai clienti un'esperienza unica e indimenticabile.
                         Ogni prodotto in vendita è selezionato con cura e attenzione, per garantire la massima
                         qualità e autenticità.
                     </p>
@@ -77,7 +77,7 @@
                     <h3>Passione condivisa</h3>
                     <p>
                         Manuel e Gianluigi condividono con i clienti la loro passione per i videogiochi retro,
-                        raccontando aneddoti e curiosità su ogni titolo. Retrogamers non è solo un negozio, ma
+                        raccontando aneddoti e curiosità su ogni titolo. Retrogamer non è solo un negozio, ma
                         un luogo dove la nostalgia si mescola alla realtà.
                     </p>
                 </div>
@@ -130,13 +130,13 @@
                         <h2>Il nostro team</h2>
                         <h3>Conosci il nostro staff</h3>
                         <p>
-                            Retrogamers è composto da un team di esperti appassionati di videogiochi retro.
+                            Retrogamer è composto da un team di esperti appassionati di videogiochi retro.
                             Ogni membro del team è specializzato in un'area specifica, per garantire ai clienti
                             un'assistenza professionale e competente.
                         </p>
                         <h4>Manuel & Gianluigi</h4>
                         <p>
-                            Manuel e Gianluigi sono i fondatori di Retrogamers. Visionari e appassionati di
+                            Manuel e Gianluigi sono i fondatori di Retrogamer. Visionari e appassionati di
                             videogiochi, hanno dato vita al negozio con la loro dedizione e il loro amore per
                             i titoli retrò.
                         </p>
@@ -157,7 +157,7 @@
                         </p>
                         <h4>Luca & Martina</h4>
                         <p>
-                            Il duo dinamico di Retrogamers, Luca e Martina, si occupano del reparto marketing
+                            Il duo dinamico di Retrogamer, Luca e Martina, si occupano del reparto marketing
                             e comunicazione, promuovendo il negozio e coinvolgendo i clienti con iniziative
                             creative e originali.
                         </p>

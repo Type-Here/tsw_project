@@ -87,11 +87,11 @@ passField.addEventListener('input', function (e){
 
 passField.addEventListener('focus', ()=> {
     let tooltip = document.getElementById('tooltip');
-    tooltip.innerHTML = 'Necessario:' +
-        '<ul><li>Almeno un Carattere minuscolo</li>' +
-        '<li>Almeno un Carattere Masciuolo</li>' +
+    tooltip.innerHTML = 'Più di 8 Caratteri con:' +
+        '<ul><li>Almeno un carattere minuscolo</li>' +
+        '<li>Almeno un Carattere Maiuscolo</li>' +
         '<li>Almeno 1 Numero</li>' +
-        '<li>Almeno 1 Carattere Speciale !£%&@</li></ul>'
+        '<li>Almeno 1 Carattere Speciale: !£%&@</li></ul>'
     tooltip.style.display = "block";
     tooltip.style.position = 'absolute';
     tooltip.style.top = passField.offsetTop + passField.offsetHeight + 5 + "px";
