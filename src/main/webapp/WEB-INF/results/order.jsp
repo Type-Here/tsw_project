@@ -60,7 +60,51 @@
                         </div>
                     </div>
             </section>
-            
+
+            <section id="add-address" class="cart-prod-list general-display-none">
+                <div class="order-section-top">
+                    <h2>Aggiungi Indirizzo</h2>
+                </div>
+                <div class="new-shipping-address log_form gen-form">
+
+                    <form id="address-form" action="${pageContext.request.contextPath}/modify-user" method="post">
+                        <fieldset class="address-data">
+                            <label class="form-row centerized-row" for="road-type2">
+                                <span class="text-center-full-width">Indirizzo</span>
+                                <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
+                                       required
+                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,}$" maxlength="15"/>
+                                <input class="free-size" id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
+                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,}$" maxlength="60"/>
+                                <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
+                                       placeholder="1" step="1" required pattern="^[0-9]{1,6}$"/>
+                            </label>
+                            <label class="form-row" for="city2">
+                                <span>Citt&agrave;</span>
+                                <input id="city2" name="city2" type="text" placeholder="Città" required
+                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,}$" maxlength="50"/>
+                            </label>
+                            <div class="form-row">
+                                <label class="" for="cap2">
+                                    <span>CAP</span>
+                                    <input class="free-size" size="5" id="cap2" name="cap2" type="text" maxlength="5"
+                                           placeholder="CAP" required pattern="^[0-9]{5}$"/>
+                                </label>
+                                <label class="" for="prov2">
+                                    <span>Prov</span>
+                                    <input class="free-size" size="2" id="prov2" name="prov2" type="text" maxlength="2"
+                                           placeholder="RM" required pattern="^[a-zA-Z]{2}$"/>
+                                </label>
+                            </div>
+                        </fieldset>
+                        <label class="form-row centerized-row">
+                            <input class="default free-size" type="submit" formnovalidate value="Aggiungi">
+                        </label>
+                    </form>
+
+                </div>
+            </section>
+
             <section id="payment" class="cart-prod-list">
                 <div class="order-section-top">
                     <h2>Imposta il Pagamento</h2>
