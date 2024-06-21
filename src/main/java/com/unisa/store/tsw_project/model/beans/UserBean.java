@@ -215,6 +215,7 @@ public class UserBean implements HttpSessionBindingListener {
 
             //Update Cart if Already Exists in DataBase
             if (previous != null) {
+                cart.get().setId_cart(previous.getId_cart()); //Set same ID
                 cartDAO.doUpdate(cart.get());
 
                 //Remove all previous CartItems as we're not sure user has modified the Data
