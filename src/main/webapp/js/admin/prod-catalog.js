@@ -3,6 +3,11 @@ import {removePopup} from "./admin-functions.js";
 import {doPrintProdForm} from "./admin-functions.js";
 
 /* ================== ADMIN RETRIEVE PROD CATALOG ============================ */
+
+
+/* ================== AJAX METHODS ================= */
+
+
 /**
  * Send message in a POST Request to Server
  * @param message Message Request in Body
@@ -41,7 +46,7 @@ export function xmlConsoleReq(message, option = 1, divToSet = null){
                     break;
             }
         } else if(xhr.readyState === 4){
-            alert("Unable to perform operation - Error code:" + xhr.status);
+            alert(xhr.responseText + "- Status code:" + xhr.status);
         }
     }
 
@@ -67,7 +72,7 @@ function xmlRequestPageNumber(){
                 isFirstRequest = false;
                 maxPage = xhr.response;
             } else if(xhr.readyState === 4){
-                alert("Unable to retrieve data - Error code:" + xhr.status);
+                alert("Unable to retrieve data pages - Status code:" + xhr.status);
             }
         }
 
@@ -80,6 +85,9 @@ function xmlRequestPageNumber(){
 }
 
 
+/* ================================ PRINT TABLES FUNCTIONS ============================================ */
+
+
 /**
  * Print a Row inside a Table
  * @param tableRow Pointer to the HTMLTableRowElement to fill
@@ -88,6 +96,7 @@ function xmlRequestPageNumber(){
  */
 function printRow(tableRow, prod, type){
     switch (type){
+
         //Products Table
         case 1:
             const printable = ["id_prod","name","price","platform","developer","metadataPath","type","discount"];
@@ -178,7 +187,7 @@ function printRow(tableRow, prod, type){
 }
 
 /**
- * Remove Old Elements first.
+ * Remove Old Elements first. <br />
  * Print a List of Product in a table 1 for each row
  * @param responseJson an AJAX response parsed in JSON
  * @param table HTMLTableElement to Fill
@@ -205,6 +214,8 @@ export function doPrintTable(responseJson, table, type){
 
 
 /* ============================ LISTENERS ===================================== */
+
+/* =================================== LOAD PRODUCT TABLE AND SET BUTTON ===================================== */
 
  /*  -- GLOBAL VARIABLES -- */
 let nextPage = 2;
@@ -266,7 +277,7 @@ document.getElementById("prev-cat-button").addEventListener('click', function ()
 
 
 
-/* ================= VALIDATE AND SEND XML REQUEST FOR MODIFICATION PRODUCT ======== */
+/* =========================================== VALIDATE AND SEND XML REQUEST FOR MODIFICATION PRODUCT ======== */
 
 /**
  * Action for Modification Popup. Prevent Submit.
@@ -276,7 +287,7 @@ document.getElementById("prev-cat-button").addEventListener('click', function ()
  * @param form form to retrieve data from
  * @param divToSetAnswer is the HTMLElement where te XML Response (Answer or Status) will be written into (innerHTML)
  */
-function doModifyAction(event, form, divToSetAnswer){
+export function doModifyAction(event, form, divToSetAnswer){
     //Stop Submit
     event.preventDefault();
 
@@ -290,7 +301,7 @@ function doModifyAction(event, form, divToSetAnswer){
      * Checked at least 1 Condition + Set its Quantity
      */
     /* If Conditions and Categories are not correctly set, invalidate submit and alert user */
-    /*TODO return validation check in function doesn't work keep it here ftm*/
+    /* return validation check in function doesn't work keep it here ftm*/
     if(!(Array.from(categories).find( cat =>{ return cat.checked === true }) !== undefined //Validate Categories
         &&
         Array.from(conditions).find(cond => {

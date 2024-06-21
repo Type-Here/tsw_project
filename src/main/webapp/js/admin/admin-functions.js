@@ -1,4 +1,5 @@
 import {xmlConsoleReq} from "./prod-catalog.js";
+import {doModifyAction} from "./prod-catalog.js";
 
 /* ============= POPUP MOD AND DELETE BUTTONS ===================== */
 
@@ -10,9 +11,14 @@ function hidePopup(){
     const formSection = document.getElementById('modify-form');
     const removeDiv = document.getElementById('remove-prod-popup');
     const infoPopup = document.getElementsByClassName('info-popup')[0];
-    document.getElementsByClassName('overlay')[0].classList.remove( 'general-display-block');
-    document.getElementsByClassName('overlay-popup')[0].classList.add( 'general-display-none');
-    popupDiv.classList.add('general-display-none');
+    const overlay =document.getElementsByClassName('overlay')[0];
+    if(overlay) overlay.classList.remove( 'general-display-block');
+    const overlayPopup =document.getElementsByClassName('overlay-popup')[0];
+    if(overlayPopup) overlayPopup.classList.add( 'general-display-none');
+    if(popupDiv){
+        popupDiv.classList.add('general-display-none');
+        popupDiv.style.width = ''; //Unset for Later Reuse
+    }
     if(infoPopup) infoPopup.remove();
     if(formSection) popupDiv.removeChild(formSection);
     if(removeDiv) popupDiv.removeChild(removeDiv);
@@ -30,8 +36,31 @@ export function addPopup(button){
         let popupDiv = document.getElementById('modify-prod-popup');
         popupDiv.style.width = '80%';
 
+        /*Deep Cody Add Product Form since Update is Very Similar */
         let formSection = document.getElementById('add_prod').cloneNode(true);
         formSection.id = "modify-form";
+
+        /* Add Section with Form to Modify Popup */
+        popupDiv.appendChild(formSection);
+
+        /* Set General Form Data for later AJAX Request */
+        let form = formSection.getElementsByTagName('form')[0];
+        let divForm = formSection.getElementsByClassName('log_form add-prod-info')[0];
+        form.enctype = 'application/x-www-form-urlencoded';
+        form.id = 'mod-form';
+        form.method = 'POST';
+        form.action = 'console';
+        form.addEventListener('submit', (e) =>{doModifyAction(e, form, divForm)});
+
+        form.querySelector('input[type="hidden"]').value = 'prodManager';
+
+        /* Clean Copied Node Values */
+        Array.from(form.elements).forEach(element => {
+            if(element.type === 'text') element.value = '';
+            else if(element.type === 'radio' || element.type === 'checkbox') element.selected = 'false';
+        });
+
+        /* Set Listeners for Validation */
 
         const typeProd = formSection.getElementsByClassName('type-prod');
         const conditions = formSection.getElementsByClassName('condition-input');
@@ -52,16 +81,8 @@ export function addPopup(button){
             Array.from(conditions[0].children).forEach( c =>{ c.children[0].disabled = false});
         });
 
-        let form = formSection.getElementsByTagName('form')[0];
-        let divForm = formSection.getElementsByClassName('log_form add-prod-info')[0];
-        form.enctype = 'application/x-www-form-urlencoded';
-        form.id = 'mod-form';
-        form.method = 'POST';
-        form.action = 'console';
-        form.addEventListener('submit', (e) =>{doModifyAction(e, form, divForm)});
 
-        form.querySelector('input[type="hidden"]').value = 'prodManager';
-
+        //Set Product ID
         let hiddenID = document.createElement('input');
         hiddenID.type = 'hidden';
         hiddenID.name = 'id_prod';
@@ -74,6 +95,7 @@ export function addPopup(button){
         divHeading.children[0].classList.add('margin-h-10'); //H2 Title
         divHeading.children[0].innerHTML = "Modifica Prodotto";
 
+        //Add Exit Button
         const exitHeading = document.createElement('button');
         exitHeading.innerHTML = '&Cross;';
         exitHeading.classList.add('no-background');
@@ -83,8 +105,14 @@ export function addPopup(button){
 
         let prodId = this.value; //Button Value
 
+        /*
+         Retrieve Product Data and Populate Fields
+         */
+
         let message = "action=prodManager&ask=modifyProd&id=" + prodId;
-        xmlConsoleReq(message, 2);
+        xmlConsoleReq(message, 2); //Option 2 will populate fields //will call doPrintProdForm BELOW
+
+        /* Other Settings after population */
 
         popupDiv.classList.remove('general-display-none');
         popupDiv.style.left = (window.innerWidth - parseInt(getComputedStyle(popupDiv).width))/2 + "px"; //Center the popup
@@ -97,9 +125,6 @@ export function addPopup(button){
         formSection.querySelector('input[type=reset]').remove();
         formSection.querySelector('input[type=submit]').value="Modifica";
 
-        //Add Section with Form to Modify Popup
-        popupDiv.appendChild(formSection);
-
         /* Overlay Show */
         document.getElementsByClassName('overlay')[0].classList.add('general-display-block');
         /* Overlay Click removes popup and overlay */
@@ -108,6 +133,7 @@ export function addPopup(button){
         });
     });
 }
+
 
 /**
  * Add all elements of a product modifiable inside the popup form
