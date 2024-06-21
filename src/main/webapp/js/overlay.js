@@ -64,3 +64,19 @@ function  updateActiveNavElement(){
 window.addEventListener('load', updateActiveNavElement);
 //Cambia URL
 window.addEventListener('popstate', adaptMarginLastTile);
+
+/**
+ * Function called by Hide Button and on click over overlay div to close Modify Popup
+ */
+function hidePopup(){
+    const popupDiv = document.getElementById('modify-prod-popup');
+    const formSection = document.getElementById('modify-form');
+    const removeDiv = document.getElementById('remove-prod-popup');
+    const infoPopup = document.getElementsByClassName('info-popup')[0];
+    document.getElementsByClassName('overlay')[0].classList.remove( 'general-display-block');
+    document.getElementsByClassName('overlay-popup')[0].classList.add( 'general-display-none');
+    popupDiv.classList.add('general-display-none');
+    if(infoPopup) infoPopup.remove();
+    if(formSection) popupDiv.removeChild(formSection);
+    if(removeDiv) popupDiv.removeChild(removeDiv);
+}

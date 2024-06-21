@@ -14,6 +14,7 @@
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script type="module" src="${pageContext.request.contextPath}/js/admin/console-module.js"></script>
+    <script type="module" src="${pageContext.request.contextPath}/js/admin/admin-functions.js"></script>
     <script src="${pageContext.request.contextPath}/js/admin/add-product.js" defer></script>
     <script type="module" src="${pageContext.request.contextPath}/js/admin/prod-catalog.js" defer></script>
 </head>
