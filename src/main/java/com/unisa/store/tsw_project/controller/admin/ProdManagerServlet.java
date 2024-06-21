@@ -6,6 +6,7 @@ import com.unisa.store.tsw_project.model.DAO.ProductDAO;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.JSONMetaParser;
+import com.unisa.store.tsw_project.other.exceptions.BadRequestException;
 import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,22 +26,23 @@ public class ProdManagerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try{
+            Optional<String> header = Optional.ofNullable(req.getHeader("X-Requested-With"));
+            if(header.isEmpty() || !header.get().equalsIgnoreCase("XMLHttpRequest")) {
+                throw new BadRequestException("Invalid XML Request Header");
+            }
 
-        Optional<String> header = Optional.ofNullable(req.getHeader("X-Requested-With"));
-        if(header.isEmpty() || !header.get().equalsIgnoreCase("XMLHttpRequest")) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+            DataValidator validator = new DataValidator();
 
-        DataValidator validator = new DataValidator();
+            Optional<String> ask = Optional.ofNullable(req.getParameter("ask"));
+            if(ask.isEmpty() || !validator.validatePattern(ask.get(), DataValidator.PatternType.GenericAlphaNumeric)) {
+                throw new BadRequestException("Invalid Ask Option Request");
+            }
 
-        Optional<String> ask = Optional.ofNullable(req.getParameter("ask"));
-        if(ask.isEmpty() || !validator.validatePattern(ask.get(), DataValidator.PatternType.GenericAlphaNumeric)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+            int prodNumber = (int) Optional.of(getServletContext().getAttribute("prod-number")).orElse(10);
+            int limit = 10;
+            int pages = (prodNumber / limit) + 1;
 
-        try {
             switch (ask.get()) {
                 case "modifyProd": //Send Product data to View to be modified
                     Optional<String> id = Optional.ofNullable(req.getParameter("id"));
@@ -52,20 +54,15 @@ public class ProdManagerServlet extends HttpServlet {
                     doSendByID(idNum, resp);
                     return;
 
-                case "accessProd":
-                    int prodNumber = (int) Optional.of(getServletContext().getAttribute("prod-number")).orElse(10);
-                    int limit = 10;
-                    int pages = (prodNumber / limit) + 1;
+                case "requestPages": //Send Number of Product Pages Available
+                    sendPageNumber(pages, resp);
+                break;
 
-                    Optional<String> requestPages = Optional.ofNullable(req.getParameter("requestPages"));
-                    if(requestPages.isPresent() && requestPages.get().equals("true")) {
-                        sendPageNumber(pages, resp);
-                        return;
-                    }
+                case "accessProd": // Send Products LIst Page
                     Optional<String> page = Optional.ofNullable(req.getParameter("page"));
 
                     if (page.isEmpty() || !validator.validatePattern(page.get(), DataValidator.PatternType.Int, 1, pages)) {
-                        throw new InvalidParameterException("page");
+                        throw new InvalidParameterException("Invalid page");
                     }
                     int pageUSer = Integer.parseInt(page.get());
 
@@ -75,7 +72,7 @@ public class ProdManagerServlet extends HttpServlet {
                 case "searchByName":
                     Optional<String> search = Optional.ofNullable(req.getParameter("search"));
                     if (search.isEmpty() || !validator.validatePattern(search.get(), DataValidator.PatternType.Generic)) {
-                        throw new InvalidParameterException("search");
+                        throw new InvalidParameterException("Invalid search parameter");
                     }
                     doRetrieveByName(search.get(), resp);
                     break;
@@ -85,9 +82,9 @@ public class ProdManagerServlet extends HttpServlet {
                     break;
 
                 case "saveModProd":
-                    for(String p : req.getParameterMap().keySet()){
+                    /*for(String p : req.getParameterMap().keySet()){
                         System.out.println(p + " : " + Arrays.toString(req.getParameterMap().get(p)));
-                    }
+                    }*/
                     doUpdateProd(req, resp);
                     break;
             }
@@ -150,6 +147,7 @@ public class ProdManagerServlet extends HttpServlet {
     }
 
     /**
+     * AJAX
      * Send JSON type of Answer
      * @param products List of product to transform data in JSON
      * @param resp to write json to
@@ -163,10 +161,11 @@ public class ProdManagerServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().print(json);
-        //resp.getWriter().flush();
+        resp.getWriter().flush();
     }
 
     /**
+     * AJAX
      * Send number of pages of product table in JSON format
      * @param pages number of total pages of the product table
      * @param resp to write data
@@ -183,6 +182,7 @@ public class ProdManagerServlet extends HttpServlet {
     }
 
     /**
+     * AJAX
      * Perform Update of the Product. <br/>
      * Validate Data from User. <br />
      * Retrieve old data -> Update Bean -> Send to DAO
@@ -191,7 +191,7 @@ public class ProdManagerServlet extends HttpServlet {
      * @throws IOException if Metadata Parsing fails, if response send fails
      * @throws SQLException if db update fails
      */
-    private void doUpdateProd(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+    synchronized private void doUpdateProd(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         DataValidator validator = new DataValidator();
         ProductDAO productDAO = new ProductDAO();
         Optional<String> id = Optional.ofNullable(req.getParameter("id_prod"));
@@ -213,6 +213,7 @@ public class ProdManagerServlet extends HttpServlet {
 
         try{
             productDAO.doUpdate(p);
+
             resp.sendError(HttpServletResponse.SC_OK, "Product updated successfully");
         } catch (RuntimeException e){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -221,6 +222,7 @@ public class ProdManagerServlet extends HttpServlet {
 
 
     /**
+     * AJAX
      * Perform Delete of the Product. <br/>
      * NB. It tries to delete also images and metadata info in JSON <br />
      * If metadata delete fails, the product removal in databases still continues. <br/>
@@ -231,7 +233,7 @@ public class ProdManagerServlet extends HttpServlet {
      * @throws IOException if Metadata Parsing and deletion fails exception is caught. Not if response send fails
      * @throws SQLException if db update fails
      */
-    private void doDeleteProd(HttpServletRequest request, HttpServletResponse resp) throws IOException, SQLException {
+    synchronized private void doDeleteProd(HttpServletRequest request, HttpServletResponse resp) throws IOException, SQLException {
         Optional<String> id = Optional.ofNullable(request.getParameter("id"));
         DataValidator validator = new DataValidator();
 
@@ -249,7 +251,6 @@ public class ProdManagerServlet extends HttpServlet {
             message = " Unable to delete metadata json;";
         }
 
-        if(deleteMetaData(p)) message += " Unable to delete metadata"; //Call to deleteMetaData method below
         try {
             productDAO.doRemoveById(p);
         } catch (SQLException e){
@@ -257,6 +258,10 @@ public class ProdManagerServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
+
+        //Delete Metadata only if Product is Successfully Removed from DataBase before
+        if(!deleteMetaData(p)) message += " Unable to delete metadata"; //Call to deleteMetaData method below
+
         //No actual error SEND OK
         message += " Successfully deleted";
         resp.sendError(HttpServletResponse.SC_OK, message);
@@ -269,7 +274,7 @@ public class ProdManagerServlet extends HttpServlet {
      * @param prod to delete metadata from
      * @return false to the first error in deletion, true if all metadata is deleted.
      */
-    private boolean deleteMetaData(ProductBean prod) {
+    synchronized private boolean deleteMetaData(ProductBean prod) {
         if(prod == null) return false;
         try {
             String path = prod.getMetaData().getPath();

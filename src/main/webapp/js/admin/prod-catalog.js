@@ -58,9 +58,9 @@ export function xmlConsoleReq(message, option = 1, divToSet = null){
 function xmlRequestPageNumber(){
     if(isFirstRequest){
         let xhr = new XMLHttpRequest();
-        let base = document.URL.match("(http[s]?://.*?/.*?/)")[0];
-        let url = base + "console";
-        let message = "action=prodManager&ask=accessProd&requestPages=true";
+        //let base = document.URL.match("(http[s]?://.*?/.*?/)")[0];
+        let url = "console";
+        let message = "action=prodManager&ask=requestPages";
 
         xhr.onreadystatechange = function(){
             if(xhr.readyState === 4 && xhr.status === 200){
