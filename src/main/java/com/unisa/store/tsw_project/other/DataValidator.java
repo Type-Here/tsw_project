@@ -11,6 +11,42 @@ public class DataValidator {
         StringOnlyNumbers, DateFuture, DiscountName
     }
 
+    /* ================================= MOST COMPLETE ================================ */
+
+
+    /**
+     * Verify data respect pattern type
+     * @param data to check
+     * @param patternType type of pattern to use for check
+     * @param parameterName name of the parameter to validate: used in error as Informational Element
+     * @return true string is valid, false if not
+     * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
+     */
+    public boolean validatePattern(String data, PatternType patternType, String parameterName){
+        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException("Invalid Parameter: " + parameterName + " ");
+        return true;
+    }
+
+
+    /**
+     Verify data respect pattern type
+     * @param data to check
+     * @param patternType type of pattern to use for check
+     * @param min if patternType is Int or Double return true if value is > of min. If it's a different pattern checks if string length is bigger than min
+     * @param max if patternType is Int or Double return true if value is < of max. If it's a different pattern checks if string length is smaller than max
+     * @param parameterName name of the parameter to validate: used in error as Informational Element
+     * @return true if valide, false if not
+     * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
+     */
+    public boolean validatePattern(String data, PatternType patternType,
+                                   Integer min, Integer max, String parameterName){
+        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException("Invalid Parameter: " + parameterName + " ");
+        return true;
+    }
+
+
+    /* =========================== SECOND LEVEL ====================== */
+
     /**
      * Verify data respect pattern type
      * @param data to check
@@ -19,7 +55,7 @@ public class DataValidator {
      * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType){
-        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException(patternType.name() + ":");
+        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException("Invalid Parameter: " +patternType.name() + ":");
         return true;
     }
 
@@ -34,9 +70,12 @@ public class DataValidator {
      */
     public boolean validatePattern(String data, PatternType patternType,
                                                          Integer min, Integer max){
-        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException(patternType.name() + ":" );
+        if(!validatePatternExecute(data, patternType,min, max)) throw new InvalidParameterException("Invalid Parameter: " +patternType.name() + ":" );
         return true;
     }
+
+
+    /* ================================  OPERATIONAL - PRIVATE =================================== */
 
     /**
      Verify data respect pattern type
