@@ -115,10 +115,10 @@
                 </div>
                 <div class="log_form gen-form payment-form">
                     <form id="pay">
-                        <label class="form-row"><span>Nome e Cognome</span><input type="text" placeholder="Mario Rossi" name="name" title="Nome" pattern="[a-zA-Z&àòèùì' ]{3,50}" required/></label>
+                        <label class="form-row"><span>Nome e Cognome</span><input type="text" placeholder="Mario Rossi" name="name" title="Nome" pattern="[a-zA-Z&À-ɏ' ]{3,50}" required/></label>
                         <label class="form-row"><span>PAN </span><input type="text" name="pan" title="PAN" placeholder="0000 0000 0000 0000" pattern="[0-9]{16}" required/></label>
                         <label class="form-row"><span>CVV/CVV2 </span><input class="free-size" type="text" placeholder="123" name="cvv" title="CVV" pattern="[0-9]{3}" size="3" required/></label>
-                        <label class="form-row"><span>Data Scadenza </span><input type="date" name="expire" required></label>
+                        <label class="form-row"><span>Data Scadenza </span><input type="date" name="expire" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})"></label>
                     </form>
                 </div>
             </section>
