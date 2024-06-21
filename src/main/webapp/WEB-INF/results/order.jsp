@@ -65,7 +65,7 @@
             </section>
 
             <c:if test="${addresses.size() < 6}">
-            <section id="add-address" class="cart-prod-list general-display-none">
+            <section id="add-address" class="cart-prod-list" style="display: none">
                 <div class="order-section-top">
                     <h2>Aggiungi Indirizzo</h2>
                 </div>
@@ -77,9 +77,9 @@
                                 <span class="text-center-full-width">Indirizzo</span>
                                 <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
                                        required
-                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,}$" maxlength="15"/>
+                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$" maxlength="15"/>
                                 <input class="free-size" id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
-                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,}$" maxlength="60"/>
+                                       pattern="^[A-Za-zÀ-ÿ'\- ]{3,60}$" maxlength="60"/>
                                 <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
                                        placeholder="1" step="1" required pattern="^[0-9]{1,6}$"/>
                             </label>

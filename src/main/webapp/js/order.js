@@ -172,7 +172,7 @@ function doPresent(data){
  */
 document.getElementById('add-address-btn').addEventListener('click', () =>{
     const section = document.getElementById('add-address');
-    section.classList.remove('general-display-none');
+    section.style.display = 'flex';
     section.style.animation = 'Unfold 2s ease-out';
     section.scrollIntoView({behavior:'smooth'});
 });
@@ -291,12 +291,12 @@ document.forms.namedItem('address-form').addEventListener('submit', async functi
         addSection.style.animation = '';
 
         setTimeout(() =>{
-            addSection.style.animation = 'Unfold reverse 2s';
+            addSection.style.animation = 'Unfold reverse 2.5s';
         },50)
 
         setTimeout(()=>{
-            addSection.classList.add('general-display-none');
-        },4000);
+            addSection.style.display = 'none';
+        },2500);
 
     } catch (e) {
         span.classList.add('invalid-credentials');
