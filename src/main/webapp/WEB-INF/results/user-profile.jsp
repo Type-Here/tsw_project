@@ -165,32 +165,32 @@
                         <form action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input id="form2" type="hidden" name="section" value="four">
                             <fieldset class="address-data">
-                                <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
+                                <label class="form-row alternative-row" for="road-type2"><span>Indirizzo</span>
                                     <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
                                            required
-                                           pattern="^{3,}$"/>
+                                           pattern="^{3,20}$"/>
                                     <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
-                                           pattern="^[a-zA-Z'\s\-]{3,}$"/>
+                                           pattern="^[a-zA-Z'\- ]{3,60}$"/>
                                     <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
                                            placeholder="1" step="1" required pattern="/^\d{1,6}$/"/>
                                 </label>
                                 <label class="form-row" for="city2"><span>Citt&agrave;</span>
                                     <input id="city2" name="city2" type="text" placeholder="Città" required
-                                           pattern="^[a-zA-Z'\- ]{3,}$"/>
+                                           pattern="^[a-zA-Z'\- ]{3,50}$"/>
                                 </label>
                                 <div class="form-row centerized-row">
-                                    <label class="" for="cap"><span>CAP</span>
+                                    <label class="" for="cap2"><span>CAP</span>
                                         <input class="free-size" size="5" id="cap2" name="cap2" type="text" maxlength="5"
                                                placeholder="CAP" required pattern="^[0-9]{5}$"/>
                                     </label>
-                                    <label class="" for="prov"><span>Prov</span>
+                                    <label class="" for="prov2"><span>Prov</span>
                                         <input class="free-size" size="2" id="prov2" name="prov2" type="text" maxlength="2"
                                                placeholder="RM" required pattern="^[a-zA-Z]{2}$"/>
                                     </label>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-row">
-                                <input class="default" type="submit" value="Applica Modifica">
+                            <fieldset class="form-row centerized-row">
+                                <input class="default free-size" type="submit" value="Aggiungi Indirizzo">
                                 <c:if test="${not empty invalidAddresses}">
                                     <div class="invalid-credentials">
                                         <span>Indirizzo inserito errato</span>
