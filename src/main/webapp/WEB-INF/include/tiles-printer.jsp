@@ -20,10 +20,10 @@
                                             </span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="discount">${prod.discount}</span>
-                                    <span class="original-rem-price">${prod.price}</span>
+                                    <span class="discount">${prod.discount}&percnt;</span>
+                                    <span class="original-rem-price">${prod.price}&euro;</span>
                                     <span class="actual-price">
-                                            <c:out value="${prod.price - prod.price*prod.discount/100}"/>
+                                            <c:out value="${prod.price - prod.price*prod.discount/100}"/>&euro;
                                                 </span>
                                 </c:otherwise>
                             </c:choose>

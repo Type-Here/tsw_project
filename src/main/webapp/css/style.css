@@ -1048,6 +1048,9 @@ ul.carousel-thumbnails{
 
         .tile-text-bottom-price{
             margin: auto;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
         }
     }
 
