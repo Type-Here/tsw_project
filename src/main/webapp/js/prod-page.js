@@ -50,11 +50,6 @@ Array.from(document.getElementsByClassName('prod-condition-button')).forEach( (b
  */
 
 document.getElementById('add-to-cart').addEventListener('click',async ()=>{
-    const counter = document.getElementById('cart-counter');
-    let val = counter.innerHTML;
-
-    const id_prod = getIdProdFromURL();
-    const id_condition = document.querySelector('.prod-condition-button.active-button').value;
     await addToCart();
 });
 
@@ -70,11 +65,11 @@ async function addToCart(){
     const id_condition = document.querySelector('.prod-condition-button.active-button').value;
 
     if(!id_prod || !id_condition){
-        console.error("No Enough Data to Add");
+        console.error("Not Enough Data to Add");
         return null;
     }
 
-    fetch('cart', {
+    await fetch('cart', {
         headers: {
             "Content-type": "application/x-www-form-urlencoded",
             'X-Requested-With': 'XMLHttpRequest',
@@ -98,13 +93,14 @@ async function addToCart(){
  */
 document.getElementById('one-click').addEventListener('click', async () =>{
     //Add To Cart
-    await addToCart().then(r =>{
-        //Redirect
-        //window.location.href = 'order';
-        setTimeout( () =>{
-            window.location.href = "order";
-        }, 100);
-    });
+    await addToCart();
+
+    //Redirect
+    window.location.href = 'order';
+
+    /*setTimeout(() => {
+        window.location.href = "order";
+    }, 100);*/
 });
 
 

@@ -283,7 +283,7 @@ public class TheOrderServlet extends HttpServlet {
                 }
 
                 //Apply any Condition Discount
-                discountedPrice = discountedPrice.multiply(BigDecimal.valueOf((1 - cond.getCondition().getDiscount()/100)));
+                discountedPrice = discountedPrice.multiply(BigDecimal.valueOf((1 - (double) cond.getCondition().getDiscount()/100.0)));
             }
 
             /* Apply Any DiscountCodeValue */
