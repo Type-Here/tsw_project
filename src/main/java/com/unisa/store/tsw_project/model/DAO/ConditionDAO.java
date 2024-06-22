@@ -39,26 +39,6 @@ public class ConditionDAO {
     }
 
     /**
-     * For a new Product Insert: Save all ConditionBeans in list of a specific product
-     * @param productBean whose id is used
-     * @throws SQLException if fails
-     */
-    public void doSaveByProduct(ProductBean productBean) throws SQLException {
-        try (Connection con = ConPool.getConnection()) {
-            for (ConditionBean cond: productBean.getConditions()){
-                PreparedStatement ps =
-                        con.prepareStatement("INSERT INTO prod_quantity (id_prod, id_cond, quantity) VALUES (?, ?, ?)");
-                ps.setInt(1, productBean.getId_prod());
-                ps.setInt(2, cond.getId_cond());
-                ps.setInt(3, cond.getQuantity());
-                if (ps.executeUpdate() != 1) {
-                    throw new RuntimeException("INSERT error.");
-                }
-            }
-        }
-    }
-
-    /**
      * Use this method to update the quantity of a sold item by product id
      * @param idProd ID of the Selling Product
      * @throws SQLException if update fails
@@ -96,28 +76,79 @@ public class ConditionDAO {
     }
 
     /**
-     * Use this method to update quantity by an absolute value (I.E. for Admin Update)
-     * @param conditionBean needs to have SET id_prod before calling this method
-     * @throws SQLException if update fails
-     * @apiNote <b>Bean needs to have SET id_prod before calling this method</p>
+     * For a new Product Insert: Save all ConditionBeans in list of a specific product
+     * @param productBean whose id is used
+     * @throws SQLException if fails
      */
-    synchronized public void doUpdateByIDProduct(ConditionBean conditionBean) throws SQLException {
-        //Return Error if id_prod == 0 -> ID NOT SET
-        if(conditionBean.getId_prod() <= 0){ throw new InvalidParameterException(); }
-
+    public void doSaveByProduct(ProductBean productBean) throws SQLException {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps =
-                    con.prepareStatement("UPDATE prod_quantity SET quantity = ? WHERE id_prod = ? AND id_cond = ?");
-            ps.setInt(1, conditionBean.getQuantity());
-            ps.setInt(2, conditionBean.getId_prod());
-            ps.setInt(3, conditionBean.getId_cond());
-            if (ps.executeUpdate() != 1) {
-                throw new RuntimeException("INSERT error.");
+            for (ConditionBean cond: productBean.getConditions()){
+                PreparedStatement ps =
+                        con.prepareStatement("INSERT INTO prod_quantity (id_prod, id_cond, quantity) VALUES (?, ?, ?)");
+                ps.setInt(1, productBean.getId_prod());
+                ps.setInt(2, cond.getId_cond());
+                ps.setInt(3, cond.getQuantity());
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException("INSERT Condition-Quantity Error.");
+                }
             }
         }
     }
 
 
+    /**
+     * Use this method to update quantity by an absolute value (I.E. for Admin Update) <br />
+     * Update all ConditionBeans in list of a specific product -- DELETE THEN SAVE
+     * @param productBean needs to have SET id_prod before calling this method
+     * @throws SQLException if update fails
+     * @apiNote <b>Bean needs to have SET id_prod before calling this method</p>
+     */
+    synchronized public void doFullUpdateByIDProduct(ProductBean productBean) throws SQLException {
+        //Since we're not sure if some elements are removed or not by Admin:
+        //Remove all Conditions then Set new
+        doDeleteAllByIDProduct(productBean);
+        doSaveByProduct(productBean);
+    }
+
+    /**
+     * Use this method to update quantity by an absolute value (I.E. for Admin Update) <br />
+     * Update all ConditionBeans in list of a specific product -- DO ONLY UPDATE NOT DELETE BEFORE
+     * @param productBean needs to have SET id_prod before calling this method
+     * @throws SQLException if update fails
+     * @apiNote <b>Bean needs to have SET id_prod before calling this method</p>
+     * @see ConditionDAO#doFullUpdateByIDProduct(ProductBean) if you're looking for a full reset of data
+     */
+    public void doOnlyUpdateByIDProduct(ProductBean productBean) throws SQLException {
+        //Return Error if id_prod == 0 -> ID NOT SET
+        try (Connection con = ConPool.getConnection()) {
+            for (ConditionBean cond: productBean.getConditions()){
+                if(productBean.getId_prod() <= 0){ throw new InvalidParameterException(); }
+                PreparedStatement ps =
+                        con.prepareStatement("UPDATE prod_quantity SET quantity = ? WHERE id_prod = ? AND id_cond = ?");
+                ps.setInt(1, cond.getQuantity());
+                ps.setInt(2, productBean.getId_prod());
+                ps.setInt(3, cond.getId_cond());
+                if (ps.executeUpdate() != 1) {
+                    throw new RuntimeException("UPDATE Conditions and Quantity error.");
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Delete all Product Conditions in Database
+     * @param productBean product to remove all conditions
+     * @throws SQLException if query fails
+     */
+    synchronized public void doDeleteAllByIDProduct(ProductBean productBean) throws SQLException {
+        try (Connection con = ConPool.getConnection()) {
+            if(productBean.getId_prod() <= 0) throw new RuntimeException("No ID Product Set in Update Conditions");
+            PreparedStatement ps = con.prepareStatement("DELETE FROM prod_quantity WHERE id_prod = ?");
+            ps.setInt(1, productBean.getId_prod());
+            ps.executeUpdate();
+        }
+    }
 
 
 }
