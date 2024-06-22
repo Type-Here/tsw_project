@@ -351,3 +351,168 @@ document.getElementById('changePassword').addEventListener('submit', function(ev
         });
     }
 });
+
+
+
+
+/* ============================================================ VALIDATION LISTENERS ================================================================ */
+
+
+
+/* ========================== VALIDATION FORM PERSONAL DATA FORM ON SUBMIT ====================================== */
+
+/**
+ * Validate Data Before Register Submit Listener
+ */
+document.forms.namedItem('form1').addEventListener('submit', function(){
+    let isValid = true;
+
+    // Validate Each Field
+    Array.from(this.elements).forEach(element =>{
+        //Validate Pattern
+        if(element.pattern){
+            let pattern = new RegExp(element.pattern);
+
+            if(!pattern.test(element.value)) {
+                isValid = false;
+                element.style.backgroundColor = '#77000090';
+                const span = document.createElement('span');
+                span.classList.add('invalid-credentials');
+                element.parentElement.appendChild(span);
+                span.innerHTML = "Campo non valido";
+                setTimeout(()=>{
+                    element.style.backgroundColor = '';
+                    element.parentElement.removeChild(span)
+                }, 4000);
+            }
+        }
+
+        //Trim for cleaner data
+        if(isValid) element.value = element.value.trim();
+    });
+
+    if(!isValid) return;
+
+    //If it's all valid: Submit
+    this.submit();
+})
+
+/* ======================= ON INPUT CHECKS (not all fields) ================================== */
+
+/**
+ * Function to Validate On Input Element Field
+ * @param pattern regex to validate data
+ * @param element HtmlElement whose value is validated
+ * @param event input event to get input data
+ */
+function checkInputPatterns(pattern, element, event){
+    const maxlength = parseInt(element.getAttribute('maxlength'));
+    if(pattern && !pattern.test(event.data)) element.value = element.value.slice(0, element.value.length - event.data.length);
+    if(element.value.length > maxlength) element.value = element.value.slice(0, maxlength);
+    if(element.id.toString().match(/prov.*/)) element.value = element.value.toUpperCase();
+}
+
+/**
+ * Keeps Data Valid for each specified field (Listeners) FORM1 Personal Data
+ */
+Array.from(document.forms.namedItem('form1').elements).forEach(element =>{
+    element.addEventListener('input', function (e){
+        if(!e.data || element.type === 'submit') return;
+
+        let pattern;
+        switch (element.id){
+            case 'road-type':
+            case 'road-name':
+            case 'city':
+                pattern = /^[A-Za-zÀ-ÿ' -]+$/;
+                break;
+            case 'road-number':
+            case 'cap':
+                pattern = /^[0-9]+$/;
+                break;
+            case 'prov':
+                pattern = /^[a-zA-Z]$/;
+                break;
+            default:
+                return;
+        }
+        checkInputPatterns(pattern, element, e);
+    });
+});
+
+
+/**
+ * Keeps Data Valid for each specified field (Listeners) FORM2 Add Shipping Address
+ */
+Array.from(document.forms.namedItem('add-address').elements).forEach(element =>{
+    element.addEventListener('input', function (e){
+        if(!e.data || element.type === 'submit') return;
+
+        let pattern;
+        switch (element.id){
+            case 'road-type2':
+            case 'road-name2':
+            case 'city2':
+                pattern = /^[A-Za-zÀ-ÿ' -]+$/;
+                break;
+            case 'road-number2':
+            case 'cap2':
+                pattern = /^[0-9]+$/;
+                break;
+            case 'prov2':
+                pattern = /^[a-zA-Z]$/;
+                break;
+            default:
+                return;
+        }
+        checkInputPatterns(pattern, element, e);
+    });
+});
+
+
+/* ================================ CHANGE PASSWORD FIELDS LISTENERS ===================================== */
+
+/**
+ * Listener Validation for Password Field
+ */
+let passField = document.getElementById('pass-new');
+let confirmField = document.getElementById('pass-new-confirm');
+
+passField.addEventListener('input', function (){
+    let pattern = /^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!#@£$%&/()=?'^])(?=.*[0-9]).{8,}$/
+    if(!pattern.test(passField.value)) {
+        this.style.backgroundColor = '#77000090';
+        confirmField.style.backgroundColor = '#77000090';
+    }
+    else {
+        passField.style.backgroundColor = '#00770090';
+        if(confirmField.value === passField.value) confirmField.style.backgroundColor = '#00770090';
+    }
+
+});
+
+confirmField.addEventListener('input', function (){
+    let pattern = /^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!#@£$%&/()=?'^])(?=.*[0-9]).{8,}$/
+    if(!pattern.test(confirmField.value) || (this.value !== passField.value)) this.style.backgroundColor = '#77000090';
+    else this.style.backgroundColor = '#00770090';
+});
+
+
+passField.addEventListener('focus', ()=> {
+    let tooltip = document.getElementById('tooltip');
+    tooltip.innerHTML = 'Più di 8 Caratteri con:' +
+        '<ul><li>Almeno un carattere minuscolo</li>' +
+        '<li>Almeno un Carattere Maiuscolo</li>' +
+        '<li>Almeno 1 Numero</li>' +
+        '<li>Almeno 1 Carattere Speciale: !£%&@</li></ul>'
+    tooltip.style.display = "block";
+    tooltip.style.position = 'absolute';
+    tooltip.style.top = passField.offsetTop + passField.offsetHeight + 5 + "px";
+    tooltip.style.left = passField.offsetLeft + "px";
+
+})
+
+passField.addEventListener('blur', () =>{
+    let tooltip = document.getElementById('tooltip');
+    tooltip.style.display = '';
+})
