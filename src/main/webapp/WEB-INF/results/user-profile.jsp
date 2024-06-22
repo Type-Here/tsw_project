@@ -51,16 +51,16 @@
                             </fieldset>
                             <fieldset class="registry-data">
                                 <label class="form-row" for="name"><span>Nome</span>
-                                    <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-Z']{3,}$" disabled/>
+                                    <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" disabled/>
                                 </label>
                                 <label class="form-row" for="surname"><span>Cognome</span>
-                                    <input id="surname" name="surname" type="text" value="${userlogged.lastname}"  required pattern="^[a-zA-Z']{3,}$" />
+                                    <input id="surname" name="surname" type="text" value="${userlogged.lastname}" required pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" />
                                 </label>
                                 <label class="form-row" for="phone"><span>Numero di Telefono</span>
                                     <input id="phone"  type="tel" name="phone" value="${userlogged.telephone}" required pattern="\+39[0-9]{8,10}"/>
                                 </label>
                                 <label class="form-row" for="birth"><span>Data di Nascita</span>
-                                    <input id="birth" name="birthdate" type="date" value="${userlogged.birth}" required />
+                                    <input id="birth" name="birthdate" type="date" value="${userlogged.birth}" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})"/>
                                 </label>
                                 <label class="form-row" for="email"><span>Email</span>
                                     <input id="email" name="email" type="email" value="${userlogged.email}" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" />
@@ -69,12 +69,12 @@
                             <fieldset class="address-data">
                                 <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
                                     <input id="address" type="hidden" value="${userlogged.address}">
-                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-Z']{3,}$" />
-                                    <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-Z'\s\-]{3,}$" />
+                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-ZÀ-ÿ' ]{3,15}$" maxlength="15"/>
+                                    <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,60}$" maxlength="60" />
                                     <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[0-9]{1,6}$" />
                                 </label>
                                 <label class="form-row" for="city"><span>Citt&agrave;</span>
-                                    <input id="city" name="city" type="text" value="${userlogged.city}" required pattern="^[a-zA-Z'\s\-]{3,}$" />
+                                    <input id="city" name="city" type="text" value="${userlogged.city}" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,50}$" maxlength="50"/>
                                 </label>
                                 <div class="form-row centerized-row">
                                     <label class="" for="cap"><span>CAP</span>
@@ -127,6 +127,7 @@
                                     <input id="pass-new-confirm" name="newpassConfirm" type="password" placeholder="Conferma Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
                             </fieldset>
+                            <div id="tooltip" class="general-display-none"></div>
                             <fieldset class="form-row">
                                 <input id="passSend" class="default" type="submit" value="Applica">
                                 <label id="passwordResults"></label>
@@ -159,24 +160,25 @@
                                 <td class="table-row-button"><button onclick="" value="" title="remove" class="secondary attention">&Cross;</button></td>
                             </tr>
                         </table>
+                        <span><b>Nota:</b> Non puoi eliminare gli indirizzi che hai già usato per un ordine. <br />Massimo 6 indirizzi</span>
                     </div>
 
                     <div class="log_form reg_form">
-                        <form action="${pageContext.request.contextPath}/modify-user" method="post">
+                        <form id="add-address" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input id="form2" type="hidden" name="section" value="four">
                             <fieldset class="address-data">
                                 <label class="form-row alternative-row" for="road-type2"><span>Indirizzo</span>
                                     <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
-                                           required
-                                           pattern="^{3,20}$"/>
-                                    <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required
-                                           pattern="^[a-zA-Z'\- ]{3,60}$"/>
+                                           required maxlength="15"
+                                           pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$"/>
+                                    <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required maxlength="60"
+                                           pattern="^[A-Za-zÀ-ÿ''\- ]{3,60}$"/>
                                     <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
-                                           placeholder="1" step="1" required pattern="/^\d{1,6}$/"/>
+                                           placeholder="1" step="1" required pattern="^\d{1,6}$"/>
                                 </label>
                                 <label class="form-row" for="city2"><span>Citt&agrave;</span>
-                                    <input id="city2" name="city2" type="text" placeholder="Città" required
-                                           pattern="^[a-zA-Z'\- ]{3,50}$"/>
+                                    <input id="city2" name="city2" type="text" placeholder="Città" required maxlength="50"
+                                           pattern="^[a-zA-ZÀ-ÿ'\- ]{3,50}$"/>
                                 </label>
                                 <div class="form-row centerized-row">
                                     <label class="" for="cap2"><span>CAP</span>
