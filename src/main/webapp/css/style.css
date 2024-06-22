@@ -251,7 +251,7 @@ hr{
 .menu_icon {
     /*display: none; */ /*WideScreen Rule*/
     position: relative;
-    z-index: 11;
+    z-index: 15;
     transition: transform 0.4s;
 } 
 
