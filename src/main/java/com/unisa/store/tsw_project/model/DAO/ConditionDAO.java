@@ -146,7 +146,9 @@ public class ConditionDAO {
             if(productBean.getId_prod() <= 0) throw new RuntimeException("No ID Product Set in Update Conditions");
             PreparedStatement ps = con.prepareStatement("DELETE FROM prod_quantity WHERE id_prod = ?");
             ps.setInt(1, productBean.getId_prod());
-            ps.executeUpdate();
+            if(ps.executeUpdate() == 0){
+                System.out.println("0 Rows Deleted in Conditions.");
+            }
         }
     }
 

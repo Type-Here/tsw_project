@@ -175,6 +175,7 @@ public class ProductBean {
     public void addCondition(ConditionBean conditionBean){
         if(this.getConditions() == null){
             this.setConditions(new ArrayList<>());
+            if(this.type) return; //If Digital ---> Condition already set in setConditions call above!
         }
         this.getConditions().add(conditionBean);
     }
