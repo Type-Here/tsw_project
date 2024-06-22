@@ -49,18 +49,33 @@
                 <div class="centerized-flex-container condition-select">
                     <h2 class="text-center">Condizione:</h2>
                     <div class="prod-condition-div">
+
+                        <% // Only for Better View:
+                           // To retrieve the first element available and show the correct price:
+                           // set activeCondDiscount to 0 and an iterator variable iterDiscount
+                           // In the foreach check the first available element and update variables
+
+                           // To retrieve first valid condition to set button active the same iter is used
+                        %>
+                        <c:set var="activeCondDiscount" value="0"/>
+                        <c:set var="iterDiscount" value="0"/>
                         <c:choose>
                             <c:when test="${product.type == true}">
                                 <button class="prod-condition-button active-button" value="0">Digitale</button>
+                                <c:set var="iterDiscount" value="1"/>
                             </c:when>
                             <c:otherwise>
                                 <c:forEach items="${product.conditions}" var="cond">
                                     <c:choose>
-                                        <c:when test="${cond.condition eq 'A'}"> <!--<img src="img/top.png" alt="top quality"/>-->
-                                            <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if> top-quality" value="${cond.id_cond}">${cond.condition}</button>
+                                        <c:when test="${cond.quantity > 0}">
+                                            <button class="prod-condition-button <c:if test="${iterDiscount eq 0}">active-button</c:if> <c:if test="${cond.condition eq 'A'}">top-quality</c:if>" value="${cond.id_cond}">${cond.condition}</button>
+                                            <c:if test="${iterDiscount eq 0}">
+                                                <c:set var="activeCondDiscount" value="${cond.condition.discount}"/>
+                                                <c:set var="iterDiscount" value="1"/>
+                                            </c:if>
                                         </c:when>
                                         <c:otherwise>
-                                            <button class="prod-condition-button <c:if test="${cond == product.conditions[0]}">active-button</c:if>" value="${cond.id_cond}">${cond.condition}</button>
+                                            <button class="prod-condition-button" title="Non Disponibile" disabled value="Unavailable">${cond.condition}</button>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -73,14 +88,14 @@
                     <c:choose>
                         <c:when test="${empty product.discount or product.discount == 0}">
                             <span id="prod-price" class="actual-price">
-                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * (1.0 -  product.conditions[0].condition.discount/100)}"/>&euro;
+                                    <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * (1.0 -  activeCondDiscount/100)}"/>&euro;
                             </span>
                         </c:when>
                         <c:otherwise>
                             <span class="discount">${product.discount}&percnt;</span>
-                            <span class="original-rem-price">${product.price * (1.0 -  product.conditions[0].condition.discount/100)}&euro;</span>
+                            <span class="original-rem-price">${product.price * (1.0 -  activeCondDiscount/100)}&euro;</span>
                             <span id="prod-price" class="actual-price">
-                                <c:set var="price" scope="page" value="${product.price * (1.0 -  product.conditions[0].condition.discount/100) * (1 - product.discount/100)}"/>
+                                <c:set var="price" scope="page" value="${product.price * (1.0 -  activeCondDiscount/100) * (1 - product.discount/100)}"/>
                                  <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${price}"/>&euro;
                             </span>
                         </c:otherwise>

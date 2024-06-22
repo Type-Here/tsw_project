@@ -1410,6 +1410,15 @@ input#pass{
     }
 }
 
+/* Button to Choose Condition - Unavailable Condition */
+.prod-condition-button:disabled{
+    background-color: #888888;
+    color: #202020;
+    &:hover{
+        box-shadow: none;
+    }
+}
+
 .prod-overview{
     width: 20%;
     min-width: 300px;
