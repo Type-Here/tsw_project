@@ -91,7 +91,7 @@ public class ProdManagerServlet extends HttpServlet {
             }
         } catch (InvalidParameterException e){
             doSendAjaxText(resp, Data.SC_INVALID_DATA, e.getMessage());
-        } catch (SQLException e){
+        } catch (IOException | SQLException e){
             doSendAjaxText(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (BadRequestException e){
             doSendAjaxText(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
