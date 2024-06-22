@@ -246,6 +246,8 @@ public class AddProdServlet extends HttpServlet {
 
         //Else is a Physical Item: Check for Values
         if(conditions.length != purifiedQuantities.size()) throw new InvalidParameterException("conditions != quantities");
+
+        List<ConditionBean> conditionBeans = new ArrayList<>();
         DataValidator validator = new DataValidator();
         for(int i = 0; i < conditions.length; i++){
 
@@ -256,8 +258,9 @@ public class AddProdServlet extends HttpServlet {
             ConditionBean c = new ConditionBean();
             c.setId_cond(Data.Condition.valueOf(conditions[i]).dbValue);
             c.setQuantity(Integer.parseInt(purifiedQuantities.get(i)));
-            p.addCondition(c);
+            conditionBeans.add(c);
         }
+        p.setConditions(conditionBeans);
     }
 
 
