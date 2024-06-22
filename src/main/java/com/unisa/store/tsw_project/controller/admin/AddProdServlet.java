@@ -148,6 +148,17 @@ public class AddProdServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/console?added=true");
 
         } catch (InvalidParameterException| SQLException | IOException e){
+
+            //If some error occurred try to remove partially saved data in DB
+            ProductDAO dao = new ProductDAO();
+            if(p.getId_prod() > 0){ //IF Product has an ID it's been saved at least ones
+                try{
+                    dao.doRemoveById(p);
+                } catch (SQLException ex){
+                    System.err.println(ex.getMessage());
+                }
+            }
+
             resp.sendRedirect(req.getContextPath() + "/console?added=false&error=" + e.getMessage().substring(0, Math.min(25,e.getMessage().length())));
 
         } finally {
@@ -158,10 +169,6 @@ public class AddProdServlet extends HttpServlet {
         }
 
 
-    }
-
-    @Override
-    public void destroy() {
     }
 
 
