@@ -98,13 +98,13 @@ async function addToCart(){
  */
 document.getElementById('one-click').addEventListener('click', async () =>{
     //Add To Cart
-    await addToCart();
-
-    //Redirect
-    //window.location.href = 'order';
-    setTimeout( () =>{
-        window.location.replace("order");
-    }, 50);
+    await addToCart().then(r =>{
+        //Redirect
+        //window.location.href = 'order';
+        setTimeout( () =>{
+            window.location.href = "order";
+        }, 100);
+    });
 });
 
 
