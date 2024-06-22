@@ -2086,6 +2086,7 @@ section.section-container{
             flex-basis: 25%;
             width: fit-content;
             max-width: 300px;
+            min-width: 230px;
         }
     }
 
@@ -2096,6 +2097,7 @@ section.section-container{
     #cart, #address{
         flex-flow: row wrap;
         gap: 15px 20px ;
+        justify-content: center;
     }
     
     .address-button{
