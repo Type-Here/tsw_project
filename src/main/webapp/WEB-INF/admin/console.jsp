@@ -15,7 +15,7 @@
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
     <script type="module" src="${pageContext.request.contextPath}/js/admin/console-module.js"></script>
     <script type="module" src="${pageContext.request.contextPath}/js/admin/admin-functions.js"></script>
-    <script src="${pageContext.request.contextPath}/js/admin/add-product.js" defer></script>
+    <script type="module" src="${pageContext.request.contextPath}/js/admin/add-product.js" defer></script>
     <script type="module" src="${pageContext.request.contextPath}/js/admin/prod-catalog.js" defer></script>
 </head>
 <body class="body_def">
@@ -29,7 +29,8 @@
                     <span>Inserimento è andato a buon fine</span>
                 </c:when>
                 <c:otherwise>
-                    <span class="error-popup">Inserimento ha provocato un errore, impossibile inserire elemento</span>
+                    <span class="error-popup">Inserimento ha provocato un errore, impossibile inserire elemento</span><br />
+                    <span>Errore: ${error}</span>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -57,7 +58,7 @@
             <form id="add-form" action="admin/add-prod" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="addProd" />
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
-                <label class="form-row"><span>Prezzo:</span><input type="number" step="0.01" name="price" required pattern="[0-9]+"/></label>
+                <label class="form-row"><span>Prezzo:</span><input class="price-prod" type="number" min="1" max="100000" maxlength="8" step="0.01" name="price" required pattern="[0-9.,]{1,8}"/></label>
                 <fieldset class="form-row">
                     <div>
                         <span>Tipo:</span>
@@ -81,15 +82,15 @@
                 <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" name="description" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
                 <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required /></label>
                 <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required /></label>
-                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\- ]{2,}" required /> </label>
-                <label class="form-row"><span>Key:</span><input type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
+                <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\- ]{2,50}" required /> </label>
+                <label class="form-row"><span>Key:</span><input class="key-prod" type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
                 <fieldset class="form-row category-form"><span class="title-row">Categorie:*</span>
                     <c:forEach var="cat" items="${category}">
                         <label><input type="checkbox" class="category-input free-size" name="category" value="${cat.id_cat}">${cat.typename}</label>
                     </c:forEach>
                 </fieldset>
                 <fieldset class="form-row centerized-row">
-                    <label><span>&percnt; Sconto:</span><input class="free-size" size="5" type="number" name="discount" min="0" max="100" /></label>
+                    <label><span>&percnt; Sconto:</span><input class="discount-prod free-size" size="5" maxlength="5" type="number" name="discount" min="0" max="100" pattern="[0-9.,]{1,5}"/></label>
                 </fieldset>
                 <fieldset class="form-row category-form">
                     <span class="title-row">Condizione:* </span>
@@ -98,23 +99,23 @@
                     </div>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="A"/>A</label>
-                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                        <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="B"/>B</label>
-                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                        <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="C"/>C</label>
-                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                        <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="D"/>D</label>
-                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                        <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="E"/>E</label>
-                        <label class="condition-row">Quantità<input class="free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
+                        <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
                 </fieldset>
 

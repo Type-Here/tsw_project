@@ -1,5 +1,7 @@
 import {xmlConsoleReq} from "./prod-catalog.js";
 import {doModifyAction} from "./prod-catalog.js";
+import {applyProductFormListeners} from "./add-product.js";
+
 
 /* ============= POPUP MOD AND DELETE BUTTONS ===================== */
 
@@ -26,7 +28,7 @@ function hidePopup(){
 
 /* =============== MODIFY PRODUCT =============== */
 
-/* Listener for Modify Button */
+/* Listener for 'Modify Button' */
 /**
  * Add a Listener to Modify Button: On Click Show Popup to Modify the selected Product
  * @param button button to which add the listener
@@ -125,6 +127,12 @@ export function addPopup(button){
         formSection.querySelector('input[type=reset]').remove();
         formSection.querySelector('input[type=submit]').value="Modifica";
 
+
+        /*
+         * APPLY VALIDATION LISTENERS
+         */
+        applyProductFormListeners(popupDiv);
+
         /* Overlay Show */
         document.getElementsByClassName('overlay')[0].classList.add('general-display-block');
         /* Overlay Click removes popup and overlay */
@@ -150,7 +158,7 @@ export function doPrintProdForm(response){
     let prod = JSON.parse(response);
     let form = formSection.getElementsByTagName('form')[0];
 
-    console.log(prod);
+    //console.log(prod);
     const conditionsValues=['X','A','B','C','D','E'];
     Object.keys(prod).forEach((key, index, array)=>{
         let formElement = form.querySelectorAll('[name="' + key + '"');
@@ -180,7 +188,7 @@ export function doPrintProdForm(response){
 
                 Array.from(form.getElementsByClassName('condition-input')).forEach((row, index) => {
 
-                    console.log("isDig:" + isDigital + ",ind:" + index);
+
                     //Equivalent to XOR Op
                     //Disable all but first if digital, viceversa if physical,
                     row.getElementsByTagName('input')[0].disabled = (isDigital !== (index === 0));

@@ -1,6 +1,7 @@
 import {addPopup} from "./admin-functions.js";
 import {removePopup} from "./admin-functions.js";
 import {doPrintProdForm} from "./admin-functions.js";
+import {isEmpty} from "./add-product.js";
 
 /* ================== ADMIN RETRIEVE PROD CATALOG ============================ */
 
