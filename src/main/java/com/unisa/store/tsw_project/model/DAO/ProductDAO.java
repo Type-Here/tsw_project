@@ -115,8 +115,13 @@ public class ProductDAO {
             rs.next();
             product.setId_prod(rs.getInt(1)); //Set the new ID in the ProductBean
 
+            //Save Product Categories
             CategoryDAO categoryDAO = new CategoryDAO();
             categoryDAO.doSaveProductCategories(product);
+
+            //Save Product Conditions
+            ConditionDAO conditionDAO = new ConditionDAO();
+            conditionDAO.doSaveByProduct(product);
 
         }
     }
@@ -130,6 +135,14 @@ public class ProductDAO {
             if (ps.executeUpdate() != 1) {
                 throw new SQLException("UPDATE Error: " + product.getName());
             }
+
+            //Save a Full Update of Product Categories - Delete and Reset
+            CategoryDAO categoryDAO = new CategoryDAO();
+            categoryDAO.doFullUpdateByIDProduct(product);
+
+            //Save a Full Update of Product Conditions - Delete and Reset
+            ConditionDAO conditionDAO = new ConditionDAO();
+            conditionDAO.doFullUpdateByIDProduct(product);
         }
     }
 
@@ -360,7 +373,7 @@ public class ProductDAO {
 
     private void setCategoryList(ProductBean productBean) throws SQLException {
         CategoryDAO categoryDAO = new CategoryDAO();
-        productBean.setCategoryBeanList(categoryDAO.doRetriveCategoryListByProductId(productBean.getId_prod()));
+        productBean.setCategoryBeanList(categoryDAO.doRetrieveCategoryListByProductId(productBean.getId_prod()));
     }
 
     private void setCategoryList(List<ProductBean> productBeanList) throws SQLException {
