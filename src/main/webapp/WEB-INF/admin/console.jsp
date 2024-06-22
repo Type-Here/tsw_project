@@ -143,6 +143,7 @@
             </div>
         </div>
         <div class="prod-table prod-reviews-internal">
+            <div class="margin-v-10 text-center"><span><b>Nota:</b> Possono essere eliminati solo prodotti non ancora venduti</span></div>
             <table id="admin-prod-table" class="prod-reviews-table">
                 <tr id="admin-prod-table-header">
                     <th>ID</th>
