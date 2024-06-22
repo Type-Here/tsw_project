@@ -290,20 +290,24 @@ public class ProductDAO {
 
 
     /**
-     * Remove product di ID.
+     * Remove Product by ID. Operations: <br />
+     * 1. Remove Categories First <br />
+     * 2. Remove Conditions - Quantity <br />
+     * 3. Remove Product from Table <br />
      * From the DAO it is not possible to retrieve json and images files, so they need to be removed before this call.
      * @param product to delete
      * @throws SQLException if query fails
      */
     public void doRemoveById(ProductBean product) throws SQLException {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        categoryDAO.doDeleteAllByIDProduct(product);
+
+        ConditionDAO conditionDAO = new ConditionDAO();
+        conditionDAO.doDeleteAllByIDProduct(product);
+
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement psCat = con.prepareStatement("DELETE FROM prod_categories WHERE id_prod=?");
             PreparedStatement ps = con.prepareStatement("DELETE FROM products WHERE id_prod=?");
-            psCat.setInt(1, product.getId_prod());
             ps.setInt(1, product.getId_prod());
-            if(psCat.executeUpdate() == 0){
-                throw new SQLException("DELETE error Categories of the Product");
-            }
             if(ps.executeUpdate() == 0){
                 throw new SQLException("DELETE error Product from DB");
             }
