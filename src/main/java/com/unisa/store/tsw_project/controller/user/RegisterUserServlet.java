@@ -50,16 +50,16 @@ public class RegisterUserServlet extends HttpServlet {
 
         DataValidator validator = new DataValidator();
         try {
-            validator.validatePattern(name.get(), DataValidator.PatternType.Username);
-            validator.validatePattern(surname.get(), DataValidator.PatternType.Surname);
-            validator.validatePattern(phone.get(), DataValidator.PatternType.Phone);
-            validator.validatePattern(email.get(), DataValidator.PatternType.Email);
+            validator.validatePattern(name.get().trim(), DataValidator.PatternType.Username);
+            validator.validatePattern(surname.get().trim(), DataValidator.PatternType.Surname);
+            validator.validatePattern(phone.get().trim(), DataValidator.PatternType.Phone);
+            validator.validatePattern(email.get().trim(), DataValidator.PatternType.Email);
             validator.validatePattern(birthdate.get(), DataValidator.PatternType.Birthdate);
-            validator.validatePattern(roadType.get(), DataValidator.PatternType.Generic);
-            validator.validatePattern(roadName.get(), DataValidator.PatternType.Generic);
-            validator.validatePattern(roadNumber.get(), DataValidator.PatternType.GenericAlphaNumeric);
-            validator.validatePattern(city.get(), DataValidator.PatternType.Generic);
-            validator.validatePattern(province.get(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadType.get().trim(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadName.get().trim(), DataValidator.PatternType.Generic);
+            validator.validatePattern(roadNumber.get().trim(), DataValidator.PatternType.GenericAlphaNumeric);
+            validator.validatePattern(city.get().trim(), DataValidator.PatternType.Generic);
+            validator.validatePattern(province.get().trim(), DataValidator.PatternType.Generic, 2, 2);
             validator.validatePattern(cap.get(), DataValidator.PatternType.CAP);
             validator.validatePattern(password.get(), DataValidator.PatternType.Password);
         } catch (Exception e) {
@@ -78,13 +78,13 @@ public class RegisterUserServlet extends HttpServlet {
         try {
             id_cred = userDAO.doSaveCredentials(password.get());
             userBean.setId_cred(id_cred);
-            userBean.setFirstname(name.get());
-            userBean.setLastname(surname.get());
-            userBean.setTelephone("+39" + phone.get());
-            userBean.setEmail(email.get());
+            userBean.setFirstname(name.get().trim());
+            userBean.setLastname(surname.get().trim());
+            userBean.setTelephone(phone.get().trim());
+            userBean.setEmail(email.get().trim());
             userBean.setBirth(LocalDate.parse(birthdate.get()));
-            userBean.setAddress(roadType.get() + ", " + roadName.get() + ", " + roadNumber.get());
-            userBean.setCity(city.get());
+            userBean.setAddress(roadType.get().trim() + ", " + roadName.get().trim() + ", " + roadNumber.get().trim());
+            userBean.setCity(city.get().trim());
             userBean.setProv(province.get());
             userBean.setCAP(cap.get());
             userDAO.doSave(userBean);
