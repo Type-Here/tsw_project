@@ -158,8 +158,8 @@ public class AddProdServlet extends HttpServlet {
                     System.err.println(ex.getMessage());
                 }
             }
-
-            resp.sendRedirect(req.getContextPath() + "/console?added=false&error=" + e.getMessage().substring(0, Math.min(25,e.getMessage().length())));
+            req.getSession().setAttribute("error", e.getMessage());
+            resp.sendRedirect(req.getContextPath() + "/console?added=false");
 
         } finally {
             Logger logger = (Logger) getServletContext().getAttribute("base-log");

@@ -30,7 +30,7 @@
                 </c:when>
                 <c:otherwise>
                     <span class="error-popup">Inserimento ha provocato un errore, impossibile inserire elemento</span><br />
-                    <span>Errore: ${error}</span>
+                    <span>Errore: <c:if test="${not empty error}">${error}</c:if></span>
                 </c:otherwise>
             </c:choose>
         </div>

@@ -48,10 +48,13 @@ public class ConsoleDispatcherServlet extends HttpServlet {
         this.verifyAdminUser(req);
 
         Optional<String> addedProd = Optional.ofNullable(req.getParameter("added"));
-        Optional<String> error = Optional.ofNullable(req.getParameter("error"));
+        addedProd.ifPresent(s -> {
+            if(s.equals("true")) req.setAttribute("upload", true);
+            if(s.equals("false")) req.setAttribute("upload", false);
+            //else does nothing: Avoid User abuse of the variable in URL
+        });
 
-        addedProd.ifPresent(s -> req.setAttribute("upload", s.equals("true")));
-        error.ifPresent(s -> req.setAttribute("error", error.get()));
+        //error is set in session if any
         req.getRequestDispatcher("/WEB-INF/admin/console.jsp").forward(req, resp);
     }
 
