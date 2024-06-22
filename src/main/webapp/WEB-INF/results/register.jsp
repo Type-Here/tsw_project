@@ -41,10 +41,10 @@
             </fieldset>
             <fieldset class="registry-data">
                 <label class="form-row" for="name"><span>Nome</span>
-                    <input id="name" type="text" name="name" placeholder="Nome" required size="30" pattern="^[a-zA-Z']{3,}$" />
+                    <input id="name" type="text" name="name" placeholder="Nome" required size="30" pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" />
                 </label>
                 <label class="form-row" for="surname"><span>Cognome</span>
-                    <input id="surname" type="text" name="surname" placeholder="Cognome" required pattern="^[a-zA-Z']{3,}$" />
+                    <input id="surname" type="text" name="surname" placeholder="Cognome" required pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" />
                 </label>
                 <label class="form-row" for="phone"><span>Numero di Telefono</span>
                     <input id="phone" type="tel" name="phone" title="Tel: +3912345678" placeholder="Numero di Telefono: +3901234567" required pattern="\+39[0-9]{8,10}" value="+39"/>
@@ -60,7 +60,7 @@
                     <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[0-9]{1,6}$" />
                 </label>
                 <label class="form-row" for="city"><span>Citt&agrave;</span>
-                    <input id="city" type="text" name="city" placeholder="Città" required pattern="^[a-zA-Z'\- ]{3,50}$" maxlength="50" />
+                    <input id="city" type="text" name="city" placeholder="Città" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,50}$" maxlength="50" />
                 </label>
                 <div class="form-row centerized-row">
                     <label class="" for="cap"><span>CAP</span>
