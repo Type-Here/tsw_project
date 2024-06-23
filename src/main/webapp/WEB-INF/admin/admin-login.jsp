@@ -25,19 +25,19 @@
     <div><h2 class="admin-login"><b>ADMIN CONSOLE</b></h2></div>
     <div class="log_form">
         <form action="${pageContext.request.contextPath}/admin-login" method="post">
-            <fieldset class="form-row">
+            <div class="form-row">
                 <label for="user">Username</label>
                 <input id="user" type="text" name="user" placeholder="Username" required autofocus size="30" pattern="^[a-zA-Z0-9_\-]+$" /> <!-- Email -->
                 <!-- General username pattern="^(?=.*[a-z])(?=.*[A-Z])(?!.*[\s]).{3,}$" -->
-            </fieldset>
-            <fieldset class="form-row">
+            </div>
+            <div class="form-row">
                 <label for="pass">Password</label>
                 <input id="pass" type="password" name="pass" placeholder="Password" required pattern="^.{5,}$" maxlength="30"/>
-            </fieldset>
-            <fieldset class="form-row centerized-row"><a href="#">Password Dimenticata?</a></fieldset>
-            <fieldset class="form-row centerized-row">
+            </div>
+            <div class="form-row centerized-row"><a href="#">Password Dimenticata?</a></div>
+            <div class="form-row centerized-row">
                 <input class="default" type="submit" value="Login">
-            </fieldset>
+            </div>
         </form>
     </div>
     <c:if test="${not empty invalidUser}">
