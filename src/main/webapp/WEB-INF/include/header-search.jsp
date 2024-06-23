@@ -34,16 +34,16 @@
         </span>
         <c:choose>
             <c:when test="${not empty userlogged}">
-                <figure id="userMenu">
-                    <img src="${pageContext.request.contextPath}/img/user/Konqi.png" alt="Area Utente" tabindex="0" title="Il mio account" class="userLoggedIcon">
-                    <div class="general-display-none" id="user-menu-div" tabindex="0">
+                <figure aria-label="user-icon-menu" id="userMenu">
+                    <img src="${pageContext.request.contextPath}/img/user/Konqi.png" alt="Area Utente" tabindex="0" role="button" title="Il mio account" class="userLoggedIcon">
+                    <div class="general-display-none" id="user-menu-div" tabindex="0" role="menu">
                         <h4>Ciao ${userlogged.firstname}!</h4>
                         <nav>
-                            <span><a href="${pageContext.request.contextPath}/user-profile">Il mio Profilo</a></span>
+                            <span role="menuitem"><a href="${pageContext.request.contextPath}/user-profile">Il mio Profilo</a></span>
                             <hr />
-                            <span><a href="${pageContext.request.contextPath}/user-profile">I miei Ordini</a></span>
+                            <span role="menuitem"><a href="${pageContext.request.contextPath}/user-profile">I miei Ordini</a></span>
                             <hr />
-                            <span class="logout"><a href="${pageContext.request.contextPath}/exit-user">Logout</a></span>
+                            <span class="logout" role="menuitem"><a href="${pageContext.request.contextPath}/exit-user">Logout</a></span>
                         </nav>
                     </div>
                 </figure>

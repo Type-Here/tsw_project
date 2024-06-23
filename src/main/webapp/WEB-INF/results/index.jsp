@@ -22,10 +22,10 @@
         <div class="upper_body">
 
             <div class="carousel">
-                <ul>
+                <ul role="list">
                     <c:set var="index" value="1" />
                     <c:forEach var="high" items="${highlights}">
-                        <li class="carousel-slide <c:if test="${index == 1}">active-slide</c:if>">
+                        <li tabindex="0" role="listitem" class="carousel-slide <c:if test="${index == 1}">active-slide</c:if>">
                             <a href="${pageContext.request.contextPath}/desc?id_prod=${high.id_prod}">
                                 <img src="${high.metaData.path}${high.metaData.front}" alt="Slide front Image of ${high.name}">
                             </a>
@@ -38,17 +38,17 @@
                 </ul>
 
                 <div class="carousel-radio">
-                    <input type="radio" name="slides" id="carousel-slide-1" checked onclick="carousel_changeimg(this)" />
-                    <input type="radio" name="slides" id="carousel-slide-2" onclick="carousel_changeimg(this)" />
-                    <input type="radio" name="slides" id="carousel-slide-3" onclick="carousel_changeimg(this)" />
-                    <input type="radio" name="slides" id="carousel-slide-4" onclick="carousel_changeimg(this)" />
-                    <input type="radio" name="slides" id="carousel-slide-5" onclick="carousel_changeimg(this)" />
+                    <input aria-label="carousel-slide-1" type="radio" name="slides" id="carousel-slide-1" checked onclick="carousel_changeimg(this)" />
+                    <input aria-label="carousel-slide-2" type="radio" name="slides" id="carousel-slide-2" onclick="carousel_changeimg(this)" />
+                    <input aria-label="carousel-slide-3" type="radio" name="slides" id="carousel-slide-3" onclick="carousel_changeimg(this)" />
+                    <input aria-label="carousel-slide-4" type="radio" name="slides" id="carousel-slide-4" onclick="carousel_changeimg(this)" />
+                    <input aria-label="carousel-slide-5" type="radio" name="slides" id="carousel-slide-5" onclick="carousel_changeimg(this)" />
                 </div>
 
-                <ul class="carousel-thumbnails">
+                <ul class="carousel-thumbnails" role="list">
                     <c:set var="index" value="1" />
                     <c:forEach items="${highlights}" var="high">
-                        <li>
+                        <li role="listitem" tabindex="0">
                             <label for="carousel-slide-<c:out value='${index}'/>"><img src="${high.metaData.path}${high.metaData.front}" alt="Thumbnail front image of${high.name}"  <c:if test="${index == 1}">class="active-thumbnail"</c:if>></label>
                             <c:set var="index" value="${index  + 1}"/>
                         </li>
