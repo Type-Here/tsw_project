@@ -28,11 +28,11 @@
         <span id="reset-filter">Reset</span>
     </div>
     <div class="drop-down-filter">
-        <div class="filter-title">
+        <div class="filter-title" tabindex="0" role="button">
             <h4>Piattaforma</h4>
             <span class="filter-arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
-                    </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12" aria-label="Freccia"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
+            </span>
         </div>
         <hr/>
         <div class="filter-list platform-filter">
@@ -48,11 +48,11 @@
         </div>
     </div>
     <div class="drop-down-filter">
-        <div class="filter-title">
+        <div class="filter-title" tabindex="0" role="button">
             <h4>Categoria</h4>
             <span class="filter-arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
-                    </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12" aria-label="Freccia"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
+            </span>
         </div>
         <hr/>
         <div class="filter-list category-filter">
@@ -62,11 +62,11 @@
         </div>
     </div>
     <div class="drop-down-filter">
-        <div class="filter-title">
+        <div class="filter-title" tabindex="0" role="button">
             <h4>Developer</h4>
             <span class="filter-arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
-                    </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12" aria-label="Freccia"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
+            </span>
         </div>
         <hr/>
         <div class="filter-list dev-filter">
@@ -76,11 +76,11 @@
         </div>
     </div>
     <div class="drop-down-filter">
-        <div class="filter-title">
+        <div class="filter-title" tabindex="0" role="button">
             <h4>Prezzo</h4>
             <span class="filter-arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
-                    </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.7 12" aria-label="Freccia"><path fill="currentColor" d="M1.7 0L0 1.7 4.3 6 0 10.3 1.7 12l6-6z"></path></svg>
+            </span>
         </div>
         <hr/>
         <div class="filter-list price-filter">

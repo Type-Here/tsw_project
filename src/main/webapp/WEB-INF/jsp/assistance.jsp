@@ -27,16 +27,16 @@
                 <div class="grid-item-faq grid-faq-header" id="q-header">
                     <h1>Domande Frequenti</h1>
                 </div>
-                <div class="grid-item-faq grid-faq0" id="q-spedizioni">
+                <div class="grid-item-faq grid-faq0" id="q-spedizioni" tabindex="0" role="button">
                     <h1>Spedizioni</h1>
                 </div>
-                <div class="grid-item-faq grid-faq0" id="q-prodotti">
+                <div class="grid-item-faq grid-faq0" id="q-prodotti" tabindex="0" role="button">
                     <h1>I nostri prodotti</h1>
                 </div>
-                <div class="grid-item-faq grid-faq0" id="q-pagamento">
+                <div class="grid-item-faq grid-faq0" id="q-pagamento" tabindex="0" role="button">
                     <h1>Pagamenti</h1>
                 </div>
-                <div class="grid-item-faq grid-faq0" id="q-lavora-con-noi">
+                <div class="grid-item-faq grid-faq0" id="q-lavora-con-noi" tabindex="0" role="button">
                     <h1>Lavorare con noi</h1>
                 </div>
 

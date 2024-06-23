@@ -17,37 +17,52 @@ hideDiv(gridFaqProdotti);
 hideDiv(gridFaqPagamento);
 hideDiv(gridFaqLavoraConNoi);
 
+
+
 // Aggiungi un evento di click a ciascun elemento
 elements.forEach(function(element, index) {
     element.addEventListener('click', function() {
+        showGrid(index);
+    });
 
-        var newVisibleDiv;
+    // Aggiungi un evento di keydown a ciascun elemento
+    element.addEventListener('keydown', function(event) {
 
-        // Mostra il div corrispondente a quale 'grid-faq0' è stato cliccato
-        switch(index) {
-            case 0:
-                newVisibleDiv = gridFaqSpedizione;
-                break;
-            case 1:
-                newVisibleDiv = gridFaqProdotti;
-                break;
-            case 2:
-                newVisibleDiv = gridFaqPagamento;
-                break;
-            case 3:
-                newVisibleDiv = gridFaqLavoraConNoi;
-                break;
-        }
-
-        // Se la div corrente non è la stessa di quella che si vuole mostrare, nascondi la div corrente
-        if (currentVisibleDiv !== newVisibleDiv) {
-            hideDiv(currentVisibleDiv);
-            currentVisibleDiv = newVisibleDiv;
-            // Mostra la nuova div corrente
-            showDiv(currentVisibleDiv);
+        // Verifica se il tasto premuto è 'Enter' o 'Space'
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault(); // Previene l'azione predefinita
+            showGrid(index);
         }
     });
 });
+
+function showGrid(index){
+    let newVisibleDiv;
+
+    // Mostra il div corrispondente a quale 'grid-faq0' è stato cliccato
+    switch(index) {
+        case 0:
+            newVisibleDiv = gridFaqSpedizione;
+            break;
+        case 1:
+            newVisibleDiv = gridFaqProdotti;
+            break;
+        case 2:
+            newVisibleDiv = gridFaqPagamento;
+            break;
+        case 3:
+            newVisibleDiv = gridFaqLavoraConNoi;
+            break;
+    }
+
+    // Se la div corrente non è la stessa di quella che si vuole mostrare, nascondi la div corrente
+    if (currentVisibleDiv !== newVisibleDiv) {
+        hideDiv(currentVisibleDiv);
+        currentVisibleDiv = newVisibleDiv;
+        // Mostra la nuova div corrente
+        showDiv(currentVisibleDiv);
+    }
+}
 
 // Funzioni per nascondere un div con animazione
 function hideDiv(div) {

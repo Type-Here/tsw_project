@@ -80,11 +80,11 @@
     grid-area: q1;
 }
 
-#q-pagamento{
+#q-prodotti{
     grid-area: q2;
 }
 
-#q-prodotti{
+#q-pagamento{
     grid-area: q3;
 }
 

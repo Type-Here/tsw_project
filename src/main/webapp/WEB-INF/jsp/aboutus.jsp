@@ -122,7 +122,7 @@
                         <div class="google-map">
                             <iframe src="https://www.google.com/maps/embed?pb=!4v1715694165381!6m8!1m7!1s6DJxZCgVENHSGe_e982cJg!2m2!1d40.77539526666076!2d14.79006064263439!3f192.40696386492903!4f0.4766663975700425!5f0.7820865974627469"
                                     width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    referrerpolicy="no-referrer-when-downgrade" title="Mappa Google Maps Interattiva"></iframe>
                         </div>
                     </div>
 
