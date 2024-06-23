@@ -59,12 +59,12 @@
                 <input type="hidden" name="action" value="addProd" />
                 <label class="form-row"><span>Nome: </span><input type="text" name="name" required/></label>
                 <label class="form-row"><span>Prezzo:</span><input class="price-prod" type="number" min="1" max="100000" maxlength="8" step="0.01" name="price" required pattern="[0-9.,]{1,8}"/></label>
-                <fieldset class="form-row">
-                    <div>
+                <div class="form-row">
+                    <span>
                         <span>Tipo:</span>
                         <label class="required"><input class="type-prod" type="radio" name="type" value="physic" required/>Fisico</label>
                         <label class="required"><input class="type-prod" type="radio" name="type" value="digital" required/>Digitale</label>
-                    </div>
+                    </span>
                     <label class="margin-h-10"><span>Piattaforma: </span>
                         <select name="platform" required>
                             <option value="ps1">PS1</option>
@@ -78,21 +78,21 @@
                             <option value="SegaMegaDrive">Sega MD</option>
                         </select>
                     </label>
-                </fieldset>
+                </div>
                 <label class="form-row"><span>Descrizione:</span><textarea rows="3" cols="40" name="description" placeholder="Aggiungi qui la descrizione..." required></textarea></label>
                 <label class="form-row"><span>Immagine Copertina:</span><input type="file" name="front-image" accept="image/*" required /></label>
                 <label class="form-row"><span>Immagini Galleria:</span><input type="file" multiple name="gallery-images" accept="image/*" required /></label>
                 <label class="form-row"><span>Developer:</span><input type="text" name="developer" pattern="[a-zA-Z0-9\&$'_\(\)\- ]{2,50}" required /> </label>
                 <label class="form-row"><span>Key:</span><input class="key-prod" type="text" name="key" pattern="[a-zA-Z0-9]{5,15}" /></label>
-                <fieldset class="form-row category-form"><span class="title-row">Categorie:*</span>
+                <div class="form-row category-form"><span class="title-row">Categorie:*</span>
                     <c:forEach var="cat" items="${category}">
                         <label><input type="checkbox" class="category-input free-size" name="category" value="${cat.id_cat}">${cat.typename}</label>
                     </c:forEach>
-                </fieldset>
-                <fieldset class="form-row centerized-row">
+                </div>
+                <div class="form-row centerized-row">
                     <label><span>&percnt; Sconto:</span><input class="discount-prod free-size" size="5" maxlength="5" type="number" name="discount" min="0" max="100" pattern="[0-9.,]{1,5}"/></label>
-                </fieldset>
-                <fieldset class="form-row category-form">
+                </div>
+                <div class="form-row category-form">
                     <span class="title-row">Condizione:* </span>
                     <div class="condition-input form-row flex-start-row bordered-row">
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="X">Digitale</label>
@@ -117,12 +117,12 @@
                         <label class="condition-row flex-start-row"><input type="checkbox" name="condition" value="E"/>E</label>
                         <label class="condition-row">Quantità<input class="quantity-prod free-size" min="0" max="100" maxlength="5" size="6" type="number" name="quantity"/></label>
                     </div>
-                </fieldset>
+                </div>
 
-                <fieldset class="form-row centerized-row">
+                <div class="form-row centerized-row">
                     <input id="add-submit" class="default" type="submit" value="Invia" />
                     <input class="default alternative" type="reset" value="Reimposta"/>
-                </fieldset>
+                </div>
             </form>
         </div>
     </section>
@@ -137,8 +137,8 @@
             <button id="next-cat-button" class="default general-display-none margin-h-10">Next</button>
             <div class="search_container">
                 <form id="prod-search" class="search-bar">
-                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
-                    <label style="display: none" for="search-input">Search</label><input id="search-input" title="Search By Product Name" type="text" name="search" placeholder="Cerca un prodotto" alt="Cerca" />
+                    <span id="label-input-product"><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <input aria-labelledby="label-input-product" id="search-input" title="Search By Product Name" type="text" name="search" placeholder="Cerca un prodotto" alt="Cerca" />
                 </form>
             </div>
         </div>
@@ -180,8 +180,8 @@
             <button id="next-order-button" class="default general-display-none margin-h-10">Next</button>
             <div class="search_container">
                 <form id="order-search" class="search-bar">
-                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
-                    <label style="display: none" for="search-input">Search</label><input id="search-input-order" title="Search Order" type="text" name="search" placeholder="Cerca un ordine" alt="Cerca" />
+                    <span id="label-input-order"><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <input id="search-input-order" aria-labelledby="label-input-order" title="Search Order" type="text" name="search" placeholder="Cerca un ordine" alt="Cerca" />
                 </form>
             </div>
         </div>
@@ -228,8 +228,8 @@
             <button id="next-users-button" class="default general-display-none margin-h-10">Next</button>
             <div class="search_container">
                 <form id="users-search" class="search-bar">
-                    <span><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
-                    <label style="display: none" for="search-input">Search</label><input id="search-input-users" title="Search User" type="text" name="search" placeholder="Cerca un utente" alt="Cerca" />
+                    <span id="label-input-user"><img src="${pageContext.request.contextPath}/img/icons/search.svg" alt="Search"/></span>
+                    <input id="search-input-users" aria-labelledby="label-input-user" title="Search User" type="text" name="search" placeholder="Cerca un utente" alt="Cerca" />
                 </form>
             </div>
         </div>
