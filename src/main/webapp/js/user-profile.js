@@ -9,6 +9,19 @@ window.onload = function() {
     splitAddress();
 }
 
+function altShowContent(sectionId, event) {
+    // Verifica se il tasto premuto è 'Enter' o 'Space'
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); // Previene l'azione predefinita
+        showContent(sectionId);
+    }
+}
+
+// Accessibility
+document.querySelector('ul li').addEventListener('keydown', function(event) {
+    altShowContent('section1', event);
+});
+
 // Function to show the content of the selected section
 function showContent(sectionId) {
     if (sectionId === 'section4') {

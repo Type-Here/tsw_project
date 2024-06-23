@@ -31,15 +31,15 @@
     <div class="log_form reg_form">
         <!--TODO-->
         <form id="register" action="${pageContext.request.contextPath}/user-register" method="post">
-            <fieldset class="access-data">
+            <div class="access-data">
                 <label class="form-row" for="email"><span>Email</span>
                     <input id="email" type="email" name="email" placeholder="Email" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" />
                 </label>
                 <label class="form-row" for="pass-2"><span>Password</span>
                     <input id="pass-2" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&\/\(\)=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                 </label>
-            </fieldset>
-            <fieldset class="registry-data">
+            </div>
+            <div class="registry-data">
                 <label class="form-row" for="name"><span>Nome</span>
                     <input id="name" type="text" name="name" placeholder="Nome" required size="30" pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" />
                 </label>
@@ -50,14 +50,15 @@
                     <input id="phone" type="tel" name="phone" title="Tel: +3912345678" placeholder="Numero di Telefono: +3901234567" required pattern="\+39[0-9]{8,10}" value="+39"/>
                 </label>
                 <label class="form-row" for="birth"><span>Data di Nascita</span>
-                    <input id="birth" type="date" name="birthdate" placeholder="Data di Nascita" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})"/>
+                    <span id="date-format" hidden>Formato data: giorno, mese, anno</span>
+                    <input id="birth" type="date" name="birthdate" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})" aria-required="true" placeholder="gg/mm/aaaa" aria-describedby="date-format"/>
                 </label>
-            </fieldset>
-            <fieldset class="address-data">
+            </div>
+            <div class="address-data">
                 <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
-                    <input class="free-size" id="road-type" type="text" name="road-type" size="5" placeholder="Via" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$" maxlength="15" />
-                    <input id="road-name" type="text" name="road-name" placeholder="Giovanni Paolo" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,60}$" maxlength="60" />
-                    <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[0-9]{1,6}$" />
+                    <input class="free-size" id="road-type" type="text" name="road-type" size="5" placeholder="Via" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$" maxlength="15" aria-label="Tipo Strada"/>
+                    <input id="road-name" type="text" name="road-name" placeholder="Giovanni Paolo" required pattern="^[A-Za-zÀ-ÿ'\- ]{3,60}$" maxlength="60" aria-labelledby="road-type"/>
+                    <input class="free-size" id="road-number" name="road-number" size="3" type="text" maxlength="6" placeholder="1" step="1" required pattern="^[0-9]{1,6}$" aria-labelledby="road-type"/>
                 </label>
                 <label class="form-row" for="city"><span>Citt&agrave;</span>
                     <input id="city" type="text" name="city" placeholder="Città" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,50}$" maxlength="50" />
@@ -70,19 +71,19 @@
                         <input class="free-size" name="province" size="2" id="prov" type="text" maxlength="2" placeholder="RM" required pattern="^[a-zA-Z]{2}$" />
                     </label>
                 </div>
-            </fieldset>
-            <fieldset class="form-row">
+            </div>
+            <div class="form-row">
                 <input class="default" type="submit" value="Register">
                 <a href="${pageContext.request.contextPath}/user-login"><button type="button" class="default alternative" value="Login" name="method">Login</button></a>
-            </fieldset>
+            </div>
             <div id="tooltip" class="general-display-none"></div>
-            <fieldset>
+            <div>
                 <c:if test="${not empty invalidUser}">
                     <div class="invalid-credentials">
                         <span>Dati inseriti non corretti</span>
                     </div>
                 </c:if>
-            </fieldset>
+            </div>
         </form>
     </div>
 </div>

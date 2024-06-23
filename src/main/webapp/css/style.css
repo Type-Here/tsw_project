@@ -1090,12 +1090,12 @@ ul.carousel-thumbnails{
     max-width: 500px; 
     font-size: 0.9rem;
 
-    & fieldset{
+    & fieldset, & div{
         border: none;
         flex-flow: row wrap;
     }
 
-    & fieldset:not(.form-row){
+    & fieldset:not(.form-row), & div:not(.form-row){
         width: 100%;
     }
 
@@ -1410,6 +1410,10 @@ input#pass{
         box-shadow: 0 0 1px 1px rgba(197, 197, 197, 0.68);
         background-color: #CCCCCC;
         transition: transform 0.5s ease-in-out;
+    }
+
+    &:focus{
+        outline: 2px solid #CCCCCC;
     }
 }
 

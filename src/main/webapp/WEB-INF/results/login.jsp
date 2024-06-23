@@ -31,25 +31,25 @@
     <div class="log_form">
         <!--TODO password dimenticata -->
         <form id="login" action="${pageContext.request.contextPath}/user-login" method="post">
-            <fieldset class="form-row">
+            <div class="form-row" aria-labelledby="user">
                 <label for="user">Username</label>
                 <input id="user" type="email" name="email" placeholder="Username" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" /> <!-- Email -->
                 <!-- General username pattern="^(?=.*[a-z])(?=.*[A-Z])(?!.*[\s]).{3,}$" -->
-            </fieldset>
-            <fieldset class="form-row">
+            </div>
+            <div class="form-row" aria-labelledby="pass">
                 <label for="pass">Password</label>
                 <input id="pass" type="password" name="password" placeholder="Password" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[\\!£$%&\/\(\)=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
-            </fieldset>
+            </div>
             <c:if test="${not empty invalidUser}">
                 <div class="invalid-credentials">
                     <span>Username o Password errati. Riprovare</span>
                 </div>
             </c:if>
-            <fieldset class="form-row centerized-row"><a href="#">Password Dimenticata?</a></fieldset>
-            <fieldset class="form-row">
+            <div class="form-row centerized-row" aria-label="Password dimenticata"><a href="#">Password Dimenticata?</a></div>
+            <div class="form-row" aria-label="Accedi o Registrati">
                 <input class="default" type="submit" value="Login">
                 <a href="${pageContext.request.contextPath}/user-register"><button type="button" class="default alternative" value="register" name="method" formnovalidate>Registrati</button></a>
-            </fieldset>
+            </div>
         </form>
     </div>
 </div>

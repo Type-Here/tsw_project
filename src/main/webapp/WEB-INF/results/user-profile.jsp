@@ -24,12 +24,12 @@
         <div class="utente-header"><hr><h1 id="username">Bentornato ${userlogged.firstname}</h1><hr></div>
         <div class="utente-content-wrapper">
             <div class="utente-sidebar">
-                <ul class="utente-nav">
-                    <li onclick="showContent('section1')">Dati Personali</li>
-                    <li onclick="showContent('section2')">I Miei Ordini</li>
-                    <li onclick="showContent('section3')">Sicurezza</li>
-                    <li onclick="showContent('section4')">Indirizzi Di Spedizione</li>
-                    <li onclick="document.getElementById('logout').submit();">Log Out</li>
+                <ul class="utente-nav" role="menu">
+                    <li onclick="showContent('section1')" tabindex="0" role="menuitemradio">Dati Personali</li>
+                    <li onclick="showContent('section2')" tabindex="0" role="menuitemradio">I Miei Ordini</li>
+                    <li onclick="showContent('section3')" tabindex="0" role="menuitemradio">Sicurezza</li>
+                    <li onclick="showContent('section4')" tabindex="0" role="menuitemradio">Indirizzi Di Spedizione</li>
+                    <li onclick="document.getElementById('logout').submit();" tabindex="0" role="menuitemradio">Log Out</li>
                 </ul>
             </div>
 
@@ -41,15 +41,15 @@
                     <div class="log_form reg_form">
                         <form id="form1" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input type="hidden" name="section" value="one">
-                            <fieldset>
+                            <div>
                                 <c:if test="${not empty invalidUserUpdate}">
                                     <div class="invalid-credentials">
                                         <span>Dati inseriti non corretti</span>
                                     </div>
                                     <div id="errorUserUpdate" style="display: none;"></div>
                                 </c:if>
-                            </fieldset>
-                            <fieldset class="registry-data">
+                            </div>
+                            <div class="registry-data">
                                 <label class="form-row" for="name"><span>Nome</span>
                                     <input id="name" name="name" type="text" value="${userlogged.firstname}" required size="30" pattern="^[a-zA-ZÀ-ÿ' ]{3,}$" disabled/>
                                 </label>
@@ -60,18 +60,19 @@
                                     <input id="phone"  type="tel" name="phone" value="${userlogged.telephone}" required pattern="\+39[0-9]{8,10}"/>
                                 </label>
                                 <label class="form-row" for="birth"><span>Data di Nascita</span>
-                                    <input id="birth" name="birthdate" type="date" value="${userlogged.birth}" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})"/>
+                                    <span id="date-format" hidden>Formato data: giorno, mese, anno</span>
+                                    <input id="birth" type="date" name="birthdate" value="${userlogged.birth}" required pattern="(\d{1,2}|\d{4})(-|\/)\d{1,2}(-|\/)(\d{4}|\d{1,2})" aria-required="true" aria-describedby="date-format"/>
                                 </label>
                                 <label class="form-row" for="email"><span>Email</span>
                                     <input id="email" name="email" type="email" value="${userlogged.email}" required autofocus size="30" pattern="^[\w]+[\w\.\-]+@[\w\.\-]+\.[\w]+$" />
                                 </label>
-                            </fieldset>
-                            <fieldset class="address-data">
+                            </div>
+                            <div class="address-data">
                                 <label class="form-row alternative-row" for="road-type"><span>Indirizzo</span>
                                     <input id="address" type="hidden" value="${userlogged.address}">
-                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-ZÀ-ÿ' ]{3,15}$" maxlength="15"/>
-                                    <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,60}$" maxlength="60" />
-                                    <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[0-9]{1,6}$" />
+                                    <input class="free-size" id="road-type" name="road-type" type="text" value="" size="5" required pattern="^[a-zA-ZÀ-ÿ' ]{3,15}$" maxlength="15" aria-labelledby="road-type"/>
+                                    <input class="" id="road-name" name="road-name" type="text" value="" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,60}$" maxlength="60" aria-labelledby="road-type"/>
+                                    <input class="free-size" id="road-number" name="road-number" size="3" value="" type="text" maxlength="6" step="1" required pattern="^[0-9]{1,6}$" aria-labelledby="road-type"/>
                                 </label>
                                 <label class="form-row" for="city"><span>Citt&agrave;</span>
                                     <input id="city" name="city" type="text" value="${userlogged.city}" required pattern="^[a-zA-ZÀ-ÿ'\- ]{3,50}$" maxlength="50"/>
@@ -84,11 +85,11 @@
                                         <input class="free-size" size="2" id="prov" name="province" type="text" maxlength="2" value="${userlogged.prov}" required pattern="^[a-zA-Z]{2}$" />
                                     </label>
                                 </div>
-                            </fieldset>
-                            <fieldset class="form-row">
+                            </div>
+                            <div class="form-row">
                                 <input class="default" type="submit" value="Applica Modifica" disabled>
                                 <button class="default" type="button" onclick="enableUserModify('form1', this)">Abilita Modifica</button>
-                            </fieldset>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -116,7 +117,7 @@
                     <div class="log_form reg_form">
                         <form id="changePassword" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input type="hidden" name="section" value="three">
-                            <fieldset class="access-data">
+                            <div class="access-data">
                                 <label class="form-row" for="pass-old"><span>Password Vecchia</span>
                                     <input id="pass-old" name="oldpass" type="password" placeholder="Password Vecchia" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
@@ -126,12 +127,12 @@
                                 <label class="form-row" for="pass-new-confirm"><span>Conferma Password Nuova</span>
                                     <input id="pass-new-confirm" name="newpassConfirm" type="password" placeholder="Conferma Password Nuova" required pattern="^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ÿ])(?=.*[!£$%&/()=?'^])(?=.*[0-9]).{8,}$" maxlength="30"/>
                                 </label>
-                            </fieldset>
+                            </div>
                             <div id="tooltip" class="general-display-none"></div>
-                            <fieldset class="form-row">
+                            <div class="form-row">
                                 <input id="passSend" class="default" type="submit" value="Applica">
                                 <label id="passwordResults"></label>
-                            </fieldset>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -166,15 +167,15 @@
                     <div class="log_form reg_form">
                         <form id="add-address" action="${pageContext.request.contextPath}/modify-user" method="post">
                             <input id="form2" type="hidden" name="section" value="four">
-                            <fieldset class="address-data">
+                            <div class="address-data">
                                 <label class="form-row alternative-row" for="road-type2"><span>Indirizzo</span>
                                     <input class="free-size" id="road-type2" name="road-type2" type="text" size="5" placeholder="Via"
                                            required maxlength="15"
-                                           pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$"/>
+                                           pattern="^[A-Za-zÀ-ÿ'\- ]{3,15}$" aria-labelledby="road-type2"/>
                                     <input id="road-name2" name="road-name2" type="text" placeholder="Giovanni Paolo" required maxlength="60"
-                                           pattern="^[A-Za-zÀ-ÿ''\- ]{3,60}$"/>
+                                           pattern="^[A-Za-zÀ-ÿ''\- ]{3,60}$" aria-labelledby="road-type2"/>
                                     <input class="free-size" id="road-number2" name="road-number2" size="3" type="text" maxlength="6"
-                                           placeholder="1" step="1" required pattern="^\d{1,6}$"/>
+                                           placeholder="1" step="1" required pattern="^\d{1,6}$" aria-labelledby="road-type2"/>
                                 </label>
                                 <label class="form-row" for="city2"><span>Citt&agrave;</span>
                                     <input id="city2" name="city2" type="text" placeholder="Città" required maxlength="50"
@@ -190,8 +191,8 @@
                                                placeholder="RM" required pattern="^[a-zA-Z]{2}$"/>
                                     </label>
                                 </div>
-                            </fieldset>
-                            <fieldset class="form-row centerized-row">
+                            </div>
+                            <div class="form-row centerized-row">
                                 <input class="default free-size" type="submit" value="Aggiungi Indirizzo">
                                 <c:if test="${not empty invalidAddresses}">
                                     <div class="invalid-credentials">
@@ -199,7 +200,7 @@
                                     </div>
                                     <div id="errorAddresses" style="display: none;"></div>
                                 </c:if>
-                            </fieldset>
+                            </div>
                         </form>
                     </div>
                 </div>
