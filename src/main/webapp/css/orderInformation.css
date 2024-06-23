@@ -64,15 +64,20 @@
 }
 
 #sendReview {
-    border-radius: 5px;
+    /*border-radius: 5px;
     border: 1px solid #202020;
-    background-color: #a5a5a5;
+    background-color: #a5a5a5;*/
+    padding: 5px 10px;
+    margin: 10px auto 3px auto;
 }
 
 .comment {
-    border-radius: 5px;
+    /*border-radius: 5px;
     border: 1px solid #202020;
-    background-color: #a5a5a5;
+    background-color: #a5a5a5;*/
+    margin: 5px;
+    width: 300px;
+    height: 100px;
 }
 
 .star{
@@ -82,21 +87,32 @@
 .prodModal {
     align-items: center;
     border-radius: 5px;
-    background-color: #c0c0c0;
+    /*background-color: #c0c0c0;*/
+    padding: 10px 15px;
+    background: #202020;
+    color: #f5f5f5;
+    border: 1px solid;
+    max-width: 800px;
+
+    & label:not(.centerized-flex-container){
+        margin-left: 15px;
+    }
 }
 
 .span.star-on::before{
     content: "\2605";
     color:#ffc30a;
-    font: 1.1em sans-serif;
+    font: 1.1rem sans-serif;
 }
 
 .span.star-off::before{
     content: "\2606";
     color: #f5f5f5;
-    font: 1.1em sans-serif;
+    font: 1.1rem sans-serif;
 }
 
 #recensione-stelle {
     user-select: none;
+    font-size: 1rem;
+    margin-left: 5px;
 }

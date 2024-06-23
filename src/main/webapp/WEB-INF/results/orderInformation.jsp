@@ -78,11 +78,11 @@
             </table>
         </div>
         <dialog class="prodModal">
-            <div style="display: flex; justify-content: flex-end"><button class="closeModal">X</button></div>
-            <h1>Recensione</h1>
+            <div style="display: flex; justify-content: flex-end"><button class="closeModal secondary attention">X</button></div>
+            <h1 class="text-center">Recensione</h1>
             <form class="modalForm">
                 <input type="hidden" name="id_prod" value="">
-                <label for="evaluation">Voto</label>
+                <label for="evaluation"><b>Voto</b></label>
                 <div class="recensione-stelle" id="recensione-stelle">
                     <span class="star star-off" data-value="1"></span>
                     <span class="star star-off" data-value="2"></span>
@@ -92,11 +92,13 @@
                 </div>
                 <input type=hidden id="evaluation" name="evaluation" value="0">
                 <br>
-                <label for="comment">Commento</label>
+                <label for="comment"><b>Commento</b></label>
                 <br>
                 <textarea class="comment" id="comment" name="comment"></textarea>
                 <br>
-                <input id="sendReview" type="submit" value="Invia Recensione" formmethod="dialog">
+                <label class="centerized-flex-container">
+                    <input class="default yellow free-size" id="sendReview" type="submit" value="Invia Recensione" formmethod="dialog">
+                </label>
             </form>
         </dialog>
     </div>

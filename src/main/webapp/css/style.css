@@ -373,6 +373,8 @@ button.default:disabled{
     }
 }
 
+input[type="reset"].yellow,
+input[type="submit"].yellow,
 button.yellow{
     background-color: #ffc30a;
     color: #121212;
@@ -446,6 +448,7 @@ textarea{
     background-color: #202020;
     border: 2px solid #5a5a5a;
     border-radius: 5px;
+    max-width: 610px;
 }
 
 input[type="range"]{
