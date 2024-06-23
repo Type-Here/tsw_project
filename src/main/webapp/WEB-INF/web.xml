@@ -39,6 +39,10 @@
         <exception-type>com.unisa.store.tsw_project.other.exceptions.InvalidAdminUserException</exception-type>
         <location>/WEB-INF/errors/InvalidAdminSession.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/errors/error404.jsp</location>
+    </error-page>
     <!-- Da abilitare alla fine gestione di tutti gli errori non gestiti -->
     <!--
     <error-page>
