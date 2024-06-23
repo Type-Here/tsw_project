@@ -45,7 +45,7 @@
                     <span>Username o Password errati. Riprovare</span>
                 </div>
             </c:if>
-            <div class="form-row centerized-row" aria-label="Password dimenticata"><a href="#">Password Dimenticata?</a></div>
+            <div class="form-row centerized-row" aria-label="Password dimenticata"><a href="mailto:supporto@retrogamer.it">Password Dimenticata?</a></div>
             <div class="form-row" aria-label="Accedi o Registrati">
                 <input class="default" type="submit" value="Login">
                 <a href="${pageContext.request.contextPath}/user-register"><button type="button" class="default alternative" value="register" name="method" formnovalidate>Registrati</button></a>
