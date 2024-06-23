@@ -12,7 +12,7 @@
         <link type="text/css" rel="stylesheet" media="screen and (min-width: 700px)" href="css/widescreen.css" />
         <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="css/small.css" />
         <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-        <script src="js/carousel.js"></script>
+        <script src="js/carousel.js" defer></script>
         <script src="js/overlay.js"></script>
     </head>
     <body class="body_def" onload="prepare_function()">
@@ -38,18 +38,18 @@
                 </ul>
 
                 <div class="carousel-radio">
-                    <input aria-label="carousel-slide-1" type="radio" name="slides" id="carousel-slide-1" checked onclick="carousel_changeimg(this)" />
-                    <input aria-label="carousel-slide-2" type="radio" name="slides" id="carousel-slide-2" onclick="carousel_changeimg(this)" />
-                    <input aria-label="carousel-slide-3" type="radio" name="slides" id="carousel-slide-3" onclick="carousel_changeimg(this)" />
-                    <input aria-label="carousel-slide-4" type="radio" name="slides" id="carousel-slide-4" onclick="carousel_changeimg(this)" />
-                    <input aria-label="carousel-slide-5" type="radio" name="slides" id="carousel-slide-5" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-1" checked onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-2" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-3" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-4" onclick="carousel_changeimg(this)" />
+                    <input type="radio" name="slides" id="carousel-slide-5" onclick="carousel_changeimg(this)" />
                 </div>
 
-                <ul class="carousel-thumbnails" role="list">
+                <ul class="carousel-thumbnails">
                     <c:set var="index" value="1" />
                     <c:forEach items="${highlights}" var="high">
-                        <li role="listitem" tabindex="0">
-                            <label for="carousel-slide-<c:out value='${index}'/>"><img src="${high.metaData.path}${high.metaData.front}" alt="Thumbnail front image of${high.name}"  <c:if test="${index == 1}">class="active-thumbnail"</c:if>></label>
+                        <li>
+                            <label class="label-thumbnail-listener" id="carousel-label-<c:out value='${index}'/>" tabindex="0" for="carousel-slide-<c:out value='${index}'/>"><img src="${high.metaData.path}${high.metaData.front}" alt="Thumbnail front image of${high.name}"  <c:if test="${index == 1}">class="active-thumbnail"</c:if>></label>
                             <c:set var="index" value="${index  + 1}"/>
                         </li>
                     </c:forEach>

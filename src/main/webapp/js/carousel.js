@@ -4,9 +4,10 @@
  * @param {*} caller HTMLInputElement or HTMLLabelElement
  */
 function carousel_changeimg(caller){
-    if(!(caller instanceof HTMLInputElement)){
+    if(!(caller instanceof HTMLElement)){
         return;
     }
+
 
     // Unset old thumbnail
     const old_thumb = document.getElementsByClassName('active-thumbnail')[0];
@@ -49,3 +50,12 @@ function prepare_function(){
         document.getElementById('carousel-slide-' + scroll_num).checked=true;
     });
 }
+
+
+Array.from(document.getElementsByClassName('label-thumbnail-listener')).forEach(label =>{
+    label.addEventListener('keydown', function (e){
+        console.log(this.getAttribute('for'), e.keyCode);
+        if(e.keyCode !== 13) return;
+        carousel_changeimg(document.getElementById(this.getAttribute('for')));
+    })
+});

@@ -48,7 +48,7 @@ function  updateActiveNavElement(){
 
 
         if(itemHref === path || itemPath === currentPath){
-            console.log("Adding this-page class to: " + item);
+            //console.log("Adding this-page class to: " + item);
             if (!item.parentElement.classList.contains('this-page')){
                 item.parentElement.classList.add('this-page');
             }
