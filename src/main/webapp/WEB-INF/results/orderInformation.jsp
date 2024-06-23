@@ -77,18 +77,18 @@
                 </c:forEach>
             </table>
         </div>
-        <dialog class="prodModal">
+        <dialog class="prodModal" tabindex="0" aria-labelledby="titleReview">
             <div style="display: flex; justify-content: flex-end"><button class="closeModal secondary attention">X</button></div>
-            <h1 class="text-center">Recensione</h1>
+            <h1 id="titleReview" class="text-center">Recensione</h1>
             <form class="modalForm">
                 <input type="hidden" name="id_prod" value="">
                 <label for="evaluation"><b>Voto</b></label>
                 <div class="recensione-stelle" id="recensione-stelle">
-                    <span class="star star-off" data-value="1"></span>
-                    <span class="star star-off" data-value="2"></span>
-                    <span class="star star-off" data-value="3"></span>
-                    <span class="star star-off" data-value="4"></span>
-                    <span class="star star-off" data-value="5"></span>
+                    <span class="star star-off" data-value="1" tabindex="0" role="button"></span>
+                    <span class="star star-off" data-value="2" tabindex="0" role="button"></span>
+                    <span class="star star-off" data-value="3" tabindex="0" role="button"></span>
+                    <span class="star star-off" data-value="4" tabindex="0" role="button"></span>
+                    <span class="star star-off" data-value="5" tabindex="0" role="button"></span>
                 </div>
                 <input type=hidden id="evaluation" name="evaluation" value="0">
                 <br>
