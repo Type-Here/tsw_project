@@ -141,6 +141,12 @@ public class AddProdServlet extends HttpServlet {
             p.setMetadataPath(jsonName);
             productDAO.doUpdate(p);
 
+
+            /* Update List of Developers */
+            /* Load Developers List in Application at Startup */
+            List<String> developers = productDAO.doRetrieveDevelopers();
+            getServletContext().setAttribute("developers", developers);
+
             /* Set attribute to true to display info of saved file */
             //req.setAttribute("upload", true);
             /*Product is saved, Dispatch to view */
