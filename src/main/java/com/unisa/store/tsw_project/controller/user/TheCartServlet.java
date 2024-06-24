@@ -340,7 +340,7 @@ public class TheCartServlet extends HttpServlet {
      * @param req HttpServletRequest
      * @return CartBean with current Session Cart
      */
-    private CartBean getCart(HttpServletRequest req) {
+    synchronized private CartBean getCart(HttpServletRequest req) {
         HttpSession session = req.getSession();
 
         //Check if user is logged: Set id_client to user id if logged, null if not

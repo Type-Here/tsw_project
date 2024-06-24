@@ -98,82 +98,83 @@ public class TheOrderServlet extends HttpServlet {
             validator.validatePattern(date.get().trim(), DataValidator.PatternType.DateFuture, "date");
 
             /* VALIDATE PAYMENT DETAILS THAN DO NOTHING SINCE IT'S ONLY A PROJECT */
+            CartBean cart;
+            synchronized (cart = (CartBean) req.getSession().getAttribute("cart")) {
+                UserBean user = (UserBean) req.getSession().getAttribute("userlogged");
 
-            CartBean cart = (CartBean) req.getSession().getAttribute("cart");
-            UserBean user = (UserBean) req.getSession().getAttribute("userlogged");
+                CartDAO cartDao = new CartDAO();
+                CartItemsDAO itemsDAO = new CartItemsDAO();
+                OrdersDAO ordersDAO = new OrdersDAO();
+                OrdersBean order = new OrdersBean();
+                ShippingAddressesDAO shippingAddressDAO = new ShippingAddressesDAO();
+                ConditionDAO conditionDAO = new ConditionDAO();
 
-            CartDAO cartDao = new CartDAO();
-            CartItemsDAO itemsDAO = new CartItemsDAO();
-            OrdersDAO ordersDAO = new OrdersDAO();
-            OrdersBean order = new OrdersBean();
-            ShippingAddressesDAO shippingAddressDAO = new ShippingAddressesDAO();
-            ConditionDAO conditionDAO = new ConditionDAO();
+                // To be sure, to be sure
 
-            // To be sure, to be sure
+                /* Check For ShippingAddress */
+                List<ShippingAddressesBean> addresses = shippingAddressDAO.doRetrieveAllByUserId(user.getId());
+                ShippingAddressesBean address = addresses.stream()
+                        .filter(ad -> ad.getId_add() == Integer.parseInt(shippingAddress.get())).findFirst()
+                        .orElseThrow(() -> new InvalidParameterException("Shipping Address Not Found"));
 
-            /* Check For ShippingAddress */
-            List<ShippingAddressesBean> addresses = shippingAddressDAO.doRetrieveAllByUserId(user.getId());
-            ShippingAddressesBean address = addresses.stream()
-                    .filter( ad -> ad.getId_add() == Integer.parseInt(shippingAddress.get())).findFirst()
-                    .orElseThrow(() -> new InvalidParameterException("Shipping Address Not Found"));
+                /* Set Id-Client */
+                cart.setId_client(user.getId());
 
-            /* Set Id-Client */
-            cart.setId_client(user.getId());
+                /* CALCULATE TOTAL - VALUTATE QUANTITY And CONDITION For Each Product; Valutate DISCOUNT CODE */
+                setTotal(cart);
 
-            /* CALCULATE TOTAL - VALUTATE QUANTITY And CONDITION For Each Product; Valutate DISCOUNT CODE */
-            setTotal(cart);
+                /* Prepare Cart to DB Save: set Active false as it will not be the current cart anymore */
+                cart.setActive(false);
 
-            /* Prepare Cart to DB Save: set Active false as it will not be the current cart anymore */
-            cart.setActive(false);
-
-            // Cart is already Saved in DB if it has an ID but needs and update if user has added/removed some items
-            // If Cart is Saved: Remove old data and save new items.
-            if (cart.getId_cart() != null && cart.getId_cart() != 0) {
-                cartDao.doUpdate(cart);
-                itemsDAO.doRemoveAllByCartID(cart);
-            } else {
-                cartDao.doSave(cart);
-            }
-
-            for(Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()){
-                item.getValue().setId_cart(cart.getId_cart());
-                itemsDAO.doSave(item.getValue());
-            }
-
-            /* (Re)Set total order price */
-            order.setStatus(Data.OrderStatus.INPROCESS);
-            order.setOrder_date(LocalDate.now());
-            order.setId_cart(cart.getId_cart());
-            order.setId_client(user.getId());
-            order.setId_add(address.getId_add());
-
-            /* Save Order */
-            ordersDAO.doSave(order);
-
-            /* Update Quantity if Physical */
-            for(CartItemsBean item : cart.getCartItems().values()){
-                if(!item.getCondition().equals(Data.Condition.X)){
-                    conditionDAO.doSell(item.getId_prod(),item.getCondition().dbValue, item.getQuantity());
+                // Cart is already Saved in DB if it has an ID but needs and update if user has added/removed some items
+                // If Cart is Saved: Remove old data and save new items.
+                if (cart.getId_cart() != null && cart.getId_cart() != 0) {
+                    cartDao.doUpdate(cart);
+                    itemsDAO.doRemoveAllByCartID(cart);
+                } else {
+                    cartDao.doSave(cart);
                 }
-            }
 
-
-            /* Debug */
-            if(getServletContext().getAttribute("debug") != null){
-                System.err.println("----- ORDER DEBUG [INFO]: ---- ");
-                System.out.println("- Cart: " + cart);
-                System.out.println("- Order: " + order);
-                for(CartItemsBean item : cart.getCartItems().values()){
-                    System.out.println(" - Item: " + item);
+                for (Map.Entry<String, CartItemsBean> item : cart.getCartItems().entrySet()) {
+                    item.getValue().setId_cart(cart.getId_cart());
+                    itemsDAO.doSave(item.getValue());
                 }
+
+                /* (Re)Set total order price */
+                order.setStatus(Data.OrderStatus.INPROCESS);
+                order.setOrder_date(LocalDate.now());
+                order.setId_cart(cart.getId_cart());
+                order.setId_client(user.getId());
+                order.setId_add(address.getId_add());
+
+                /* Save Order */
+                ordersDAO.doSave(order);
+
+                /* Update Quantity if Physical */
+                for (CartItemsBean item : cart.getCartItems().values()) {
+                    if (!item.getCondition().equals(Data.Condition.X)) {
+                        conditionDAO.doSell(item.getId_prod(), item.getCondition().dbValue, item.getQuantity());
+                    }
+                }
+
+
+                /* Debug */
+                if (getServletContext().getAttribute("debug") != null) {
+                    System.err.println("----- ORDER DEBUG [INFO]: ---- ");
+                    System.out.println("- Cart: " + cart);
+                    System.out.println("- Order: " + order);
+                    for (CartItemsBean item : cart.getCartItems().values()) {
+                        System.out.println(" - Item: " + item);
+                    }
+                }
+
+                /* Clear Cart from Session */
+                req.getSession().removeAttribute("cart");
+
+                /* Write Message Answer */
+                resp.setContentType("text/html");
+                resp.getWriter().write("Acquisto Effettuato!");
             }
-
-            /* Clear Cart from Session */
-            req.getSession().removeAttribute("cart");
-
-            /* Write Message Answer */
-            resp.setContentType("text/html");
-            resp.getWriter().write("Acquisto Effettuato!");
 
         } catch (SQLException e) {
             resp.setContentType("text/plain");
@@ -210,7 +211,7 @@ public class TheOrderServlet extends HttpServlet {
      * @param cart CartBean to calculate total and set in Bean
      * @throws SQLException if query for product data retrieval fails
      */
-    private void setTotal(CartBean cart) throws SQLException {
+    synchronized private void setTotal(CartBean cart) throws SQLException {
         /* Check For Discount */
         Map<String, Double> discounts = (Map<String, Double>) getServletContext().getAttribute("discountCode");
         Double discountValue = null;
@@ -252,7 +253,7 @@ public class TheOrderServlet extends HttpServlet {
      * @return Total Price of Items in Cart with all Discount Counted
      * @throws SQLException if Queries to Retrieve Product Data fail
      */
-    public static BigDecimal checkEachProduct(CartBean cart, Double discountCodeValue) throws SQLException {
+    synchronized public static BigDecimal checkEachProduct(CartBean cart, Double discountCodeValue) throws SQLException {
         BigDecimal total = new BigDecimal(0);
         ProductDAO productDAO = new ProductDAO();
 
