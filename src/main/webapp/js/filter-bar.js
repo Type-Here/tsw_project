@@ -309,3 +309,34 @@ function updatePagePrevNextButtons(query){
                     }
                 }
 * */
+
+
+/* ON LOAD PAGE */
+/* ============================================== SHOW INFO IF NO PRODUCTS ARE FOUND =================================== */
+
+/**
+ * Show info if no products are found
+ */
+window.addEventListener('load', () =>{
+    const tiles = document.getElementsByClassName('tile');
+    if(!tiles || tiles.length === 0){
+        const info = document.createElement('div');
+        info.style.width = '90%';
+        info.style.margin = '15px auto';
+        info.style.height = '400px';
+        info.innerHTML = '<h2 class="text-center">OPS... Non ci sono prodotti che soddisfano la tua ricerca</h2>'
+
+        const img = document.createElement('img');
+        img.width = 200;
+        img.style.margin = '20px auto';
+        img.src = 'img/noprod.webp';
+        img.style.display = 'block'
+        img.alt = 'No product image'
+        img.classList.add('error-img');
+
+        info.appendChild(img);
+
+        const div = document.getElementsByClassName('main_home')[0];
+        div.appendChild(info);
+    }
+});

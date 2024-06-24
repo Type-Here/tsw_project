@@ -4,6 +4,7 @@ import com.unisa.store.tsw_project.model.DAO.ProductDAO;
 import com.unisa.store.tsw_project.model.beans.ProductBean;
 import com.unisa.store.tsw_project.other.DataValidator;
 import com.unisa.store.tsw_project.other.JSONMetaParser;
+import com.unisa.store.tsw_project.other.exceptions.InvalidParameterException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,13 +23,11 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<String> queryString = Optional.ofNullable(req.getParameter("q"));
         DataValidator validator = new DataValidator();
-
-        if(queryString.isEmpty() ||
-                !validator.validatePattern(queryString.get(), DataValidator.PatternType.GenericAlphaNumeric)){
-            return;
-        }
-
         try {
+            if(queryString.isEmpty() ||
+                    !validator.validatePattern(queryString.get(), DataValidator.PatternType.GenericAlphaNumeric)){
+                throw new InvalidParameterException();
+            }
 
             ProductDAO productDAO = new ProductDAO();
             List<ProductBean> products = productDAO.doRetrieveByName(queryString.get());
@@ -41,11 +40,12 @@ public class SearchServlet extends HttpServlet {
 
         } catch (SQLException e){
             throw new RuntimeException(e);
+
+        } catch (InvalidParameterException e){
+            resp.sendRedirect(getServletContext().getContextPath() + "/store");
         }
 
     }
 
-    @Override
-    public void destroy() {
-    }
+
 }
