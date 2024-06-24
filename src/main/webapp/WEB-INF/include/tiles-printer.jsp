@@ -20,7 +20,7 @@
                                             </span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="discount">${prod.discount}&percnt;</span>
+                                    <span class="discount"><fmt:formatNumber type="number" minFractionDigits="0" maxFractionDigits="1" value="${prod.discount}"/>&percnt;</span>
                                     <span class="original-rem-price">${prod.price}&euro;</span>
                                     <span class="actual-price">
                                             <c:out value="${prod.price - prod.price*prod.discount/100}"/>&euro;

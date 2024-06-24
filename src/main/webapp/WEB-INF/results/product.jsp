@@ -92,7 +92,7 @@
                             </span>
                         </c:when>
                         <c:otherwise>
-                            <span class="discount">${product.discount}&percnt;</span>
+                            <span class="discount"><fmt:formatNumber type="number" minFractionDigits="0" maxFractionDigits="1" value="${product.discount}"/>&percnt;</span>
                             <span class="original-rem-price"><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * (1.0 -  activeCondDiscount/100)}"/>&euro;</span>
                             <span id="prod-price" class="actual-price">
                                 <c:set var="price" scope="page" value="${product.price * (1.0 -  activeCondDiscount/100) * (1 - product.discount/100)}"/>
