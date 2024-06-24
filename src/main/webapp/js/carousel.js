@@ -54,7 +54,7 @@ function prepare_function(){
 
 Array.from(document.getElementsByClassName('label-thumbnail-listener')).forEach(label =>{
     label.addEventListener('keydown', function (e){
-        console.log(this.getAttribute('for'), e.keyCode);
+
         if(e.keyCode !== 13) return;
         carousel_changeimg(document.getElementById(this.getAttribute('for')));
     })

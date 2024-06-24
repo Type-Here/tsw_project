@@ -136,15 +136,17 @@
             </div>
         </c:forEach>
     </div>
-    <div class="page-number">
-        <c:if test="${page > 1}">
-            <a id="prev-page" href="${pageContext.request.contextPath}/store?page=${page - 1}">Prev</a>
-        </c:if>
-        <a id="this-page" href="${pageContext.request.contextPath}/store?page=${page}"><button class="default alternative">${page}</button></a>
-        <c:if test="${page < maxPage}">
-            <a id="next-page" href="${pageContext.request.contextPath}/store?page=${page + 1}">Next</a>
-        </c:if>
-    </div>
+    <c:if test="${not empty page}">
+        <div class="page-number">
+            <c:if test="${page > 1}">
+                <a id="prev-page" href="${pageContext.request.contextPath}/store?page=${page - 1}">Prev</a>
+            </c:if>
+            <a id="this-page" href="${pageContext.request.contextPath}/store?page=${page}"><button class="default alternative">${page}</button></a>
+            <c:if test="${page < maxPage}">
+                <a id="next-page" href="${pageContext.request.contextPath}/store?page=${page + 1}">Next</a>
+            </c:if>
+        </div>
+    </c:if>
 </div>
 
 <%@include file="/WEB-INF/include/footer.jsp"%>

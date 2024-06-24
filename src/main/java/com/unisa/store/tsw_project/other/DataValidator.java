@@ -23,7 +23,7 @@ public class DataValidator {
      * @see DataValidator#validatePatternExecute(String, PatternType, Integer, Integer);
      */
     public boolean validatePattern(String data, PatternType patternType, String parameterName){
-        if(!validatePattern(data, patternType,null, null)) throw new InvalidParameterException("Invalid Parameter: " + parameterName + " ");
+        if(!validatePatternExecute(data, patternType,null, null)) throw new InvalidParameterException("Invalid Parameter: " + parameterName + " ");
         return true;
     }
 

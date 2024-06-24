@@ -178,7 +178,7 @@ arrows[1].addEventListener('AnimationEvent', moveRight);
 arrows[0].addEventListener('click', function (){
     let scrollPosition = galleryWindow.scrollLeft;
     let newPosition = scrollPosition - slideWidth;
-    console.log(imgNumber, imgContainerWidth, slideWidth, newPosition);
+
     if(newPosition < 0) newPosition = imgContainerWidth - slideWidth;
     galleryWindow.scrollTo({top:'0', left:newPosition, behavior:'smooth'});
     scrollTimer.reset();
