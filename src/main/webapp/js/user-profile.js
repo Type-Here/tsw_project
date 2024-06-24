@@ -9,6 +9,11 @@ window.onload = function() {
     splitAddress();
 }
 
+// Accessibility
+document.querySelector('ul li').addEventListener('keydown', function(event) {
+    altShowContent('section1', event);
+});
+
 function altShowContent(sectionId, event) {
     // Verifica se il tasto premuto è 'Enter' o 'Space'
     if (event.key === 'Enter' || event.key === ' ') {
@@ -16,11 +21,6 @@ function altShowContent(sectionId, event) {
         showContent(sectionId);
     }
 }
-
-// Accessibility
-document.querySelector('ul li').addEventListener('keydown', function(event) {
-    altShowContent('section1', event);
-});
 
 // Function to show the content of the selected section
 function showContent(sectionId) {

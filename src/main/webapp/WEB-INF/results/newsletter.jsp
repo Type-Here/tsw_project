@@ -12,7 +12,6 @@
     <link type="text/css" rel="stylesheet" media="screen and (max-width: 450px)" href="${pageContext.request.contextPath}/css/small.css" />
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <script src="${pageContext.request.contextPath}/js/overlay.js"></script>
-    <script src="${pageContext.request.contextPath}/js/newsletter.js"></script>
     <title>Retrogamer: Newsletter</title>
 </head>
 <body class="body_def">
