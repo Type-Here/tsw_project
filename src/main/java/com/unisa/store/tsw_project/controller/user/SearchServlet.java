@@ -25,7 +25,7 @@ public class SearchServlet extends HttpServlet {
         DataValidator validator = new DataValidator();
         try {
             if(queryString.isEmpty() ||
-                    !validator.validatePattern(queryString.get(), DataValidator.PatternType.GenericAlphaNumeric)){
+                    !validator.validatePattern(queryString.get(), DataValidator.PatternType.Generic)){
                 throw new InvalidParameterException();
             }
 
