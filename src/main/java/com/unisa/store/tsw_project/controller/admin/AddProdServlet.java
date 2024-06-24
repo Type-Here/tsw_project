@@ -147,6 +147,12 @@ public class AddProdServlet extends HttpServlet {
             List<String> developers = productDAO.doRetrieveDevelopers();
             getServletContext().setAttribute("developers", developers);
 
+            /* Update MAX PRICE IN APPLCIATION if this price is higher than previous */
+            Optional<BigDecimal> maxPrice = Optional.ofNullable((BigDecimal) getServletContext().getAttribute("maxPrice"));
+            if(maxPrice.isEmpty() || maxPrice.get().compareTo(p.getPrice()) < 0){
+                getServletContext().setAttribute("maxPrice", p.getPrice());
+            }
+
             /* Set attribute to true to display info of saved file */
             //req.setAttribute("upload", true);
             /*Product is saved, Dispatch to view */

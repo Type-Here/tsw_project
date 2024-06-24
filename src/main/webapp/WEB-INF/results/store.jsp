@@ -84,8 +84,8 @@
         </div>
         <hr/>
         <div class="filter-list price-filter">
-            <label>Prezzo Minimo:<span class="price-value"></span><input class="price-range" type="range" name="min-price" value="0" min="0" max="3000" /></label>
-            <label>Prezzo Massimo:<span class="price-value"></span><input class="price-range" type="range" name="max-price" value="3000" min="0" max="3000" /></label>
+            <label>Prezzo Minimo:<span class="price-value"></span><input class="price-range" type="range" name="min-price" value="0" min="0" max="${maxPrice}" /></label>
+            <label>Prezzo Massimo:<span class="price-value"></span><input class="price-range" type="range" name="max-price" value=${maxPrice} min="0" max=${maxPrice} /></label>
         </div>
     </div>
     <div class="filter-buttons">

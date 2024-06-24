@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,6 +43,10 @@ public class InitServlet extends HttpServlet {
             /* Load Developers List in Application at Startup */
             List<String> developers = productDAO.doRetrieveDevelopers();
             app.setAttribute("developers", developers);
+
+            /* Load MaxPrice of a product Available in Shop */
+            BigDecimal maxPrice = new BigDecimal("3000").setScale(2, RoundingMode.HALF_UP);
+            app.setAttribute("maxPrice", maxPrice);
 
             /* Load Product Number */
             int prodNum = productDAO.doCountAll();
