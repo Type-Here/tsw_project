@@ -44,11 +44,10 @@
         <location>/WEB-INF/errors/error404.jsp</location>
     </error-page>
     <!-- Da abilitare alla fine gestione di tutti gli errori non gestiti -->
-    <!--
+
     <error-page>
         <location>/WEB-INF/errors/genericError.jsp</location>
     </error-page>
-    -->
 
     <!-- SECURITY FEATURES -->
     <filter>

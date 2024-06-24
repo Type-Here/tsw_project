@@ -24,7 +24,7 @@
             <span class="text-center">Torna alla <a href="${pageContext.request.contextPath}/">Home Page</a></span>
             <span class="text-center">Se il problema persiste, contatta l'amministratore del sito. <strong><a href="mailto:supporto@retrogamer.it">supporto@retrogamer.it</a></strong></span>
         </div>
-        <div class="general-display-flex centerized-flex-container margin-top-90">
+        <div class="general-display-flex centerized-flex-container margin-v-10 margin-top-90">
             <c:if test="${exception != null}">
                 <span>Messaggio: ${exception.message}</span>
             </c:if>

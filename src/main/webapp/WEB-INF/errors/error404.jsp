@@ -13,10 +13,10 @@
 <div class="error_container">
     <h1 class="text-center">Oops! Qualcosa è andato storto</h1>
     <div class="error_content">
-        <div class="general-display-flex centerized-flex-container">
-            <img width="338" src="${pageContext.request.contextPath}/img/error404.jpeg" alt="Error 404"/>
+        <div class="general-display-flex centerized-flex-container margin-v-10">
+            <img class="error-img" width="338" src="${pageContext.request.contextPath}/img/error404.jpeg" alt="Error 404"/>
         </div>
-        <div class="general-display-flex centerized-flex-container margin-top-90">
+        <div class="general-display-flex centerized-flex-container margin-v-10 margin-top-90">
             <h2 class="text-center">Errore 404</h2>
             <p class="text-center">
                 Non riusciamo a trovare la pagina che stai cercando. Potrebbe essere dovuto a: <br>
